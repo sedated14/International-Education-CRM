@@ -12,13 +12,13 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
     const { studentProfile } = lead;
 
     return (
-        <div className="bg-white rounded-[24px] border-4 border-yellow-500 shadow-sm hover:shadow-md transition-all cursor-pointer group overflow-hidden">
+        <div className="bg-white rounded-[24px] border-4 border-emerald-500 shadow-sm hover:shadow-md transition-all cursor-pointer group overflow-hidden">
             {/* Header: Name, Agency, Status */}
-            <div className="bg-yellow-50/80 p-5 border-b border-yellow-100 flex justify-between items-start">
+            <div className="bg-white p-5 border-b-2 border-emerald-100 flex justify-between items-start">
                 <div>
                     <h3 className="font-bold text-lg text-gray-900 leading-tight">{lead.studentName}</h3>
                     {lead.agencyProfile && (
-                        <div className="flex items-center gap-1.5 text-[11px] text-gray-600 mt-1.5 bg-white/60 px-2 py-1 rounded-lg w-fit border border-yellow-100/50 backdrop-blur-sm">
+                        <div className="flex items-center gap-1.5 text-[11px] text-gray-600 mt-1.5 bg-white px-2 py-1 rounded-lg w-fit border border-gray-200 backdrop-blur-sm">
                             <span className="text-gray-400 font-extrabold text-[9px] uppercase tracking-wider">SO:</span>
                             <div className="flex items-center gap-1.5 font-bold">
                                 <span className="text-gray-900">{lead.agencyProfile.name}</span>
@@ -28,7 +28,7 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
                         </div>
                     )}
                 </div>
-                <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.status === 'Inquiry' ? 'bg-blue-100 text-blue-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.status === 'Inquiry' ? 'bg-blue-100 text-blue-700' : 'bg-emerald-100 text-emerald-700'}`}>
                     {lead.status}
                 </span>
             </div>
@@ -50,7 +50,7 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
                 </div>
 
                 {/* Education Details */}
-                <div className="grid grid-cols-2 gap-2 mb-4 bg-gray-50 p-3 rounded-xl border border-gray-100">
+                <div className="grid grid-cols-2 gap-2 mb-4 bg-white p-3 rounded-xl border-2 border-emerald-100">
                     <div className="flex flex-col gap-0.5">
                         <span className="font-bold text-gray-400 uppercase text-[10px]">Current Grade</span>
                         <span className="font-bold text-sm text-gray-900">{studentProfile.currentGrade || 'N/A'}</span>
@@ -61,7 +61,7 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
                     </div>
 
                     {/* Duration Row */}
-                    <div className="col-span-2 flex items-center gap-2 text-xs text-gray-700 mt-1 pt-2 border-t border-gray-200">
+                    <div className="col-span-2 flex items-center gap-2 text-xs text-gray-700 mt-1 pt-2 border-t-2 border-emerald-100">
                         <span className="font-bold text-gray-400 uppercase text-[10px]">Duration:</span>
                         <span className="font-bold">{studentProfile.duration || 'Not Specified'}</span>
                     </div>
@@ -75,7 +75,7 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
                                 </span>
                             )}
                             {studentProfile.graduatedInHomeCountry && (
-                                <span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-[10px] font-bold uppercase tracking-wider flex-1 text-center">
+                                <span className="px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-[10px] font-bold uppercase tracking-wider flex-1 text-center">
                                     Already Graduated
                                 </span>
                             )}

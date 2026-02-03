@@ -50,7 +50,7 @@ export default function ApexCRM() {
         {/* HEADER */}
         <header className="flex justify-between items-center mb-8 px-2">
           <div>
-            <h1 className="text-3xl font-black tracking-tight text-gray-900">Dashboard <span className="text-xs text-gray-400 font-normal">v2.0</span></h1>
+            <h1 className="text-3xl font-black tracking-tight text-gray-900">Dashboard</h1>
             <p className="text-gray-500 font-medium text-sm">Welcome back, Sean</p>
           </div>
           <div className="flex gap-4">
@@ -92,10 +92,10 @@ export default function ApexCRM() {
                 return dateA - dateB; // Soonest first
               })
               .map(lead => (
-                <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)} className={`bg-white p-4 rounded-[20px] border-4 shadow-sm hover:shadow-md cursor-pointer transition-all group mb-2 ${lead.type === 'Student' ? 'border-yellow-500 hover:border-yellow-600' : 'border-blue-500 hover:border-blue-600'}`}>
+                <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)} className={`bg-white p-4 rounded-[20px] border-4 shadow-sm hover:shadow-md cursor-pointer transition-all group mb-2 ${lead.type === 'Student' ? 'border-emerald-500 hover:border-emerald-600' : 'border-blue-500 hover:border-blue-600'}`}>
                   <div className="flex justify-between items-center mb-2">
-                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.type === 'Student' ? 'bg-yellow-50 text-yellow-700' : 'bg-blue-50 text-blue-700'}`}>{lead.type}</span>
-                    <span className={`text-[10px] font-bold ${lead.type === 'Student' ? 'text-yellow-600' : 'text-blue-500'}`}>
+                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.type === 'Student' ? 'bg-emerald-50 text-emerald-700' : 'bg-blue-50 text-blue-700'}`}>{lead.type}</span>
+                    <span className={`text-[10px] font-bold ${lead.type === 'Student' ? 'text-emerald-600' : 'text-blue-500'}`}>
                       {lead.followUpDate
                         ? new Date(lead.followUpDate).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric' })
                         : 'Auto Due'
@@ -105,7 +105,7 @@ export default function ApexCRM() {
                   <h3 className="font-bold text-gray-900 text-sm mb-1">{lead.type === 'Student' ? lead.studentName : lead.agentName}</h3>
                   <p className="text-xs text-gray-400 mb-3 line-clamp-1">{lead.title}</p>
 
-                  <button className={`w-full py-2 rounded-lg text-xs font-bold transition-colors ${lead.type === 'Student' ? 'bg-yellow-50 text-yellow-700 hover:bg-yellow-100' : 'bg-blue-50 text-blue-700 hover:bg-blue-100'}`}>
+                  <button className={`w-full py-2 rounded-lg text-xs font-bold transition-colors ${lead.type === 'Student' ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' : 'bg-blue-50 text-blue-700 hover:bg-blue-100'}`}>
                     Mark Complete
                   </button>
                 </div>
@@ -125,9 +125,9 @@ export default function ApexCRM() {
                 return dateA - dateB; // Oldest first (most overdue)
               })
               .map(lead => (
-                <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)} className={`bg-white p-4 rounded-[20px] border-4 shadow-sm hover:shadow-md cursor-pointer transition-all group mb-2 ${lead.type === 'Student' ? 'border-yellow-500 hover:border-yellow-600' : 'border-blue-500 hover:border-blue-600'}`}>
+                <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)} className={`bg-white p-4 rounded-[20px] border-4 shadow-sm hover:shadow-md cursor-pointer transition-all group mb-2 ${lead.type === 'Student' ? 'border-emerald-500 hover:border-emerald-600' : 'border-blue-500 hover:border-blue-600'}`}>
                   <div className="flex justify-between items-center mb-2">
-                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.type === 'Student' ? 'bg-yellow-50 text-yellow-700' : 'bg-blue-50 text-blue-700'}`}>{lead.type}</span>
+                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.type === 'Student' ? 'bg-emerald-50 text-emerald-700' : 'bg-blue-50 text-blue-700'}`}>{lead.type}</span>
                     <span className="text-[10px] font-bold text-red-500">
                       {lead.followUpDate
                         ? new Date(lead.followUpDate).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric' })

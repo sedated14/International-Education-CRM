@@ -17,7 +17,7 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
     return (
         <div className="bg-white rounded-[24px] border-4 border-blue-500 shadow-sm hover:shadow-md cursor-pointer transition-all group h-full flex flex-col overflow-hidden">
             {/* Header: Name and Type */}
-            <div className="bg-blue-50/80 p-5 border-b border-blue-100 flex justify-between items-start">
+            <div className="bg-white p-5 border-b-2 border-blue-100 flex justify-between items-start">
                 <div className="flex flex-col">
                     <h3 className="font-bold text-gray-900 text-base leading-tight">{lead.agentName || lead.title}</h3>
                 </div>
@@ -28,7 +28,7 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
 
             <div className="p-5 pt-4 flex-1 flex flex-col">
                 {/* Company Info Snippets */}
-                <div className="space-y-2 mb-4 bg-gray-50/50 p-3 rounded-xl border border-gray-100/50">
+                <div className="space-y-2 mb-4 bg-white p-3 rounded-xl border-2 border-blue-100">
                     {/* Website */}
                     {lead.agencyProfile?.website && (
                         <div className="flex items-center gap-2 group/link">
@@ -55,7 +55,7 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
 
                 {/* Latest Note Snippet */}
                 {latestNote ? (
-                    <div className="mb-4 bg-yellow-50 p-3 rounded-xl border border-yellow-100 min-h-[60px] flex flex-col justify-between">
+                    <div className="mb-4 bg-white p-3 rounded-xl border-2 border-yellow-200 min-h-[60px] flex flex-col justify-between">
                         <div className="flex gap-2 items-start mb-1">
                             <StickyNote size={12} className="text-yellow-500 mt-0.5 shrink-0" />
                             <p className="text-[10px] text-gray-600 font-medium line-clamp-2 leading-snug italic">
@@ -67,7 +67,7 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
                         </div>
                     </div>
                 ) : (
-                    <div className="mb-4 bg-gray-50 p-3 rounded-xl border border-gray-100 flex items-center justify-center min-h-[60px]">
+                    <div className="mb-4 bg-white p-3 rounded-xl border-2 border-gray-100 flex items-center justify-center min-h-[60px]">
                         <span className="text-[10px] text-gray-400 font-medium italic">No notes yet</span>
                     </div>
                 )}
