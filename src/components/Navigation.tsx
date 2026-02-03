@@ -74,8 +74,8 @@ export const Navigation = () => {
                     icon={<GraduationCap size={20} />}
                     label="Students"
                     isExpanded={isExpanded}
-                    activeClass="bg-amber-500 text-white shadow-md shadow-amber-200"
-                    inactiveClass="bg-amber-50 text-amber-600 hover:bg-amber-100"
+                    activeClass="bg-yellow-500 text-white shadow-md shadow-yellow-200"
+                    inactiveClass="bg-yellow-50 text-yellow-600 hover:bg-yellow-100"
                 />
 
                 {duplicateCount > 0 && (

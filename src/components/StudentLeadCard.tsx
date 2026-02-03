@@ -12,13 +12,13 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
     const { studentProfile } = lead;
 
     return (
-        <div className="bg-white rounded-[24px] border border-amber-200 shadow-sm hover:shadow-md transition-all cursor-pointer group overflow-hidden">
+        <div className="bg-white rounded-[24px] border-2 border-yellow-500 shadow-sm hover:shadow-md transition-all cursor-pointer group overflow-hidden">
             {/* Header: Name, Agency, Status */}
-            <div className="bg-amber-50/80 p-5 border-b border-amber-100 flex justify-between items-start">
+            <div className="bg-yellow-50/80 p-5 border-b border-yellow-100 flex justify-between items-start">
                 <div>
                     <h3 className="font-bold text-lg text-gray-900 leading-tight">{lead.studentName}</h3>
                     {lead.agencyProfile && (
-                        <div className="flex items-center gap-1.5 text-[11px] text-gray-600 mt-1.5 bg-white/60 px-2 py-1 rounded-lg w-fit border border-amber-100/50 backdrop-blur-sm">
+                        <div className="flex items-center gap-1.5 text-[11px] text-gray-600 mt-1.5 bg-white/60 px-2 py-1 rounded-lg w-fit border border-yellow-100/50 backdrop-blur-sm">
                             <span className="text-gray-400 font-extrabold text-[9px] uppercase tracking-wider">SO:</span>
                             <div className="flex items-center gap-1.5 font-bold">
                                 <span className="text-gray-900">{lead.agencyProfile.name}</span>
@@ -28,7 +28,7 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
                         </div>
                     )}
                 </div>
-                <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.status === 'Inquiry' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700'}`}>
+                <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.status === 'Inquiry' ? 'bg-blue-100 text-blue-700' : 'bg-yellow-100 text-yellow-700'}`}>
                     {lead.status}
                 </span>
             </div>

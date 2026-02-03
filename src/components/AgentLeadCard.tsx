@@ -15,7 +15,7 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
         : null;
 
     return (
-        <div className="bg-white rounded-[24px] border border-blue-200 shadow-sm hover:shadow-md cursor-pointer transition-all group h-full flex flex-col overflow-hidden">
+        <div className="bg-white rounded-[24px] border-2 border-blue-600 shadow-sm hover:shadow-md cursor-pointer transition-all group h-full flex flex-col overflow-hidden">
             {/* Header: Name and Type */}
             <div className="bg-blue-50/80 p-5 border-b border-blue-100 flex justify-between items-start">
                 <div className="flex flex-col">
