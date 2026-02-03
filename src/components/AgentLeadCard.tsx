@@ -15,11 +15,11 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
         : null;
 
     return (
-        <div className="bg-white rounded-[24px] border-4 border-blue-500 shadow-sm hover:shadow-md cursor-pointer transition-all group h-full flex flex-col overflow-hidden">
+        <div className="bg-white dark:bg-gray-900 rounded-[24px] border-4 border-blue-500 shadow-sm hover:shadow-md cursor-pointer transition-all group h-full flex flex-col overflow-hidden">
             {/* Header: Name and Type */}
-            <div className="bg-white p-5 border-b-2 border-blue-500 flex justify-between items-start">
+            <div className="bg-white dark:bg-gray-900 p-5 border-b-2 border-blue-500 flex justify-between items-start">
                 <div className="flex flex-col">
-                    <h3 className="font-bold text-gray-900 text-base leading-tight">{lead.agentName || lead.title}</h3>
+                    <h3 className="font-bold text-gray-900 dark:text-white text-base leading-tight">{lead.agentName || lead.title}</h3>
                 </div>
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-sm shrink-0 bg-blue-500`}>
                     {lead.country.substring(0, 2).toUpperCase()}
@@ -28,7 +28,7 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
 
             <div className="p-5 pt-4 flex-1 flex flex-col">
                 {/* Company Info Snippets */}
-                <div className="space-y-2 mb-4 bg-white p-3 rounded-xl border-2 border-blue-500">
+                <div className="space-y-2 mb-4 bg-white dark:bg-gray-800/50 p-3 rounded-xl border-2 border-blue-500">
                     {/* Website */}
                     {lead.agencyProfile?.website && (
                         <div className="flex items-center gap-2 group/link">
@@ -37,7 +37,7 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
                                 href={lead.agencyProfile.website.startsWith('http') ? lead.agencyProfile.website : `https://${lead.agencyProfile.website}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-xs font-bold text-gray-500 hover:text-blue-600 truncate hover:underline"
+                                className="text-xs font-bold text-gray-500 dark:text-gray-300 hover:text-blue-600 truncate hover:underline"
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 {lead.agencyProfile.website.replace(/^https?:\/\//, '')}
@@ -47,7 +47,7 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
                     {/* Location */}
                     <div className="flex items-center gap-2">
                         <MapPin size={12} className="text-gray-400" />
-                        <span className="text-xs font-bold text-gray-500 truncate">
+                        <span className="text-xs font-bold text-gray-500 dark:text-gray-300 truncate">
                             {lead.agencyProfile?.city ? `${lead.agencyProfile.city}, ` : ''}{lead.country}
                         </span>
                     </div>
@@ -55,19 +55,19 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
 
                 {/* Latest Note Snippet */}
                 {latestNote ? (
-                    <div className="mb-4 bg-white p-3 rounded-xl border-2 border-yellow-500 min-h-[60px] flex flex-col justify-between">
+                    <div className="mb-4 bg-white dark:bg-gray-800/50 p-3 rounded-xl border-2 border-yellow-500 min-h-[60px] flex flex-col justify-between">
                         <div className="flex gap-2 items-start mb-1">
                             <StickyNote size={12} className="text-yellow-500 mt-0.5 shrink-0" />
-                            <p className="text-[10px] text-gray-600 font-medium line-clamp-2 leading-snug italic">
+                            <p className="text-[10px] text-gray-600 dark:text-gray-300 font-medium line-clamp-2 leading-snug italic">
                                 "{latestNote.content}"
                             </p>
                         </div>
-                        <div className="text-[9px] text-yellow-600/60 font-bold text-right">
+                        <div className="text-[9px] text-yellow-600/60 dark:text-yellow-500/60 font-bold text-right">
                             {new Date(latestNote.timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                         </div>
                     </div>
                 ) : (
-                    <div className="mb-4 bg-white p-3 rounded-xl border-2 border-gray-100 flex items-center justify-center min-h-[60px]">
+                    <div className="mb-4 bg-white dark:bg-gray-800/50 p-3 rounded-xl border-2 border-gray-100 dark:border-gray-800 flex items-center justify-center min-h-[60px]">
                         <span className="text-[10px] text-gray-400 font-medium italic">No notes yet</span>
                     </div>
                 )}
@@ -76,20 +76,20 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
                 <div className="flex-1" />
 
                 {/* Date Tracking (Same as existing style) */}
-                <div className="pt-3 border-t border-gray-50 grid grid-cols-1 gap-1">
+                <div className="pt-3 border-t border-gray-50 dark:border-gray-800 grid grid-cols-1 gap-1">
                     <div className="flex justify-between items-center text-[10px]">
                         <span className="text-gray-400 font-bold uppercase tracking-wider">Received</span>
-                        <span className="font-bold text-gray-500">{new Date(lead.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric' })}</span>
+                        <span className="font-bold text-gray-500 dark:text-gray-400">{new Date(lead.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric' })}</span>
                     </div>
                     <div className="flex justify-between items-center text-[10px]">
                         <span className="text-gray-400 font-bold uppercase tracking-wider">Contact</span>
-                        <span className={`font-bold ${lead.lastContacted ? 'text-gray-500' : 'text-gray-300'}`}>
+                        <span className={`font-bold ${lead.lastContacted ? 'text-gray-500 dark:text-gray-400' : 'text-gray-300 dark:text-gray-600'}`}>
                             {lead.lastContacted ? new Date(lead.lastContacted).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric' }) : 'Never'}
                         </span>
                     </div>
-                    <div className="flex justify-between items-center text-[10px] text-blue-600 bg-blue-50 -mx-2 px-2 py-1 rounded-lg mt-1">
-                        <span className="font-bold uppercase tracking-wider opacity-70">Follow Up</span>
-                        <span className="font-bold">
+                    <div className="flex justify-between items-center text-[10px] text-blue-600 bg-blue-50 dark:bg-blue-900/20 -mx-2 px-2 py-1 rounded-lg mt-1">
+                        <span className="font-bold uppercase tracking-wider opacity-70 dark:text-blue-300">Follow Up</span>
+                        <span className="font-bold dark:text-blue-200">
                             {lead.followUpDate
                                 ? new Date(lead.followUpDate).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric' })
                                 : 'Auto (72h)'
