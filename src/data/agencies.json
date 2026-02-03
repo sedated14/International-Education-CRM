@@ -1,0 +1,275 @@
+[
+  {
+    "id": 1,
+    "name": "Global Education Links",
+    "type": "Recruitment Agency",
+    "country": "Brazil",
+    "city": "Sao Palo",
+    "website": "https://globaledlinks.com.br",
+    "partnershipStatus": "Active",
+    "contractSignedDate": "2025-12-15T00:00:00.000Z",
+    "commissionRate": "15%",
+    "historicalSends": 12,
+    "timezone": "GMT-3",
+    "language": "Portuguese",
+    "keyContacts": [
+      {
+        "name": "Daniel Cali",
+        "firstName": "Daniel",
+        "lastName": "Cali",
+        "nickname": "",
+        "role": "Director",
+        "email": "ana@globaledlinks.com.br",
+        "phone": "+55 11 99999-9999",
+        "whatsapp": "1234567899",
+        "skype": "",
+        "preferredCommunication": "WhatsApp",
+        "notes": ""
+      }
+    ],
+    "culturalNotes": "Prefers WhatsApp for quick communication. Very relationship-driven; appreciates personal check-ins.",
+    "generalNotes": "Top performer in Latin America region.",
+    "lastContactDate": "2026-01-10T14:30:00.000Z",
+    "region": "Latin America",
+    "address": "",
+    "metAt": "Email",
+    "contactFirstName": "Daniel",
+    "contactLastName": "Cali",
+    "nickname": "",
+    "secContactFirstName": "Second ",
+    "secContactLastName": "Contact",
+    "secondaryContact": {
+      "name": "Second  Contact",
+      "firstName": "Second ",
+      "lastName": "Contact",
+      "role": "Admission",
+      "email": "Adminssion@brazilco.com",
+      "phone": "",
+      "whatsapp": "456325698",
+      "notes": "Fast admissions, make sure not to send this contact the invoices"
+    },
+    "gradesOffered": [
+      "Elementary",
+      "Middle School",
+      "High School",
+      "College/University"
+    ],
+    "duration": [
+      "Short Term",
+      "Semester",
+      "Academic Year",
+      "Summer",
+      "Calendar Year"
+    ],
+    "targetCountries": [
+      "United States",
+      "Canada",
+      "United Kingdom"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "EuroStudy Partners",
+    "type": "Recruitment Agency",
+    "country": "Germany",
+    "city": "Berlin",
+    "website": "https://eurostudy.de",
+    "partnershipStatus": "Do Not Contact",
+    "contractSignedDate": "2024-06-20T09:00:00.000Z",
+    "commissionRate": "12%",
+    "historicalSends": 5,
+    "timezone": "CET",
+    "language": "German, English",
+    "keyContacts": [
+      {
+        "name": "Claud Code",
+        "firstName": "Claud",
+        "lastName": "Code",
+        "nickname": "",
+        "role": "Senior Counselor",
+        "email": "klaus@eurostudy.de",
+        "phone": "+49 30 12345678",
+        "whatsapp": "",
+        "skype": "",
+        "preferredCommunication": "Email",
+        "notes": ""
+      }
+    ],
+    "culturalNotes": "Values punctuality and detailed written agreements. Formal communication style.",
+    "lastContactDate": "2026-01-05T10:00:00.000Z",
+    "region": "",
+    "address": "",
+    "metAt": "",
+    "contactFirstName": "Claud",
+    "contactLastName": "Code",
+    "nickname": "",
+    "generalNotes": "",
+    "secContactFirstName": "",
+    "secContactLastName": ""
+  },
+  {
+    "id": 3,
+    "name": "Asia Future Pathways",
+    "type": "Ed-Tech Platform",
+    "country": "Vietnam",
+    "city": "Ho Chi Minh City",
+    "partnershipStatus": "Prospective",
+    "historicalSends": 0,
+    "timezone": "GMT+7",
+    "language": "Vietnamese, English",
+    "keyContacts": [
+      {
+        "name": "Linh Nguyen",
+        "role": "Partnerships Manager",
+        "email": "linh@futurepathways.vn",
+        "phone": "+84 90 123 4567"
+      }
+    ],
+    "culturalNotes": "High interest in STEM programs. Decision making can be hierarchical.",
+    "lastContactDate": "2025-12-15T08:00:00.000Z"
+  },
+  {
+    "name": "Test Agency 2",
+    "region": "Asia",
+    "country": "Vietnam",
+    "city": "",
+    "address": "",
+    "type": "Recruitment Agency",
+    "website": "",
+    "metAt": "",
+    "contactFirstName": "Mario",
+    "contactLastName": "Rossi",
+    "nickname": "",
+    "partnershipStatus": "Active",
+    "commissionRate": "",
+    "timezone": "",
+    "language": "",
+    "culturalNotes": "",
+    "generalNotes": "",
+    "keyContacts": [
+      {
+        "name": "Mario Rossi",
+        "firstName": "Mario",
+        "lastName": "Rossi",
+        "nickname": "",
+        "role": "CEO",
+        "email": "mario@example.com",
+        "phone": "",
+        "whatsapp": "",
+        "skype": "",
+        "preferredCommunication": "Email",
+        "notes": ""
+      }
+    ],
+    "historicalSends": 0,
+    "lastContactDate": "2026-01-22T00:16:33.508Z",
+    "id": 1769040994678,
+    "contractSignedDate": "2026-01-22T00:00:00.000Z",
+    "secContactFirstName": "Contact ",
+    "secContactLastName": "Two",
+    "secondaryContact": {
+      "name": "Contact  Two",
+      "firstName": "Contact ",
+      "lastName": "Two",
+      "role": "Admissions",
+      "email": "",
+      "phone": "",
+      "whatsapp": "",
+      "notes": ""
+    }
+  },
+  {
+    "name": "Test agency",
+    "region": "",
+    "country": "Canada",
+    "city": "",
+    "address": "",
+    "type": "Recruitment Agency",
+    "website": "",
+    "metAt": "ICEF",
+    "contactFirstName": "Sean",
+    "contactLastName": "Test",
+    "nickname": "",
+    "partnershipStatus": "Prospective",
+    "commissionRate": "",
+    "timezone": "",
+    "language": "",
+    "culturalNotes": "",
+    "generalNotes": "",
+    "keyContacts": [
+      {
+        "name": "Sean Test",
+        "firstName": "Sean",
+        "lastName": "Test",
+        "nickname": "",
+        "role": "MAnager",
+        "email": "testagentemail@test.com",
+        "phone": "",
+        "whatsapp": "1234567893",
+        "skype": "test_testskype",
+        "preferredCommunication": "Email"
+      }
+    ],
+    "historicalSends": 0,
+    "lastContactDate": "2026-01-22T00:18:30.624Z",
+    "id": 1769041110637,
+    "secContactFirstName": "",
+    "secContactLastName": ""
+  },
+  {
+    "name": "New Test Agency MExico",
+    "region": "Latin America",
+    "country": "Mexico",
+    "city": "Mexico City",
+    "address": "",
+    "type": "Recruitment Agency",
+    "website": "",
+    "metAt": "",
+    "contactFirstName": "Juan",
+    "contactLastName": "Herrera",
+    "nickname": "",
+    "partnershipStatus": "Prospective",
+    "contractSignedDate": "",
+    "commissionRate": "",
+    "timezone": "",
+    "language": "",
+    "culturalNotes": "",
+    "generalNotes": "",
+    "secContactFirstName": "",
+    "secContactLastName": "",
+    "gradesOffered": [
+      "Elementary",
+      "Middle School",
+      "High School",
+      "College/University"
+    ],
+    "duration": [
+      "Short Term",
+      "Calendar Year",
+      "Summer",
+      "Academic Year"
+    ],
+    "targetCountries": [
+      "United States",
+      "Canada"
+    ],
+    "keyContacts": [
+      {
+        "name": "Juan Herrera",
+        "firstName": "Juan",
+        "lastName": "Herrera",
+        "nickname": "",
+        "role": "Manager",
+        "email": "Juan@pablo.com",
+        "phone": "",
+        "whatsapp": "",
+        "skype": "",
+        "preferredCommunication": "Email",
+        "notes": ""
+      }
+    ],
+    "historicalSends": 0,
+    "lastContactDate": "2026-01-23T06:06:45.356Z",
+    "id": 1769148405934
+  }
+]

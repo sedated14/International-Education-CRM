@@ -1,0 +1,227 @@
+[
+  {
+    "id": 6,
+    "title": "Inquiry: Student - Mexico",
+    "type": "Student",
+    "source": "Form",
+    "createdAt": "2026-01-22T06:38:38.074Z",
+    "followUpDate": "2026-01-28T16:47:00.000Z",
+    "studentName": "Simon Test",
+    "country": "Germany",
+    "status": "Inquiry",
+    "score": 5,
+    "timestamp": "Just now",
+    "studentProfile": {
+      "age": "16",
+      "dob": "2005-05-22",
+      "gender": "Male",
+      "nationality": "Mexico",
+      "residence": "Mexico",
+      "phoneNumber": "1234567895",
+      "whatsappNumber": "1234567899",
+      "currentSchool": "",
+      "currentGrade": "12th",
+      "gpa": "",
+      "englishLevel": "Intermediate",
+      "desiredDestination": [
+        "USA",
+        "Canada",
+        "Virtual"
+      ],
+      "targetGrades": {
+        "USA": "",
+        "Canada": "",
+        "Online": ""
+      },
+      "sports": [
+        "Hockey",
+        "Football"
+      ],
+      "hobbies": [
+        "Music"
+      ],
+      "favoriteSubject": "Math",
+      "personality": "",
+      "allergies": [],
+      "medicalInfo": "",
+      "dietaryRestrictions": [],
+      "budget": "25,000",
+      "essay": "",
+      "preferredCommunication": [
+        "Email"
+      ],
+      "otherInfo": "",
+      "gradeApplyingTo": "12th",
+      "duration": "Academic Year",
+      "graduatedInHomeCountry": true,
+      "seekingGraduation": true
+    },
+    "lastContacted": "2026-01-14T05:58:00.000Z"
+  },
+  {
+    "id": 5,
+    "title": "Inquiry: Student - Canada",
+    "type": "Student",
+    "source": "Form",
+    "createdAt": "2026-01-21T22:01:52.317Z",
+    "followUpDate": "2026-01-24T22:01:52.268Z",
+    "studentName": "Test student 2",
+    "country": "Canada",
+    "status": "Inquiry",
+    "score": 5,
+    "timestamp": "Just now",
+    "studentProfile": {
+      "age": 0,
+      "dob": "2010-06-15",
+      "gender": "Male",
+      "nationality": "Canada",
+      "residence": "Canada",
+      "phoneNumber": "1234567899",
+      "whatsappNumber": "",
+      "currentSchool": "",
+      "currentGrade": "",
+      "gpa": "",
+      "englishLevel": "Intermediate",
+      "desiredDestination": [],
+      "targetGrades": {
+        "USA": "",
+        "Canada": "",
+        "Online": ""
+      },
+      "sports": [],
+      "hobbies": [],
+      "favoriteSubject": "",
+      "personality": "",
+      "allergies": [],
+      "medicalInfo": "",
+      "dietaryRestrictions": [],
+      "budget": "",
+      "essay": "",
+      "preferredCommunication": [
+        "Email"
+      ],
+      "otherInfo": ""
+    }
+  },
+  {
+    "id": 4,
+    "title": "Inquiry: Student - Unknown",
+    "type": "Student",
+    "source": "Form",
+    "createdAt": "2026-01-21T21:48:39.482Z",
+    "followUpDate": "2026-01-24T21:48:39.351Z",
+    "studentName": "Test Student",
+    "country": "Unknown",
+    "status": "Inquiry",
+    "score": 5,
+    "timestamp": "Just now",
+    "studentProfile": {
+      "age": 0,
+      "dob": "",
+      "gender": "",
+      "nationality": "",
+      "residence": "",
+      "phoneNumber": "",
+      "whatsappNumber": "",
+      "currentSchool": "",
+      "currentGrade": "",
+      "gpa": "",
+      "englishLevel": "Intermediate",
+      "desiredDestination": [],
+      "targetGrades": {
+        "USA": "",
+        "Canada": "",
+        "Online": ""
+      },
+      "sports": [],
+      "hobbies": [],
+      "favoriteSubject": "",
+      "personality": "",
+      "allergies": [],
+      "medicalInfo": "",
+      "dietaryRestrictions": [],
+      "budget": "",
+      "essay": "",
+      "preferredCommunication": [
+        "Email"
+      ],
+      "otherInfo": ""
+    }
+  },
+  {
+    "id": 1,
+    "title": "Inquiry: 12th Grade Student - Spain",
+    "type": "Student",
+    "source": "Form",
+    "createdAt": "2024-05-23T10:24:00.000Z",
+    "followUpDate": "2024-05-26T10:24:00.000Z",
+    "studentName": "Mario Rossi",
+    "country": "Spain",
+    "status": "Inquiry",
+    "score": 5,
+    "timestamp": "10:24 AM",
+    "studentProfile": {
+      "age": 17,
+      "dob": "2007-05-15",
+      "gender": "Male",
+      "desiredDestination": [
+        "USA"
+      ],
+      "desiredSchool": "Florida Prep Academy",
+      "hobbies": [
+        "Soccer",
+        "Photography"
+      ],
+      "sports": [
+        "Soccer"
+      ],
+      "englishLevel": "Intermediate",
+      "personality": "Outgoing"
+    }
+  },
+  {
+    "id": 2,
+    "title": "Agent Partnership Request",
+    "type": "Agent",
+    "source": "Gmail",
+    "createdAt": "2024-05-23T09:15:00.000Z",
+    "lastContacted": "2024-05-23T09:45:00.000Z",
+    "followUpDate": "2024-05-25T09:15:00.000Z",
+    "studentName": "N/A",
+    "agentName": "Global Education Links",
+    "country": "Brazil",
+    "status": "Inquiry",
+    "score": 3,
+    "timestamp": "09:15 AM",
+    "commission": true
+  },
+  {
+    "id": 3,
+    "title": "Student Application - Germany",
+    "type": "Student",
+    "source": "Manual",
+    "createdAt": "2024-05-22T10:00:00.000Z",
+    "followUpDate": "2024-05-25T10:00:00.000Z",
+    "studentName": "Hans Müller",
+    "country": "Germany",
+    "status": "Qualified",
+    "score": 4,
+    "timestamp": "Yesterday",
+    "studentProfile": {
+      "age": 16,
+      "dob": "2008-02-20",
+      "gender": "Male",
+      "desiredDestination": [
+        "Canada"
+      ],
+      "hobbies": [
+        "Tech",
+        "Gaming"
+      ],
+      "sports": [
+        "Tennis"
+      ],
+      "englishLevel": "Advanced"
+    }
+  }
+]

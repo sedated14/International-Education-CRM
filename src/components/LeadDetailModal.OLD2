@@ -1,0 +1,443 @@
+﻿// Fixed syntax error
+import React, { useState, useEffect } from 'react';
+import { Lead } from '../types';
+import { useLeads } from '../context/LeadContext';
+import { X, User, Calendar, Languages, GraduationCap, School as SchoolIcon, Activity, Smile, BookOpen, Briefcase, PenTool, MapPin, Save, Edit2 } from 'lucide-react';
+import { COUNTRIES } from '../data/countries';
+
+interface Props {
+    lead: Lead | null;
+    onClose: () => void;
+}
+
+// Helper to format Date string (UTC) to Local ISO string for datetime-local input
+const toLocalISOString = (dateStr: string) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    const tzOffset = date.getTimezoneOffset() * 60000;
+    return new Date(date.getTime() - tzOffset).toISOString().slice(0, 16);
+};
+
+export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
+    const { updateLead } = useLeads();
+    const [isEditing, setIsEditing] = useState(false);
+    const [formData, setFormData] = useState<any>({});
+
+    useEffect(() => {
+        if (lead) {
+            setFormData(JSON.parse(JSON.stringify(lead))); // Deep copy
+        }
+    }, [lead]);
+
+    if (!lead) return null;
+
+    const isStudent = lead.type === 'Student';
+    const profile = lead.studentProfile; // Read-only reference for display
+    const editProfile = formData.studentProfile || {}; // Mutable reference for edit
+
+    const handleSave = () => {
+        updateLead(lead.id, formData);
+        setIsEditing(false);
+    };
+
+    const updateProfileField = (field: string, value: any) => {
+        setFormData((prev: any) => ({
+            ...prev,
+            studentProfile: {
+                ...prev.studentProfile,
+                [field]: value
+            }
+        }));
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/20 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="bg-white w-full max-w-2xl rounded-[32px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 border border-white/20">
+
+                {/* HEADER */}
+                <div className="bg-[#F9F9FB] p-8 border-b border-gray-100 flex justify-between items-start">
+                    <div className="flex gap-6">
+                        <div className={`w-20 h-20 rounded-3xl flex items-center justify-center text-4xl font-bold text-white shadow-lg ${isStudent ? 'bg-orange-500' : 'bg-purple-600'}`}>
+                            {lead.country.substring(0, 2).toUpperCase()}
+                        </div>
+                        <div>
+                            <div className="flex items-center gap-3 mb-2">
+                                {isEditing ? (
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-gray-400 font-bold uppercase text-[10px] whitespace-nowrap">Name:</span>
+                                        <Input
+                                            value={isStudent ? formData.studentName : formData.agentName}
+                                            onChange={v => setFormData(p => ({ ...p, [isStudent ? 'studentName' : 'agentName']: v }))}
+                                            className="text-2xl font-black text-gray-900 bg-transparent border-b border-gray-300 focus:border-black rounded-none px-0 py-1 min-w-[200px]"
+                                        />
+                                    </div>
+                                ) : (
+                                    <h2 className="text-2xl font-black text-gray-900">{isStudent ? lead.studentName : lead.agentName}</h2>
+                                )}
+                                <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md ${isStudent ? 'bg-orange-100 text-orange-600' : 'bg-purple-100 text-purple-600'}`}>
+                                    {lead.type}
+                                </span>
+                            </div>
+                            <div className="text-gray-500 font-medium flex items-center gap-2">
+                                <MapPin size={16} />
+                                {isEditing ? (
+                                    <>
+                                        <input
+                                            list="countries-list"
+                                            value={formData.country}
+                                            onChange={e => setFormData(p => ({ ...p, country: e.target.value }))}
+                                            className="text-sm font-medium bg-transparent border-b border-gray-300 focus:border-black rounded-none px-0 py-0.5 w-48 outline-none placeholder:text-gray-300"
+                                            placeholder="Select Country..."
+                                        />
+                                        <datalist id="countries-list">
+                                            {COUNTRIES.map(c => <option key={c} value={c} />)}
+                                        </datalist>
+                                    </>
+                                ) : (
+                                    <>
+                                        {lead.country} â€¢ {lead.status}
+                                    </>
+                                )}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => setIsEditing(!isEditing)}
+                        className={`p-2 rounded-full transition-colors ${isEditing ? 'bg-blue-100 text-blue-600' : 'hover:bg-black/5 text-gray-400'}`}
+                    >
+                        <Edit2 size={24} />
+                    </button>
+                    <button onClick={onClose} className="p-2 hover:bg-black/5 rounded-full transition-colors">
+                        <X size={24} className="text-gray-400" />
+                    </button>
+                </div>
+            </div>
+
+            {/* CONTENT */}
+            <div className="p-8 max-h-[70vh] overflow-y-auto">
+
+                {/* STUDENT DETAILS */}
+                {isStudent && profile ? (
+                    <div className="space-y-8">
+
+                        {/* DEMOGRAPHICS */}
+                        <section>
+                            <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Demographics</h3>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                <DetailItem
+                                    icon={<User />}
+                                    label="Age"
+                                    value={isEditing ?
+                                        <Input value={editProfile.age} onChange={v => updateProfileField('age', v)} type="number" /> :
+                                        `${profile.age} Years`}
+                                />
+                                <DetailItem
+                                    icon={<Calendar />}
+                                    label="DOB"
+                                    value={isEditing ?
+                                        <Input value={editProfile.dob} onChange={v => updateProfileField('dob', v)} type="date" /> :
+                                        profile.dob}
+                                />
+                                <DetailItem
+                                    icon={<User />}
+                                    label="Gender"
+                                    value={isEditing ?
+                                        <Input value={editProfile.gender} onChange={v => updateProfileField('gender', v)} /> :
+                                        profile.gender}
+                                />
+                                <DetailItem
+                                    icon={<Languages />}
+                                    label="English"
+                                    value={isEditing ?
+                                        <Select value={editProfile.englishLevel} onChange={v => updateProfileField('englishLevel', v)} options={['Low', 'Intermediate', 'Advanced']} /> :
+                                        profile.englishLevel}
+                                />
+                                {isEditing && (
+                                    <DetailItem
+                                        icon={<Activity />}
+                                        label="Phone"
+                                        value={<Input value={editProfile.phoneNumber} onChange={v => updateProfileField('phoneNumber', v)} />}
+                                    />
+                                )}
+                            </div>
+                        </section>
+
+                        {/* PREFERENCES */}
+                        <section>
+                            <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Preferences</h3>
+                            <div className="grid grid-cols-2 gap-4">
+                                <DetailItem
+                                    icon={<GraduationCap />}
+                                    label="Desired Dest."
+                                    value={isEditing ?
+                                        <Input value={Array.isArray(editProfile.desiredDestination) ? editProfile.desiredDestination.join(', ') : editProfile.desiredDestination} onChange={v => updateProfileField('desiredDestination', v.split(',').map((s: string) => s.trim()))} /> : // Simple comma separated edit
+                                        (Array.isArray(profile.desiredDestination) ? profile.desiredDestination.join(', ') : profile.desiredDestination)}
+                                />
+                                <DetailItem
+                                    icon={<SchoolIcon />}
+                                    label="Target School"
+                                    value={isEditing ?
+                                        <Input value={editProfile.desiredSchool} onChange={v => updateProfileField('desiredSchool', v)} /> :
+                                        (profile.desiredSchool || 'Undecided')}
+                                />
+                                <DetailItem
+                                    icon={<SchoolIcon />}
+                                    label="Current Grade"
+                                    value={isEditing ?
+                                        <Select
+                                            value={editProfile.currentGrade}
+                                            onChange={v => updateProfileField('currentGrade', v)}
+                                            options={['5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']}
+                                        /> :
+                                        (profile.currentGrade || '-')}
+                                />
+
+                                {/* Conditional: Graduated in Home Country (If Current Grade is 12th) */}
+                                {editProfile.currentGrade === '12th' && isEditing && (
+                                    <div className="col-span-2 bg-yellow-50 p-3 rounded-xl border border-yellow-200">
+                                        <p className="text-[10px] font-bold text-yellow-600 uppercase mb-2">Graduated in Home Country?</p>
+                                        <div className="flex gap-2">
+                                            {['Yes', 'No'].map(opt => (
+                                                <button
+                                                    key={opt}
+                                                    onClick={() => updateProfileField('graduatedInHomeCountry', opt === 'Yes')}
+                                                    className={`flex-1 py-1.5 text-xs font-bold rounded-lg border transition-all ${(editProfile.graduatedInHomeCountry === (opt === 'Yes'))
+                                                        ? 'bg-yellow-500 text-white border-yellow-600'
+                                                        : 'bg-white text-gray-500 border-gray-200 hover:bg-yellow-50'
+                                                        }`}
+                                                >
+                                                    {opt}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                                {/* Read Only Display for Condition */}
+                                {!isEditing && profile.currentGrade === '12th' && (
+                                    <DetailItem
+                                        icon={<GraduationCap />}
+                                        label="Home Graduation?"
+                                        value={profile.graduatedInHomeCountry ? 'Yes' : 'No'}
+                                    />
+                                )}
+
+                                <DetailItem
+                                    icon={<SchoolIcon />}
+                                    label="Applying Grade"
+                                    value={isEditing ?
+                                        <Select
+                                            value={editProfile.gradeApplyingTo}
+                                            onChange={v => updateProfileField('gradeApplyingTo', v)}
+                                            options={['6th', '7th', '8th', '9th', '10th', '11th', '12th']}
+                                        /> :
+                                        (profile.gradeApplyingTo || '-')}
+                                />
+
+                                {/* Conditional: Seeking Graduation (If Applying Grade is 12th) */}
+                                {editProfile.gradeApplyingTo === '12th' && isEditing && (
+                                    <div className="col-span-2 bg-indigo-50 p-3 rounded-xl border border-indigo-200">
+                                        <p className="text-[10px] font-bold text-indigo-600 uppercase mb-2">Seeking Graduation?</p>
+                                        <div className="flex gap-2">
+                                            {['Yes', 'No'].map(opt => (
+                                                <button
+                                                    key={opt}
+                                                    onClick={() => updateProfileField('seekingGraduation', opt === 'Yes')}
+                                                    className={`flex-1 py-1.5 text-xs font-bold rounded-lg border transition-all ${(editProfile.seekingGraduation === (opt === 'Yes'))
+                                                        ? 'bg-indigo-500 text-white border-indigo-600'
+                                                        : 'bg-white text-gray-500 border-gray-200 hover:bg-indigo-50'
+                                                        }`}
+                                                >
+                                                    {opt}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                                {/* Read Only Display for Condition */}
+                                {!isEditing && profile.gradeApplyingTo === '12th' && (
+                                    <DetailItem
+                                        icon={<GraduationCap />}
+                                        label="Seek Graduation?"
+                                        value={profile.seekingGraduation ? 'Yes' : 'No'}
+                                    />
+                                )}
+                                <DetailItem
+                                    icon={<Calendar />}
+                                    label="Duration"
+                                    value={isEditing ?
+                                        <Select
+                                            value={editProfile.duration}
+                                            onChange={v => updateProfileField('duration', v)}
+                                            options={['Short Term', 'Semester (Aug)', 'Semester (Jan)', 'Academic Year', 'Calendar Year']}
+                                        /> :
+                                        (profile.duration || '-')}
+                                />
+                                <DetailItem
+                                    icon={<SchoolIcon />}
+                                    label="Budget"
+                                    value={isEditing ?
+                                        <Input value={editProfile.budget} onChange={v => updateProfileField('budget', v)} /> :
+                                        (profile.budget || '-')}
+                                />
+                            </div>
+                        </section>
+
+                        {/* INTERESTS */}
+                        <section>
+                            <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Interests & Hobbies</h3>
+                            {isEditing ? (
+                                <div className="space-y-2">
+                                    <Input label="Sports (comma sep)" value={Array.isArray(editProfile.sports) ? editProfile.sports.join(', ') : editProfile.sports} onChange={v => updateProfileField('sports', v.split(',').map((s: string) => s.trim()))} />
+                                    <Input label="Hobbies (comma sep)" value={Array.isArray(editProfile.hobbies) ? editProfile.hobbies.join(', ') : editProfile.hobbies} onChange={v => updateProfileField('hobbies', v.split(',').map((s: string) => s.trim()))} />
+                                    <Input label="Fav Subject" value={editProfile.favoriteSubject} onChange={v => updateProfileField('favoriteSubject', v)} />
+                                </div>
+                            ) : (
+                                <div className="flex flex-wrap gap-2">
+                                    {profile.sports?.map(s => <Tag key={s} icon={<Activity size={12} />} text={s} />)}
+                                    {profile.hobbies?.map(h => <Tag key={h} icon={<Smile size={12} />} text={h} />)}
+                                    <Tag icon={<BookOpen size={12} />} text={profile.favoriteSubject || 'N/A'} label="Fav Subject" />
+                                </div>
+                            )}
+                        </section>
+                    </div>
+                ) : (
+                    /* AGENT DETAILS (Read Only for now or basic edit) */
+                    <div className="space-y-6">
+                        <section>
+                            <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Partnership Details</h3>
+                            <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                                <div className="flex items-center gap-4 mb-4">
+                                    <Briefcase className="text-gray-400" />
+                                    <div>
+                                        <p className="text-sm font-bold text-gray-900">Commission Based</p>
+                                        <p className="text-xs text-gray-500">{lead.commission ? 'Yes - Standard Rate' : 'No'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                )}
+
+                {/* ACTIVITY & SCHEDULING (SHARED, EDITABLE) */}
+                <div className="mt-8 pt-6 border-t border-gray-100">
+                    <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Activity & Scheduling</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                            <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Date Received</p>
+                            <p className="font-bold text-gray-900 text-sm">
+                                {new Date(lead.createdAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
+                            </p>
+                        </div>
+
+                        {/* Editable Last Contacted */}
+                        <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                            <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Last Contacted</p>
+                            {isEditing ? (
+                                <input
+                                    type="datetime-local"
+                                    className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1 text-xs font-bold"
+                                    value={formData.lastContacted ? toLocalISOString(formData.lastContacted) : ''}
+                                    onChange={e => setFormData({ ...formData, lastContacted: new Date(e.target.value).toISOString() })}
+                                />
+                            ) : (
+                                <p className={`font-bold text-sm ${lead.lastContacted ? 'text-gray-900' : 'text-gray-300'}`}>
+                                    {lead.lastContacted
+                                        ? new Date(lead.lastContacted).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })
+                                        : 'Never'
+                                    }
+                                </p>
+                            )}
+                        </div>
+
+                        {/* Editable Follow Up */}
+                        <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100 relative group">
+                            <div className="flex justify-between items-start">
+                                <p className="text-[10px] text-blue-400 font-bold uppercase mb-1">Follow Up Due</p>
+                                {!isEditing && <PenTool size={12} onClick={() => setIsEditing(true)} className="text-blue-300 opacity-0 group-hover:opacity-100 cursor-pointer" />}
+                            </div>
+                            {isEditing ? (
+                                <input
+                                    type="datetime-local"
+                                    className="w-full bg-white border border-blue-200 rounded-lg px-2 py-1 text-xs font-bold text-blue-900"
+                                    value={formData.followUpDate ? toLocalISOString(formData.followUpDate) : ''}
+                                    onChange={e => setFormData({ ...formData, followUpDate: new Date(e.target.value).toISOString() })}
+                                />
+                            ) : (
+                                <p className="font-bold text-blue-900 text-sm">
+                                    {lead.followUpDate
+                                        ? new Date(lead.followUpDate).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })
+                                        : new Date(new Date(lead.createdAt).getTime() + (72 * 60 * 60 * 1000)).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) + ' (Auto)'
+                                    }
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3 rounded-b-[32px]">
+                <button onClick={onClose} className="px-6 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-200 transition-colors">Close</button>
+                {isEditing ? (
+                    <button onClick={handleSave} className="px-6 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 hover:shadow-lg transition-all flex items-center gap-2">
+                        <Save size={18} />
+                        Save Changes
+                    </button>
+                ) : (
+                    <button onClick={() => setIsEditing(true)} className="px-6 py-3 bg-black text-white rounded-xl font-bold hover:shadow-lg transition-all">Edit Lead</button>
+                )}
+            </div>
+        </div>
+    </div>
+    );
+};
+
+const DetailItem = ({ icon, label, value }: { icon: React.ReactNode, label: string, value: React.ReactNode }) => (
+    <div className="bg-gray-50 p-3 rounded-2xl border border-gray-100 flex items-center gap-3 min-h-[60px]">
+        <div className="text-gray-400 [&>svg]:w-5 [&>svg]:h-5 shrink-0">{icon}</div>
+        <div className="min-w-0 flex-1">
+            <p className="text-[10px] text-gray-400 font-bold uppercase truncate">{label}</p>
+            <div className="text-sm font-bold text-gray-900 truncate">{value}</div>
+        </div>
+    </div>
+);
+
+const Input = ({ value, onChange, type = "text", label, className }: any) => (
+    <div className="w-full">
+        {label && <label className="text-[10px] text-gray-400 font-bold uppercase mb-1 block">{label}</label>}
+        <input
+            type={type}
+            value={value || ''}
+            onChange={e => onChange(e.target.value)}
+            className={className || "w-full bg-white border border-gray-200 rounded-lg px-2 py-1 text-sm font-medium focus:border-black focus:ring-0 transition-all outline-none"}
+        />
+    </div>
+);
+
+const Select = ({ value, onChange, options }: any) => (
+    <select
+        value={value || ''}
+        onChange={e => onChange(e.target.value)}
+        className="w-full bg-white border border-gray-200 rounded-lg px-2 py-1 text-sm font-medium focus:border-black focus:ring-0 transition-all outline-none"
+    >
+        {options.map((opt: string) => <option key={opt} value={opt}>{opt}</option>)}
+    </select>
+);
+
+const Tag = ({ icon, text, label, color = 'gray' }: { icon?: React.ReactNode, text: string, label?: string, color?: 'gray' | 'red' | 'orange' }) => {
+    const colorClasses = {
+        gray: 'bg-gray-100 text-gray-700',
+        red: 'bg-red-50 text-red-600',
+        orange: 'bg-orange-50 text-orange-600'
+    };
+
+    return (
+        <span className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2 ${colorClasses[color]}`}>
+            {icon && <span className="[&>svg]:w-3.5 [&>svg]:h-3.5 opacity-70">{icon}</span>}
+            {label && <span className="opacity-50">{label}:</span>}
+            {text}
+        </span>
+    );
+};
