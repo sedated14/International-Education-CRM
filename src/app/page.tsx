@@ -92,7 +92,7 @@ export default function ApexCRM() {
                 return dateA - dateB; // Soonest first
               })
               .map(lead => (
-                <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)} className={`bg-white p-4 rounded-[20px] border-2 shadow-sm hover:shadow-md cursor-pointer transition-all group mb-2 ${lead.type === 'Student' ? 'border-yellow-500 hover:border-yellow-600' : 'border-blue-500 hover:border-blue-600'}`}>
+                <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)} className={`bg-white p-4 rounded-[20px] border-4 shadow-sm hover:shadow-md cursor-pointer transition-all group mb-2 ${lead.type === 'Student' ? 'border-yellow-500 hover:border-yellow-600' : 'border-blue-500 hover:border-blue-600'}`}>
                   <div className="flex justify-between items-center mb-2">
                     <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.type === 'Student' ? 'bg-yellow-50 text-yellow-700' : 'bg-blue-50 text-blue-700'}`}>{lead.type}</span>
                     <span className={`text-[10px] font-bold ${lead.type === 'Student' ? 'text-yellow-600' : 'text-blue-500'}`}>
@@ -125,7 +125,7 @@ export default function ApexCRM() {
                 return dateA - dateB; // Oldest first (most overdue)
               })
               .map(lead => (
-                <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)} className={`bg-white p-4 rounded-[20px] border-2 shadow-sm hover:shadow-md cursor-pointer transition-all group mb-2 ${lead.type === 'Student' ? 'border-yellow-500 hover:border-yellow-600' : 'border-blue-500 hover:border-blue-600'}`}>
+                <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)} className={`bg-white p-4 rounded-[20px] border-4 shadow-sm hover:shadow-md cursor-pointer transition-all group mb-2 ${lead.type === 'Student' ? 'border-yellow-500 hover:border-yellow-600' : 'border-blue-500 hover:border-blue-600'}`}>
                   <div className="flex justify-between items-center mb-2">
                     <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.type === 'Student' ? 'bg-yellow-50 text-yellow-700' : 'bg-blue-50 text-blue-700'}`}>{lead.type}</span>
                     <span className="text-[10px] font-bold text-red-500">

@@ -12,7 +12,7 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
     const { studentProfile } = lead;
 
     return (
-        <div className="bg-white rounded-[24px] border-2 border-yellow-500 shadow-sm hover:shadow-md transition-all cursor-pointer group overflow-hidden">
+        <div className="bg-white rounded-[24px] border-4 border-yellow-500 shadow-sm hover:shadow-md transition-all cursor-pointer group overflow-hidden">
             {/* Header: Name, Agency, Status */}
             <div className="bg-yellow-50/80 p-5 border-b border-yellow-100 flex justify-between items-start">
                 <div>
