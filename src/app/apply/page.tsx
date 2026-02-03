@@ -209,20 +209,20 @@ export default function ApplyPage() {
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <Input label="Full Name" placeholder="Mario Rossi" value={formData.studentName} onChange={v => setFormData({ ...formData, studentName: v })} />
-                                <Input type="date" label="Date of Birth" value={formData.dob} onChange={v => setFormData({ ...formData, dob: v })} />
-                                <Select label="Gender" options={["Male", "Female"]} value={formData.gender} onChange={v => setFormData({ ...formData, gender: v })} />
+                                <Input label="Full Name" placeholder="Mario Rossi" value={formData.studentName} onChange={(v: any) => setFormData({ ...formData, studentName: v })} />
+                                <Input type="date" label="Date of Birth" value={formData.dob} onChange={(v: any) => setFormData({ ...formData, dob: v })} />
+                                <Select label="Gender" options={["Male", "Female"]} value={formData.gender} onChange={(v: any) => setFormData({ ...formData, gender: v })} />
                                 <div className="hidden md:block"></div> {/* Spacer */}
-                                <Combobox label="Nationality" placeholder="Select Nationality..." icon={<Globe size={16} />} value={formData.nationality} onChange={v => setFormData({ ...formData, nationality: v })} options={COUNTRIES} />
-                                <Combobox label="Country of Residence" placeholder="Select Country..." icon={<MapPin size={16} />} value={formData.residence} onChange={v => setFormData({ ...formData, residence: v })} options={COUNTRIES} />
+                                <Combobox label="Nationality" placeholder="Select Nationality..." icon={<Globe size={16} />} value={formData.nationality} onChange={(v: any) => setFormData({ ...formData, nationality: v })} options={COUNTRIES} />
+                                <Combobox label="Country of Residence" placeholder="Select Country..." icon={<MapPin size={16} />} value={formData.residence} onChange={(v: any) => setFormData({ ...formData, residence: v })} options={COUNTRIES} />
                             </div>
 
                             <div className="h-px bg-gray-100 w-full" />
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <Input label="Email Address" placeholder="hello@example.com" value={formData.studentEmail} onChange={v => setFormData({ ...formData, studentEmail: v })} />
-                                <Input label="Phone Number" placeholder="+1 234 567 890" icon={<Phone size={16} />} value={formData.phoneNumber} onChange={v => setFormData({ ...formData, phoneNumber: v })} />
-                                <Input label="WhatsApp Number" placeholder="+1 234 567 890" icon={<MessageCircle size={16} />} value={formData.whatsappNumber} onChange={v => setFormData({ ...formData, whatsappNumber: v })} />
+                                <Input label="Email Address" placeholder="hello@example.com" value={formData.studentEmail} onChange={(v: any) => setFormData({ ...formData, studentEmail: v })} />
+                                <Input label="Phone Number" placeholder="+1 234 567 890" icon={<Phone size={16} />} value={formData.phoneNumber} onChange={(v: any) => setFormData({ ...formData, phoneNumber: v })} />
+                                <Input label="WhatsApp Number" placeholder="+1 234 567 890" icon={<MessageCircle size={16} />} value={formData.whatsappNumber} onChange={(v: any) => setFormData({ ...formData, whatsappNumber: v })} />
                             </div>
                         </section>
 
@@ -238,8 +238,8 @@ export default function ApplyPage() {
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <Input label="Current School" placeholder="International High School..." value={formData.currentSchool} onChange={v => setFormData({ ...formData, currentSchool: v })} />
-                                <Select label="Current Grade" options={GRADE_OPTIONS} value={formData.currentGrade} onChange={v => setFormData({ ...formData, currentGrade: v })} />
+                                <Input label="Current School" placeholder="International High School..." value={formData.currentSchool} onChange={(v: any) => setFormData({ ...formData, currentSchool: v })} />
+                                <Select label="Current Grade" options={GRADE_OPTIONS} value={formData.currentGrade} onChange={(v: any) => setFormData({ ...formData, currentGrade: v })} />
                             </div>
 
                             {/* Conditional: Graduated in Home Country */}
@@ -268,8 +268,8 @@ export default function ApplyPage() {
                             )}
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
-                                <Input label="Current GPA" placeholder="3.8 / 4.0" value={formData.gpa} onChange={v => setFormData({ ...formData, gpa: v })} />
-                                <Select label="English Level" options={["Low", "Intermediate", "Advanced"]} value={formData.englishLevel} onChange={v => setFormData({ ...formData, englishLevel: v })} />
+                                <Input label="Current GPA" placeholder="3.8 / 4.0" value={formData.gpa} onChange={(v: any) => setFormData({ ...formData, gpa: v })} />
+                                <Select label="English Level" options={["Low", "Intermediate", "Advanced"]} value={formData.englishLevel} onChange={(v: any) => setFormData({ ...formData, englishLevel: v })} />
                             </div>
                         </section>
 
@@ -314,7 +314,7 @@ export default function ApplyPage() {
                                                 label="Requested Grade for USA"
                                                 options={GRADE_OPTIONS}
                                                 value={formData.targetGrades.USA}
-                                                onChange={v => handleTargetGradeChange('USA', v)}
+                                                onChange={(v: any) => handleTargetGradeChange('USA', v)}
                                             />
                                         )}
                                         {formData.destinations.includes('Canada') && (
@@ -322,7 +322,7 @@ export default function ApplyPage() {
                                                 label="Requested Grade for Canada"
                                                 options={GRADE_OPTIONS}
                                                 value={formData.targetGrades.Canada}
-                                                onChange={v => handleTargetGradeChange('Canada', v)}
+                                                onChange={(v: any) => handleTargetGradeChange('Canada', v)}
                                             />
                                         )}
                                         {formData.destinations.includes('Online') && (
@@ -330,7 +330,7 @@ export default function ApplyPage() {
                                                 label="Requested Grade for Online School"
                                                 options={GRADE_OPTIONS}
                                                 value={formData.targetGrades.Online}
-                                                onChange={v => handleTargetGradeChange('Online', v)}
+                                                onChange={(v: any) => handleTargetGradeChange('Online', v)}
                                             />
                                         )}
                                     </div>
@@ -375,16 +375,16 @@ export default function ApplyPage() {
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <Input label="Sports Practice & Likes" placeholder="Soccer, Tennis..." value={formData.sports} onChange={v => setFormData({ ...formData, sports: v })} />
-                                <Input label="Hobbies" placeholder="Reading, Music..." value={formData.hobbies} onChange={v => setFormData({ ...formData, hobbies: v })} />
-                                <Input label="Favorite Subjects" placeholder="Math, Art..." value={formData.favoriteSubject} onChange={v => setFormData({ ...formData, favoriteSubject: v })} />
-                                <Input label="Personality" placeholder="Extroverted, Social..." value={formData.personality} onChange={v => setFormData({ ...formData, personality: v })} />
-                                <Input label="Dietary Restrictions" placeholder="Vegetarian, etc..." value={formData.dietaryRestrictions} onChange={v => setFormData({ ...formData, dietaryRestrictions: v })} />
-                                <Input label="Allergies (esp. Pets)" placeholder="Cats, Peanuts..." value={formData.allergies} onChange={v => setFormData({ ...formData, allergies: v })} />
+                                <Input label="Sports Practice & Likes" placeholder="Soccer, Tennis..." value={formData.sports} onChange={(v: any) => setFormData({ ...formData, sports: v })} />
+                                <Input label="Hobbies" placeholder="Reading, Music..." value={formData.hobbies} onChange={(v: any) => setFormData({ ...formData, hobbies: v })} />
+                                <Input label="Favorite Subjects" placeholder="Math, Art..." value={formData.favoriteSubject} onChange={(v: any) => setFormData({ ...formData, favoriteSubject: v })} />
+                                <Input label="Personality" placeholder="Extroverted, Social..." value={formData.personality} onChange={(v: any) => setFormData({ ...formData, personality: v })} />
+                                <Input label="Dietary Restrictions" placeholder="Vegetarian, etc..." value={formData.dietaryRestrictions} onChange={(v: any) => setFormData({ ...formData, dietaryRestrictions: v })} />
+                                <Input label="Allergies (esp. Pets)" placeholder="Cats, Peanuts..." value={formData.allergies} onChange={(v: any) => setFormData({ ...formData, allergies: v })} />
                             </div>
                             <div className="grid grid-cols-1 gap-5">
-                                <Input label="Medical Information" placeholder="Current medications, conditions..." value={formData.medicalInfo} onChange={v => setFormData({ ...formData, medicalInfo: v })} isTextArea />
-                                <Input label="Budget" placeholder="Approximate budget per year..." icon={<DollarSign size={16} />} value={formData.budget} onChange={v => setFormData({ ...formData, budget: v })} />
+                                <Input label="Medical Information" placeholder="Current medications, conditions..." value={formData.medicalInfo} onChange={(v: any) => setFormData({ ...formData, medicalInfo: v })} isTextArea />
+                                <Input label="Budget" placeholder="Approximate budget per year..." icon={<DollarSign size={16} />} value={formData.budget} onChange={(v: any) => setFormData({ ...formData, budget: v })} />
                             </div>
                         </section>
 
@@ -403,7 +403,7 @@ export default function ApplyPage() {
                                 label="Why do you want to study abroad?"
                                 placeholder="Tell us your story..."
                                 value={formData.essay}
-                                onChange={v => setFormData({ ...formData, essay: v })}
+                                onChange={(v: any) => setFormData({ ...formData, essay: v })}
                                 isTextArea
                                 rows={4}
                             />
@@ -411,7 +411,7 @@ export default function ApplyPage() {
                                 label="Anything else we should know?"
                                 placeholder="Additional context..."
                                 value={formData.otherInfo}
-                                onChange={v => setFormData({ ...formData, otherInfo: v })}
+                                onChange={(v: any) => setFormData({ ...formData, otherInfo: v })}
                                 isTextArea
                             />
 

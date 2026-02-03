@@ -126,7 +126,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                     <span className="text-gray-400 font-bold uppercase text-[10px] whitespace-nowrap w-12">Name:</span>
                                                     <input
                                                         value={isStudent ? formData.studentName : (formData.agentName || '')}
-                                                        onChange={e => setFormData(p => ({ ...p, [isStudent ? 'studentName' : 'agentName']: e.target.value }))}
+                                                        onChange={e => setFormData((p: any) => ({ ...p, [isStudent ? 'studentName' : 'agentName']: e.target.value }))}
                                                         className="text-xl font-black text-gray-900 bg-transparent border-b border-gray-300 focus:border-black rounded-none px-0 py-1 w-full outline-none"
                                                         placeholder="Agent Name"
                                                     />
@@ -137,7 +137,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                             <span className="text-gray-400 font-bold uppercase text-[10px] whitespace-nowrap w-12">Web:</span>
                                                             <input
                                                                 value={formData.agencyProfile?.website || ''}
-                                                                onChange={e => setFormData(p => ({ ...p, agencyProfile: { ...p.agencyProfile, website: e.target.value } }))}
+                                                                onChange={e => setFormData((p: any) => ({ ...p, agencyProfile: { ...p.agencyProfile, website: e.target.value } }))}
                                                                 className="text-sm font-bold text-gray-700 bg-transparent border-b border-gray-200 focus:border-black rounded-none px-0 py-1 w-full outline-none"
                                                                 placeholder="www.example.com"
                                                             />
@@ -147,7 +147,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                                 <span className="text-gray-400 font-bold uppercase text-[10px] whitespace-nowrap w-12">Region:</span>
                                                                 <input
                                                                     value={formData.agencyProfile?.region || ''}
-                                                                    onChange={e => setFormData(p => ({ ...p, agencyProfile: { ...p.agencyProfile, region: e.target.value } }))}
+                                                                    onChange={e => setFormData((p: any) => ({ ...p, agencyProfile: { ...p.agencyProfile, region: e.target.value } }))}
                                                                     className="text-sm font-bold text-gray-700 bg-transparent border-b border-gray-200 focus:border-black rounded-none px-0 py-1 w-full outline-none"
                                                                     placeholder="Region"
                                                                 />
@@ -156,7 +156,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                                 <span className="text-gray-400 font-bold uppercase text-[10px] whitespace-nowrap w-12">City:</span>
                                                                 <input
                                                                     value={formData.agencyProfile?.city || ''}
-                                                                    onChange={e => setFormData(p => ({ ...p, agencyProfile: { ...p.agencyProfile, city: e.target.value } }))}
+                                                                    onChange={e => setFormData((p: any) => ({ ...p, agencyProfile: { ...p.agencyProfile, city: e.target.value } }))}
                                                                     className="text-sm font-bold text-gray-700 bg-transparent border-b border-gray-200 focus:border-black rounded-none px-0 py-1 w-full outline-none"
                                                                     placeholder="City"
                                                                 />
@@ -166,7 +166,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                             <span className="text-gray-400 font-bold uppercase text-[10px] whitespace-nowrap w-12">Addr:</span>
                                                             <input
                                                                 value={formData.agencyProfile?.address || ''}
-                                                                onChange={e => setFormData(p => ({ ...p, agencyProfile: { ...p.agencyProfile, address: e.target.value } }))}
+                                                                onChange={e => setFormData((p: any) => ({ ...p, agencyProfile: { ...p.agencyProfile, address: e.target.value } }))}
                                                                 className="text-sm font-bold text-gray-700 bg-transparent border-b border-gray-200 focus:border-black rounded-none px-0 py-1 w-full outline-none"
                                                                 placeholder="Full Address"
                                                             />
@@ -223,15 +223,15 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                 updateLead(lead.id, {
                                                     agencyProfile: {
                                                         ...lead.agencyProfile,
-                                                        partnershipStatus: newStatus
-                                                    }
+                                                        partnershipStatus: newStatus as any
+                                                    } as any
                                                 });
                                                 // Sync local form data too if editing
-                                                setFormData(p => ({
+                                                setFormData((p: any) => ({
                                                     ...p,
                                                     agencyProfile: {
                                                         ...p.agencyProfile,
-                                                        partnershipStatus: newStatus
+                                                        partnershipStatus: newStatus as any
                                                     }
                                                 }));
                                             }}
@@ -259,7 +259,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                         <input
                                             list="countries-list"
                                             value={formData.country}
-                                            onChange={e => setFormData(p => ({ ...p, country: e.target.value }))}
+                                            onChange={e => setFormData((p: any) => ({ ...p, country: e.target.value }))}
                                             className="text-sm font-medium bg-transparent border-b border-gray-300 focus:border-black rounded-none px-0 py-0.5 w-48 outline-none placeholder:text-gray-300"
                                             placeholder="Select Country..."
                                         />

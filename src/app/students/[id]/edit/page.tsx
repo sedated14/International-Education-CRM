@@ -35,8 +35,7 @@ export default function EditStudentPage() {
         whatsappNumber: '',
         currentSchool: '',
         currentGrade: '',
-        currentSchool: '',
-        currentGrade: '',
+
         graduatedInHomeCountry: false, // New
         gpa: '',
         englishLevel: '',
@@ -75,8 +74,7 @@ export default function EditStudentPage() {
                 whatsappNumber: lead.studentProfile.whatsappNumber || '',
                 currentSchool: lead.studentProfile.currentSchool || '',
                 currentGrade: lead.studentProfile.currentGrade || '',
-                currentSchool: lead.studentProfile.currentSchool || '',
-                currentGrade: lead.studentProfile.currentGrade || '',
+
                 graduatedInHomeCountry: lead.studentProfile.graduatedInHomeCountry || false,
                 gpa: lead.studentProfile.gpa || '',
                 englishLevel: lead.studentProfile.englishLevel || '',
@@ -116,14 +114,14 @@ export default function EditStudentPage() {
                 residence: formData.residence,
                 phoneNumber: formData.phoneNumber,
                 whatsappNumber: formData.whatsappNumber,
+                email: formData.studentEmail,
                 currentSchool: formData.currentSchool,
                 currentGrade: formData.currentGrade,
-                currentSchool: formData.currentSchool,
-                currentGrade: formData.currentGrade,
+
                 graduatedInHomeCountry: formData.graduatedInHomeCountry,
                 gpa: formData.gpa,
                 englishLevel: formData.englishLevel as any,
-                desiredDestination: formData.destinations,
+                desiredDestination: formData.destinations as any,
                 targetGrades: formData.targetGrades,
                 seekingGraduation: formData.seekingGraduation,
                 sports: formData.sports.split(',').map(s => s.trim()).filter(Boolean),
@@ -145,9 +143,8 @@ export default function EditStudentPage() {
 
             await updateLead(lead.id, {
                 studentName: formData.studentName,
-                email: formData.studentEmail,
                 country: formData.residence || formData.nationality || lead.country,
-                studentProfile: updatedProfile
+                studentProfile: updatedProfile as any
             });
 
             router.push(`/students/${lead.id}`);
