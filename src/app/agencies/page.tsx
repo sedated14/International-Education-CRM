@@ -186,26 +186,26 @@ export default function AgenciesPage() {
     };
 
     return (
-        <div className="flex h-screen bg-[#F0F2F5] text-[#1D1D1F] overflow-hidden font-sans">
+        <div className="flex h-screen bg-[#F0F2F5] dark:bg-gray-950 text-[#1D1D1F] dark:text-gray-100 overflow-hidden font-sans">
             <Navigation />
 
             <main className="flex-1 flex flex-col h-screen overflow-hidden">
                 {/* Header */}
-                <header className="bg-white border-b border-gray-200 px-8 py-6 flex justify-between items-center z-20">
+                <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-8 py-6 flex justify-between items-center z-20">
                     <div>
                         <div className="flex items-center gap-3 mb-1">
-                            <div className="p-2 bg-blue-100 text-blue-600 rounded-lg">
+                            <div className="p-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">
                                 <Globe size={20} />
                             </div>
-                            <h1 className="text-2xl font-black text-gray-900">Agency Network</h1>
+                            <h1 className="text-2xl font-black text-gray-900 dark:text-white">Agency Network</h1>
                         </div>
-                        <p className="text-gray-500 font-medium text-sm ml-12">Manage partnerships and recruitment channels</p>
+                        <p className="text-gray-500 dark:text-gray-400 font-medium text-sm ml-12">Manage partnerships and recruitment channels</p>
                     </div>
                     <div className="flex gap-4">
                         {selectedIds.size > 0 && (
                             <button
                                 onClick={handleBulkDelete}
-                                className="flex items-center gap-2 px-5 py-2.5 bg-red-50 border border-red-100 text-red-600 font-bold rounded-xl hover:bg-red-100 transition-all text-sm animate-in fade-in slide-in-from-top-2"
+                                className="flex items-center gap-2 px-5 py-2.5 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900 text-red-600 dark:text-red-400 font-bold rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 transition-all text-sm animate-in fade-in slide-in-from-top-2"
                             >
                                 <Trash2 size={16} />
                                 Delete ({selectedIds.size})
@@ -213,20 +213,20 @@ export default function AgenciesPage() {
                         )}
                         <button
                             onClick={() => setShowImportModal(true)}
-                            className="flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-all text-sm"
+                            className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all text-sm"
                         >
                             <FileSpreadsheet size={16} />
                             Upload CSV
                         </button>
                         <button
                             onClick={handleExportCSV}
-                            className="flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-all text-sm"
+                            className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all text-sm"
                         >
                             <Download size={16} />
                             Export CSV
                         </button>
                         <Link href="/agencies/add">
-                            <button className="flex items-center gap-2 px-5 py-2.5 bg-black text-white font-bold rounded-xl hover:bg-gray-900 shadow-lg hover:shadow-xl transition-all text-sm">
+                            <button className="flex items-center gap-2 px-5 py-2.5 bg-black dark:bg-white text-white dark:text-black font-bold rounded-xl hover:bg-gray-900 dark:hover:bg-gray-200 shadow-lg hover:shadow-xl transition-all text-sm">
                                 <Plus size={16} />
                                 Add Agency
                             </button>
@@ -244,14 +244,14 @@ export default function AgenciesPage() {
                             <input
                                 type="text"
                                 placeholder="Search agencies..."
-                                className="w-full pl-12 pr-4 py-3 bg-white border-2 border-transparent focus:border-black rounded-2xl font-medium outline-none transition-all shadow-sm"
+                                className="w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-900 border-2 border-transparent focus:border-black dark:focus:border-white rounded-2xl font-medium outline-none transition-all shadow-sm text-gray-900 dark:text-white placeholder-gray-400"
                                 value={search}
                                 onChange={e => setSearch(e.target.value)}
                             />
                         </div>
                         <button
                             onClick={() => setShowFilters(!showFilters)}
-                            className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-bold transition-all shadow-sm ${showFilters ? 'bg-black text-white' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
+                            className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-bold transition-all shadow-sm ${showFilters ? 'bg-black text-white dark:bg-white dark:text-black' : 'bg-white text-gray-700 hover:bg-gray-50 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800'}`}
                         >
                             <Filter size={18} />
                             Filters
@@ -261,14 +261,14 @@ export default function AgenciesPage() {
                                 </span>
                             )}
                         </button>
-                        <div className="flex bg-white rounded-2xl p-1 shadow-sm">
+                        <div className="flex bg-white dark:bg-gray-900 rounded-2xl p-1 shadow-sm">
                             {(['All', 'Active', 'Pending', 'Prospective', 'Inactive', 'Do Not Contact'] as const).map(status => (
                                 <button
                                     key={status}
                                     onClick={() => setStatusFilter(status)}
                                     className={`px-6 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${statusFilter === status
-                                        ? 'bg-black text-white shadow-md'
-                                        : 'text-gray-500 hover:text-black hover:bg-gray-50'
+                                        ? 'bg-black text-white shadow-md dark:bg-gray-700'
+                                        : 'text-gray-500 hover:text-black hover:bg-gray-50 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-800'
                                         }`}
                                 >
                                     {status}
@@ -279,9 +279,9 @@ export default function AgenciesPage() {
 
                     {/* Filter Panel */}
                     {showFilters && (
-                        <div className="bg-white rounded-[32px] p-8 mb-8 shadow-xl border border-gray-100 animate-in slide-in-from-top-4">
+                        <div className="bg-white dark:bg-gray-900 rounded-[32px] p-8 mb-8 shadow-xl border border-gray-100 dark:border-gray-800 animate-in slide-in-from-top-4">
                             <div className="flex justify-between items-center mb-6">
-                                <h3 className="text-lg font-black text-gray-900 flex items-center gap-2">
+                                <h3 className="text-lg font-black text-gray-900 dark:text-white flex items-center gap-2">
                                     <Filter size={20} className="text-blue-500" /> Advanced Filters
                                 </h3>
                                 <button
@@ -305,7 +305,7 @@ export default function AgenciesPage() {
                                             <Calendar size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                                             <input
                                                 type="date"
-                                                className="w-full pl-9 pr-3 py-2 bg-gray-50 rounded-xl border border-gray-200 text-sm font-bold focus:border-blue-500 outline-none"
+                                                className="w-full pl-9 pr-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-bold focus:border-blue-500 outline-none text-gray-900 dark:text-white"
                                                 value={dateRange.start}
                                                 onChange={e => setDateRange(prev => ({ ...prev, start: e.target.value }))}
                                             />
@@ -314,7 +314,7 @@ export default function AgenciesPage() {
                                             <Calendar size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                                             <input
                                                 type="date"
-                                                className="w-full pl-9 pr-3 py-2 bg-gray-50 rounded-xl border border-gray-200 text-sm font-bold focus:border-blue-500 outline-none"
+                                                className="w-full pl-9 pr-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-bold focus:border-blue-500 outline-none text-gray-900 dark:text-white"
                                                 value={dateRange.end}
                                                 onChange={e => setDateRange(prev => ({ ...prev, end: e.target.value }))}
                                             />
@@ -338,7 +338,7 @@ export default function AgenciesPage() {
                                                 }}
                                                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${selectedRegions.includes(region)
                                                     ? 'bg-blue-600 text-white border-blue-600'
-                                                    : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
+                                                    : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                                                     }`}
                                             >
                                                 {region}
@@ -364,7 +364,7 @@ export default function AgenciesPage() {
                                                 }}
                                                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${selectedCountries.includes(country)
                                                     ? 'bg-blue-600 text-white border-blue-600'
-                                                    : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
+                                                    : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                                                     }`}
                                             >
                                                 {country}
@@ -378,61 +378,61 @@ export default function AgenciesPage() {
                     )}
 
                     {/* Table */}
-                    <div className="bg-white rounded-[32px] shadow-sm border border-gray-100 overflow-hidden">
+                    <div className="bg-white dark:bg-gray-900 rounded-[32px] shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="bg-gray-50 border-b border-gray-100 text-xs uppercase tracking-wider text-gray-400 font-bold cursor-pointer select-none">
+                                <tr className="bg-gray-50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800 text-xs uppercase tracking-wider text-gray-400 font-bold cursor-pointer select-none">
                                     <th className="px-6 py-5 w-16 text-center">
                                         <input
                                             type="checkbox"
                                             checked={selectedIds.size > 0 && selectedIds.size === sortedAgencies.length}
                                             onChange={handleSelectAll}
-                                            className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                            className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
                                         />
                                     </th>
-                                    <th className="px-2 py-5 hover:text-gray-600 transition-colors" onClick={() => handleSort('name')}>
+                                    <th className="px-2 py-5 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" onClick={() => handleSort('name')}>
                                         Agency Name {sortConfig?.key === 'name' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
                                     </th>
-                                    <th className="px-6 py-5 hover:text-gray-600 transition-colors" onClick={() => handleSort('location')}>
+                                    <th className="px-6 py-5 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" onClick={() => handleSort('location')}>
                                         Location {sortConfig?.key === 'location' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
                                     </th>
-                                    <th className="px-6 py-5 hover:text-gray-600 transition-colors" onClick={() => handleSort('partnershipStatus')}>
+                                    <th className="px-6 py-5 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" onClick={() => handleSort('partnershipStatus')}>
                                         Status {sortConfig?.key === 'partnershipStatus' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
                                     </th>
-                                    <th className="px-6 py-5 hover:text-gray-600 transition-colors" onClick={() => handleSort('keyContactName')}>
+                                    <th className="px-6 py-5 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" onClick={() => handleSort('keyContactName')}>
                                         Key Contact {sortConfig?.key === 'keyContactName' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
                                     </th>
-                                    <th className="px-6 py-5 text-right hover:text-gray-600 transition-colors" onClick={() => handleSort('historicalSends')}>
+                                    <th className="px-6 py-5 text-right hover:text-gray-600 dark:hover:text-gray-300 transition-colors" onClick={() => handleSort('historicalSends')}>
                                         History {sortConfig?.key === 'historicalSends' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
                                     </th>
-                                    <th className="px-6 py-5 text-right hover:text-gray-600 transition-colors" onClick={() => handleSort('studentCount')}>
+                                    <th className="px-6 py-5 text-right hover:text-gray-600 dark:hover:text-gray-300 transition-colors" onClick={() => handleSort('studentCount')}>
                                         Active Leads {sortConfig?.key === 'studentCount' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
                                     </th>
-                                    <th className="px-6 py-5 text-right hover:text-gray-600 transition-colors" onClick={() => handleSort('createdAt')}>
+                                    <th className="px-6 py-5 text-right hover:text-gray-600 dark:hover:text-gray-300 transition-colors" onClick={() => handleSort('createdAt')}>
                                         Date Added {sortConfig?.key === 'createdAt' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
                                     </th>
                                     <th className="px-8 py-5 text-right">Action</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-50">
+                            <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
                                 {sortedAgencies.map(agency => (
-                                    <tr key={agency.id} className={`group hover:bg-blue-50/50 transition-colors ${selectedIds.has(String(agency.id)) ? 'bg-blue-50/30' : ''}`}>
+                                    <tr key={agency.id} className={`group hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-colors ${selectedIds.has(String(agency.id)) ? 'bg-blue-50/30 dark:bg-blue-900/20' : ''}`}>
                                         <td className="px-6 py-5 text-center">
                                             <input
                                                 type="checkbox"
                                                 checked={selectedIds.has(String(agency.id))}
                                                 onChange={() => handleSelect(String(agency.id))}
-                                                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
                                             />
                                         </td>
                                         <td className="px-2 py-5">
                                             <Link href={`/agencies/${agency.id}`}>
-                                                <div className="font-bold text-gray-900 hover:text-blue-600 transition-colors cursor-pointer">{agency.name}</div>
+                                                <div className="font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">{agency.name}</div>
                                             </Link>
                                             <div className="text-xs text-gray-400 font-medium">{agency.type}</div>
                                         </td>
                                         <td className="px-6 py-5">
-                                            <div className="flex items-center gap-2 text-gray-600 font-medium text-sm">
+                                            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300 font-medium text-sm">
                                                 <MapPin size={14} className="text-gray-400" />
                                                 {[agency.city, agency.country].filter(Boolean).join(', ')}
                                             </div>
@@ -442,33 +442,33 @@ export default function AgenciesPage() {
                                         </td>
                                         <td className="px-6 py-5">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-xs font-bold">
+                                                <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400 text-xs font-bold">
                                                     {agency.keyContacts[0]?.name.charAt(0)}
                                                 </div>
                                                 <div>
-                                                    <div className="text-sm font-bold text-gray-900">{agency.keyContacts[0]?.name}</div>
+                                                    <div className="text-sm font-bold text-gray-900 dark:text-white">{agency.keyContacts[0]?.name}</div>
                                                     <div className="text-xs text-gray-400">{agency.keyContacts[0]?.email}</div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-5 text-right">
-                                            <div className="font-black text-lg text-gray-900">{agency.historicalSends}</div>
+                                            <div className="font-black text-lg text-gray-900 dark:text-white">{agency.historicalSends}</div>
                                             <div className="text-[10px] text-gray-400 uppercase font-bold">Total Sent</div>
                                         </td>
                                         <td className="px-6 py-5 text-right">
                                             <Link href={`/agencies/${agency.id}/leads`} className="group/leads inline-flex flex-col items-end cursor-pointer">
-                                                <div className="font-black text-lg text-blue-600 group-hover/leads:underline decoration-2 underline-offset-2">{(agency as any).studentCount}</div>
-                                                <div className="text-[10px] text-blue-400 uppercase font-bold group-hover/leads:text-blue-600">View Leads</div>
+                                                <div className="font-black text-lg text-blue-600 dark:text-blue-400 group-hover/leads:underline decoration-2 underline-offset-2">{(agency as any).studentCount}</div>
+                                                <div className="text-[10px] text-blue-400 dark:text-blue-500 uppercase font-bold group-hover/leads:text-blue-600 dark:group-hover/leads:text-blue-400">View Leads</div>
                                             </Link>
                                         </td>
                                         <td className="px-6 py-5 text-right">
-                                            <div className="text-sm font-bold text-gray-900">
+                                            <div className="text-sm font-bold text-gray-900 dark:text-gray-300">
                                                 {agency.createdAt ? new Date(agency.createdAt).toLocaleDateString() : '-'}
                                             </div>
                                         </td>
                                         <td className="px-8 py-5 text-right">
                                             <Link href={`/agencies/${agency.id}`}>
-                                                <button className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white border-2 border-gray-100 hover:border-black hover:bg-black hover:text-white transition-all text-gray-400">
+                                                <button className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 hover:border-black dark:hover:border-white hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all text-gray-400">
                                                     <ChevronRight size={18} />
                                                 </button>
                                             </Link>
@@ -493,12 +493,12 @@ export default function AgenciesPage() {
 
 const StatusBadge = ({ status }: { status: string }) => {
     const styles = {
-        Active: 'bg-green-100 text-green-700',
-        Pending: 'bg-orange-100 text-orange-700',
-        Inactive: 'bg-gray-100 text-gray-500',
-        Prospective: 'bg-blue-100 text-blue-700',
-        'Do Not Contact': 'bg-red-100 text-red-700'
-    }[status] || 'bg-gray-100 text-gray-500';
+        Active: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
+        Pending: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300',
+        Inactive: 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400',
+        Prospective: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+        'Do Not Contact': 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
+    }[status] || 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400';
 
     return (
         <span className={`px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide ${styles}`}>
