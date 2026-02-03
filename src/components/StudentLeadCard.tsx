@@ -14,7 +14,7 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
     return (
         <div className="bg-white rounded-[24px] border-4 border-emerald-500 shadow-sm hover:shadow-md transition-all cursor-pointer group overflow-hidden">
             {/* Header: Name, Agency, Status */}
-            <div className="bg-white p-5 border-b-2 border-emerald-100 flex justify-between items-start">
+            <div className="bg-white p-5 border-b-2 border-emerald-500 flex justify-between items-start">
                 <div>
                     <h3 className="font-bold text-lg text-gray-900 leading-tight">{lead.studentName}</h3>
                     {lead.agencyProfile && (
@@ -50,7 +50,7 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
                 </div>
 
                 {/* Education Details */}
-                <div className="grid grid-cols-2 gap-2 mb-4 bg-white p-3 rounded-xl border-2 border-emerald-100">
+                <div className="grid grid-cols-2 gap-2 mb-4 bg-white p-3 rounded-xl border-2 border-emerald-500">
                     <div className="flex flex-col gap-0.5">
                         <span className="font-bold text-gray-400 uppercase text-[10px]">Current Grade</span>
                         <span className="font-bold text-sm text-gray-900">{studentProfile.currentGrade || 'N/A'}</span>
@@ -61,7 +61,7 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
                     </div>
 
                     {/* Duration Row */}
-                    <div className="col-span-2 flex items-center gap-2 text-xs text-gray-700 mt-1 pt-2 border-t-2 border-emerald-100">
+                    <div className="col-span-2 flex items-center gap-2 text-xs text-gray-700 mt-1 pt-2 border-t-2 border-emerald-500">
                         <span className="font-bold text-gray-400 uppercase text-[10px]">Duration:</span>
                         <span className="font-bold">{studentProfile.duration || 'Not Specified'}</span>
                     </div>
