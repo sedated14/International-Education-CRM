@@ -108,10 +108,10 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/20 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white w-full max-w-2xl rounded-[32px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 border border-white/20 flex flex-col max-h-[90vh]">
+            <div className="bg-white dark:bg-gray-900 w-full max-w-2xl rounded-[32px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 border border-white/20 flex flex-col max-h-[90vh]">
 
                 {/* HEADER */}
-                <div className="bg-[#F9F9FB] p-8 border-b border-gray-100 flex justify-between items-start">
+                <div className="bg-[#F9F9FB] dark:bg-gray-950 p-8 border-b border-gray-100 dark:border-gray-800 flex justify-between items-start">
                     <div className="flex gap-6 w-full">
                         <div className={`w-20 h-20 rounded-3xl flex items-center justify-center text-4xl font-bold text-white shadow-lg shrink-0 ${isStudent ? 'bg-orange-500' : 'bg-purple-600'}`}>
                             {lead.country.substring(0, 2).toUpperCase()}
@@ -127,7 +127,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                     <input
                                                         value={isStudent ? formData.studentName : (formData.agentName || '')}
                                                         onChange={e => setFormData((p: any) => ({ ...p, [isStudent ? 'studentName' : 'agentName']: e.target.value }))}
-                                                        className="text-xl font-black text-gray-900 bg-transparent border-b border-gray-300 focus:border-black rounded-none px-0 py-1 w-full outline-none"
+                                                        className="text-xl font-black text-gray-900 dark:text-white bg-transparent border-b border-gray-300 dark:border-gray-700 focus:border-black dark:focus:border-white rounded-none px-0 py-1 w-full outline-none"
                                                         placeholder="Agent Name"
                                                     />
                                                 </div>
@@ -138,7 +138,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                             <input
                                                                 value={formData.agencyProfile?.website || ''}
                                                                 onChange={e => setFormData((p: any) => ({ ...p, agencyProfile: { ...p.agencyProfile, website: e.target.value } }))}
-                                                                className="text-sm font-bold text-gray-700 bg-transparent border-b border-gray-200 focus:border-black rounded-none px-0 py-1 w-full outline-none"
+                                                                className="text-sm font-bold text-gray-700 dark:text-gray-300 bg-transparent border-b border-gray-200 dark:border-gray-700 focus:border-black dark:focus:border-white rounded-none px-0 py-1 w-full outline-none"
                                                                 placeholder="www.example.com"
                                                             />
                                                         </div>
@@ -148,7 +148,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                                 <input
                                                                     value={formData.agencyProfile?.region || ''}
                                                                     onChange={e => setFormData((p: any) => ({ ...p, agencyProfile: { ...p.agencyProfile, region: e.target.value } }))}
-                                                                    className="text-sm font-bold text-gray-700 bg-transparent border-b border-gray-200 focus:border-black rounded-none px-0 py-1 w-full outline-none"
+                                                                    className="text-sm font-bold text-gray-700 dark:text-gray-300 bg-transparent border-b border-gray-200 dark:border-gray-700 focus:border-black dark:focus:border-white rounded-none px-0 py-1 w-full outline-none"
                                                                     placeholder="Region"
                                                                 />
                                                             </div>
@@ -157,7 +157,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                                 <input
                                                                     value={formData.agencyProfile?.city || ''}
                                                                     onChange={e => setFormData((p: any) => ({ ...p, agencyProfile: { ...p.agencyProfile, city: e.target.value } }))}
-                                                                    className="text-sm font-bold text-gray-700 bg-transparent border-b border-gray-200 focus:border-black rounded-none px-0 py-1 w-full outline-none"
+                                                                    className="text-sm font-bold text-gray-700 dark:text-gray-300 bg-transparent border-b border-gray-200 dark:border-gray-700 focus:border-black dark:focus:border-white rounded-none px-0 py-1 w-full outline-none"
                                                                     placeholder="City"
                                                                 />
                                                             </div>
@@ -167,7 +167,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                             <input
                                                                 value={formData.agencyProfile?.address || ''}
                                                                 onChange={e => setFormData((p: any) => ({ ...p, agencyProfile: { ...p.agencyProfile, address: e.target.value } }))}
-                                                                className="text-sm font-bold text-gray-700 bg-transparent border-b border-gray-200 focus:border-black rounded-none px-0 py-1 w-full outline-none"
+                                                                className="text-sm font-bold text-gray-700 dark:text-gray-300 bg-transparent border-b border-gray-200 dark:border-gray-700 focus:border-black dark:focus:border-white rounded-none px-0 py-1 w-full outline-none"
                                                                 placeholder="Full Address"
                                                             />
                                                         </div>
@@ -175,7 +175,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                 )}
                                             </div>
                                         ) : (
-                                            <h2 className="text-2xl font-black text-gray-900 truncate">{isStudent ? lead.studentName : lead.agentName}</h2>
+                                            <h2 className="text-2xl font-black text-gray-900 dark:text-white truncate">{isStudent ? lead.studentName : lead.agentName}</h2>
                                         )}
                                         {!isEditing && (
                                             <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md shrink-0 ${isStudent ? 'bg-orange-100 text-orange-600' : 'bg-purple-100 text-purple-600'}`}>
@@ -260,7 +260,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                             list="countries-list"
                                             value={formData.country}
                                             onChange={e => setFormData((p: any) => ({ ...p, country: e.target.value }))}
-                                            className="text-sm font-medium bg-transparent border-b border-gray-300 focus:border-black rounded-none px-0 py-0.5 w-48 outline-none placeholder:text-gray-300"
+                                            className="text-sm font-medium bg-transparent border-b border-gray-300 dark:border-gray-600 focus:border-black dark:focus:border-white rounded-none px-0 py-0.5 w-48 outline-none placeholder:text-gray-300 dark:text-gray-300"
                                             placeholder="Select Country..."
                                         />
                                         <datalist id="countries-list">
@@ -272,7 +272,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                         {lead.country} • {lead.status}
                                         {!isStudent && lead.agencyProfile?.city && ` • ${lead.agencyProfile.city}`}
                                         {!isStudent && lead.agencyProfile?.website && (
-                                            <a href={lead.agencyProfile.website.startsWith('http') ? lead.agencyProfile.website : `https://${lead.agencyProfile.website}`} target="_blank" rel="noopener noreferrer" className="ml-2 text-blue-500 hover:underline text-xs">
+                                            <a href={lead.agencyProfile.website.startsWith('http') ? lead.agencyProfile.website : `https://${lead.agencyProfile.website}`} target="_blank" rel="noopener noreferrer" className="ml-2 text-blue-500 dark:text-blue-400 hover:underline text-xs">
                                                 Website
                                             </a>
                                         )}
@@ -288,11 +288,11 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                 <div className="flex gap-2">
                     <button
                         onClick={() => setIsEditing(!isEditing)}
-                        className={`p-2 rounded-full transition-colors ${isEditing ? 'bg-blue-100 text-blue-600' : 'hover:bg-black/5 text-gray-400'}`}
+                        className={`p-2 rounded-full transition-colors ${isEditing ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400' : 'hover:bg-black/5 dark:hover:bg-white/10 text-gray-400'}`}
                     >
                         <Edit2 size={24} />
                     </button>
-                    <button onClick={onClose} className="p-2 hover:bg-black/5 rounded-full transition-colors">
+                    <button onClick={onClose} className="p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors">
                         <X size={24} className="text-gray-400" />
                     </button>
                 </div>
@@ -304,26 +304,26 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                     {/* TOP METRICS: DATES (Moved & Refined) */}
                     <div className="grid grid-cols-3 gap-3 mb-6">
                         {/* Date Received */}
-                        <div className="bg-gray-50/80 p-3 rounded-2xl border border-gray-100/60">
-                            <p className="text-[9px] text-gray-400 font-black uppercase tracking-wider mb-1">Received</p>
-                            <p className="font-black text-gray-800 text-xs">
+                        <div className="bg-gray-50/80 dark:bg-gray-800/80 p-3 rounded-2xl border border-gray-100/60 dark:border-gray-700/60">
+                            <p className="text-[9px] text-gray-400 dark:text-gray-500 font-black uppercase tracking-wider mb-1">Received</p>
+                            <p className="font-black text-gray-800 dark:text-gray-200 text-xs">
                                 {new Date(lead.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric' })}
                             </p>
                         </div>
 
                         {/* Last Contacted */}
-                        <div className="bg-gray-50/80 p-3 rounded-2xl border border-gray-100/60">
-                            <p className="text-[9px] text-gray-400 font-black uppercase tracking-wider mb-1">Last Contacted</p>
+                        <div className="bg-gray-50/80 dark:bg-gray-800/80 p-3 rounded-2xl border border-gray-100/60 dark:border-gray-700/60">
+                            <p className="text-[9px] text-gray-400 dark:text-gray-500 font-black uppercase tracking-wider mb-1">Last Contacted</p>
                             {isEditing ? (
                                 <div className="flex gap-2">
                                     <input
                                         type="date"
-                                        className="bg-white border border-gray-200 rounded-lg px-2 py-1 text-[10px] font-bold w-full"
+                                        className="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 text-[10px] font-bold w-full dark:text-white"
                                         value={formData.lastContacted ? new Date(formData.lastContacted).toISOString().split('T')[0] : ''}
                                         onChange={e => updateDateTime('lastContacted', 'date', e.target.value)}
                                     />
                                     <select
-                                        className="bg-white border border-gray-200 rounded-lg px-2 py-1 text-[10px] font-bold"
+                                        className="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 text-[10px] font-bold dark:text-white"
                                         value={formData.lastContacted ? new Date(formData.lastContacted).getHours() : new Date().getHours()}
                                         onChange={e => updateDateTime('lastContacted', 'hour', e.target.value)}
                                     >
@@ -333,7 +333,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                     </select>
                                 </div>
                             ) : (
-                                <p className={`font-black text-xs ${lead.lastContacted ? 'text-gray-800' : 'text-gray-300'}`}>
+                                <p className={`font-black text-xs ${lead.lastContacted ? 'text-gray-800 dark:text-gray-200' : 'text-gray-300 dark:text-gray-600'}`}>
                                     {lead.lastContacted
                                         ? new Date(lead.lastContacted).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric' })
                                         : 'Never'
@@ -343,21 +343,21 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                         </div>
 
                         {/* Follow Up Due */}
-                        <div className="bg-blue-50/50 p-3 rounded-2xl border border-blue-100/60 relative group">
+                        <div className="bg-blue-50/50 dark:bg-blue-900/20 p-3 rounded-2xl border border-blue-100/60 dark:border-blue-800/40 relative group">
                             <div className="flex justify-between items-center mb-1">
-                                <p className="text-[9px] text-blue-400 font-black uppercase tracking-wider">Follow Up</p>
-                                {!isEditing && <PenTool size={10} onClick={() => setIsEditing(true)} className="text-blue-300 opacity-0 group-hover:opacity-100 cursor-pointer" />}
+                                <p className="text-[9px] text-blue-400 dark:text-blue-300 font-black uppercase tracking-wider">Follow Up</p>
+                                {!isEditing && <PenTool size={10} onClick={() => setIsEditing(true)} className="text-blue-300 dark:text-blue-400 opacity-0 group-hover:opacity-100 cursor-pointer" />}
                             </div>
                             {isEditing ? (
                                 <div className="flex gap-2">
                                     <input
                                         type="date"
-                                        className="bg-white border border-blue-200 rounded-lg px-2 py-1 text-[10px] font-bold text-blue-900 w-full"
+                                        className="bg-white dark:bg-gray-700 border border-blue-200 dark:border-blue-700 rounded-lg px-2 py-1 text-[10px] font-bold text-blue-900 dark:text-blue-100 w-full"
                                         value={formData.followUpDate ? new Date(formData.followUpDate).toISOString().split('T')[0] : ''}
                                         onChange={e => updateDateTime('followUpDate', 'date', e.target.value)}
                                     />
                                     <select
-                                        className="bg-white border border-blue-200 rounded-lg px-2 py-1 text-[10px] font-bold text-blue-900"
+                                        className="bg-white dark:bg-gray-700 border border-blue-200 dark:border-blue-700 rounded-lg px-2 py-1 text-[10px] font-bold text-blue-900 dark:text-blue-100"
                                         value={formData.followUpDate ? new Date(formData.followUpDate).getHours() : 9}
                                         onChange={e => updateDateTime('followUpDate', 'hour', e.target.value)}
                                     >
@@ -367,7 +367,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                     </select>
                                 </div>
                             ) : (
-                                <p className="font-black text-blue-600 text-xs">
+                                <p className="font-black text-blue-600 dark:text-blue-300 text-xs">
                                     {lead.followUpDate
                                         ? new Date(lead.followUpDate).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric' })
                                         : new Date(new Date(lead.createdAt).getTime() + (72 * 60 * 60 * 1000)).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric' })
@@ -379,17 +379,17 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
 
                     {/* NOTES SECTION (Moved to Body) */}
                     <div className="mb-8">
-                        <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <h3 className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4 flex items-center gap-2">
                             <StickyNote size={14} /> Notes & History
                         </h3>
-                        <div className="bg-yellow-50/50 p-4 rounded-2xl border border-yellow-100">
+                        <div className="bg-yellow-50/50 dark:bg-yellow-900/10 p-4 rounded-2xl border border-yellow-100 dark:border-yellow-900/20">
                             <div className="space-y-3">
                                 {formData.notes && formData.notes.length > 0 && (
                                     <div className="flex flex-col gap-3 max-h-60 overflow-y-auto custom-scrollbar pr-2">
                                         {[...formData.notes].sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).map((note: any) => (
-                                            <div key={note.id} className="bg-white p-3 rounded-xl border border-yellow-100 shadow-sm text-sm">
-                                                <p className="text-gray-700 font-medium leading-relaxed whitespace-pre-wrap">{note.content}</p>
-                                                <p className="text-[10px] text-gray-400 font-bold text-right mt-2 flex justify-end items-center gap-1">
+                                            <div key={note.id} className="bg-white dark:bg-gray-800 p-3 rounded-xl border border-yellow-100 dark:border-gray-700 shadow-sm text-sm">
+                                                <p className="text-gray-700 dark:text-gray-300 font-medium leading-relaxed whitespace-pre-wrap">{note.content}</p>
+                                                <p className="text-[10px] text-gray-400 dark:text-gray-500 font-bold text-right mt-2 flex justify-end items-center gap-1">
                                                     {new Date(note.timestamp).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                                 </p>
                                             </div>
@@ -403,7 +403,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                             value={newNote}
                                             onChange={e => setNewNote(e.target.value)}
                                             placeholder="Write a new note..."
-                                            className="w-full bg-white border border-yellow-200 focus:border-yellow-400 focus:ring-4 focus:ring-yellow-50 rounded-xl px-4 py-3 text-sm font-medium outline-none transition-all resize-none placeholder:text-gray-400"
+                                            className="w-full bg-white dark:bg-gray-800 border border-yellow-200 dark:border-yellow-900/40 focus:border-yellow-400 dark:focus:border-yellow-600 focus:ring-4 focus:ring-yellow-50 dark:focus:ring-yellow-900/10 rounded-xl px-4 py-3 text-sm font-medium outline-none transition-all resize-none placeholder:text-gray-400 dark:text-white"
                                             rows={3}
                                             autoFocus
                                         />
@@ -412,7 +412,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                 ) : (
                                     <div
                                         onClick={() => setIsEditing(true)}
-                                        className="py-3 px-4 rounded-xl border-2 border-dashed border-yellow-200 text-yellow-600/70 text-sm font-bold cursor-pointer hover:bg-yellow-50 hover:border-yellow-300 transition-all flex items-center justify-center gap-2"
+                                        className="py-3 px-4 rounded-xl border-2 border-dashed border-yellow-200 dark:border-yellow-900/30 text-yellow-600/70 dark:text-yellow-500/70 text-sm font-bold cursor-pointer hover:bg-yellow-50 dark:hover:bg-yellow-900/10 hover:border-yellow-300 dark:hover:border-yellow-900/50 transition-all flex items-center justify-center gap-2"
                                     >
                                         <PenTool size={14} /> Click to Add Note
                                     </div>
@@ -427,7 +427,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
 
                             {/* DEMOGRAPHICS */}
                             <section>
-                                <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Demographics</h3>
+                                <h3 className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">Demographics</h3>
                                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                                     <DetailItem
                                         icon={<User />}
@@ -663,7 +663,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                             <div className="flex flex-wrap gap-2">
                                                 {lead.agencyProfile?.targetCountries && lead.agencyProfile.targetCountries.length > 0 ? (
                                                     lead.agencyProfile.targetCountries.map(c => (
-                                                        <span key={c} className="px-2 py-1 bg-blue-50 text-blue-700 rounded-md text-xs font-bold border border-blue-100">{c}</span>
+                                                        <span key={c} className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-md text-xs font-bold border border-blue-100 dark:border-blue-800">{c}</span>
                                                     ))
                                                 ) : (
                                                     <span className="text-xs text-gray-400 italic">Not Specified</span>
@@ -690,7 +690,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                 <div className="flex flex-col gap-1">
                                                     {lead.agencyProfile?.gradesOffered && lead.agencyProfile.gradesOffered.length > 0 ? (
                                                         lead.agencyProfile.gradesOffered.map(g => (
-                                                            <span key={g} className="text-xs font-bold text-gray-700 flex items-center gap-2">
+                                                            <span key={g} className="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                                                                 <div className="w-1.5 h-1.5 rounded-full bg-purple-400" /> {g}
                                                             </span>
                                                         ))
@@ -717,7 +717,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                 <div className="flex flex-col gap-1">
                                                     {lead.agencyProfile?.duration && lead.agencyProfile.duration.length > 0 ? (
                                                         lead.agencyProfile.duration.map(d => (
-                                                            <span key={d} className="text-xs font-bold text-gray-700 flex items-center gap-2">
+                                                            <span key={d} className="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                                                                 <div className="w-1.5 h-1.5 rounded-full bg-green-400" /> {d}
                                                             </span>
                                                         ))
@@ -733,9 +733,9 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
 
                             {/* Key Contacts */}
                             <section>
-                                <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Key Contact</h3>
+                                <h3 className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">Key Contact</h3>
                                 {isEditing ? (
-                                    <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-4">
+                                    <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 space-y-4">
                                         <div className="grid grid-cols-2 gap-4">
                                             <Input
                                                 label="Full Name"
@@ -852,13 +852,13 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                         />
                                     </div>
                                 ) : (
-                                    <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100 flex items-center gap-4">
-                                        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-400 shadow-sm">
+                                    <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 flex items-center gap-4">
+                                        <div className="w-10 h-10 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center text-gray-400 shadow-sm">
                                             <User size={20} />
                                         </div>
                                         <div>
-                                            <div className="font-bold text-gray-900">{lead.agencyProfile?.keyContacts?.[0]?.name}</div>
-                                            <div className="text-xs text-gray-500 font-medium">{lead.agencyProfile?.keyContacts?.[0]?.role} • {lead.agencyProfile?.keyContacts?.[0]?.email}</div>
+                                            <div className="font-bold text-gray-900 dark:text-white">{lead.agencyProfile?.keyContacts?.[0]?.name}</div>
+                                            <div className="text-xs text-gray-500 dark:text-gray-400 font-medium">{lead.agencyProfile?.keyContacts?.[0]?.role} • {lead.agencyProfile?.keyContacts?.[0]?.email}</div>
                                             {lead.agencyProfile?.keyContacts?.[0]?.nickname && <div className="text-xs text-gray-400">aka {lead.agencyProfile.keyContacts[0].nickname}</div>}
                                         </div>
                                     </div>
@@ -867,13 +867,13 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
 
                             {/* General Notes Section (Moved Up) */}
                             <section className="animate-in fade-in slide-in-from-top-2">
-                                <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-1">
+                                <h3 className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4 flex items-center gap-1">
                                     General Notes
                                     {(lead.agencyProfile?.generalNotes || lead.agencyProfile?.culturalNotes) && (
                                         <span className="text-red-500 text-lg leading-3" title="Has Notes">*</span>
                                     )}
                                 </h3>
-                                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                                <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700">
                                     {isEditing ? (
                                         <div className="space-y-4">
                                             <Input
@@ -901,16 +901,16 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                         <div className="space-y-4">
                                             {lead.agencyProfile?.generalNotes ? (
                                                 <div>
-                                                    <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">General Notes</p>
-                                                    <p className="text-sm text-gray-700 whitespace-pre-wrap">{lead.agencyProfile.generalNotes}</p>
+                                                    <p className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase mb-1">General Notes</p>
+                                                    <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{lead.agencyProfile.generalNotes}</p>
                                                 </div>
                                             ) : (
                                                 <p className="text-xs text-gray-400 italic">No general notes available.</p>
                                             )}
                                             {lead.agencyProfile?.culturalNotes && (
-                                                <div className="pt-2 border-t border-gray-200/50">
-                                                    <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Cultural Notes</p>
-                                                    <p className="text-sm text-gray-700 whitespace-pre-wrap">{lead.agencyProfile.culturalNotes}</p>
+                                                <div className="pt-2 border-t border-gray-200/50 dark:border-gray-700/50">
+                                                    <p className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase mb-1">Cultural Notes</p>
+                                                    <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{lead.agencyProfile.culturalNotes}</p>
                                                 </div>
                                             )}
                                         </div>
@@ -1032,15 +1032,15 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
 
 
                 </div >
-                <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3 rounded-b-[32px]">
-                    <button onClick={onClose} className="px-6 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-200 transition-colors">Close</button>
+                <div className="p-6 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 flex justify-end gap-3 rounded-b-[32px]">
+                    <button onClick={onClose} className="px-6 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">Close</button>
                     {isEditing ? (
                         <button onClick={handleSave} className="px-6 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 hover:shadow-lg transition-all flex items-center gap-2">
                             <Save size={18} />
                             Save Changes
                         </button>
                     ) : (
-                        <button onClick={() => setIsEditing(true)} className="px-6 py-3 bg-black text-white rounded-xl font-bold hover:shadow-lg transition-all">Edit Lead</button>
+                        <button onClick={() => setIsEditing(true)} className="px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-xl font-bold hover:shadow-lg transition-all">Edit Lead</button>
                     )}
                 </div>
             </div >
@@ -1049,11 +1049,11 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
 };
 
 const DetailItem = ({ icon, label, value }: { icon: React.ReactNode, label: string, value: React.ReactNode }) => (
-    <div className="bg-gray-50 p-3 rounded-2xl border border-gray-100 flex items-center gap-3 min-h-[60px]">
+    <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-2xl border border-gray-100 dark:border-gray-700 flex items-center gap-3 min-h-[60px]">
         <div className="text-gray-400 [&>svg]:w-5 [&>svg]:h-5 shrink-0">{icon}</div>
         <div className="min-w-0 flex-1">
-            <p className="text-[10px] text-gray-400 font-bold uppercase truncate">{label}</p>
-            <div className="text-sm font-bold text-gray-900 truncate">{value}</div>
+            <p className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase truncate">{label}</p>
+            <div className="text-sm font-bold text-gray-900 dark:text-white truncate">{value}</div>
         </div>
     </div>
 );
@@ -1062,9 +1062,9 @@ const DetailItem = ({ icon, label, value }: { icon: React.ReactNode, label: stri
 
 const Tag = ({ icon, text, label, color = 'gray' }: { icon?: React.ReactNode, text: string, label?: string, color?: 'gray' | 'red' | 'orange' }) => {
     const colorClasses = {
-        gray: 'bg-gray-100 text-gray-700',
-        red: 'bg-red-50 text-red-600',
-        orange: 'bg-orange-50 text-orange-600'
+        gray: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
+        red: 'bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400',
+        orange: 'bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400'
     };
 
     return (

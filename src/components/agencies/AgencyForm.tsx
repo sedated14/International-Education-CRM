@@ -206,8 +206,8 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
             <div className="xl:col-span-2 space-y-8">
 
                 {/* SECTION 1: AGENCY INFO */}
-                <section className="bg-white rounded-[32px] p-8 border border-gray-100 shadow-sm space-y-6">
-                    <h2 className="text-xl font-black text-gray-900 flex items-center gap-2">
+                <section className="bg-white dark:bg-gray-900 rounded-[32px] p-8 border border-gray-100 dark:border-gray-800 shadow-sm space-y-6">
+                    <h2 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">
                         <Building2 className="text-blue-500" /> Agency Details
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -235,8 +235,8 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
                 </section>
 
                 {/* SECTION 2: PRIMARY CONTACT */}
-                <section className="bg-white rounded-[32px] p-8 border border-gray-100 shadow-sm space-y-6">
-                    <h2 className="text-xl font-black text-gray-900 flex items-center gap-2">
+                <section className="bg-white dark:bg-gray-900 rounded-[32px] p-8 border border-gray-100 dark:border-gray-800 shadow-sm space-y-6">
+                    <h2 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">
                         <User className="text-orange-500" /> Primary Contact
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -260,8 +260,8 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
                 </section>
 
                 {/* SECTION 3: SECONDARY CONTACT */}
-                <section className="bg-white rounded-[32px] p-8 border border-gray-100 shadow-sm space-y-6">
-                    <h2 className="text-xl font-black text-gray-900 flex items-center gap-2">
+                <section className="bg-white dark:bg-gray-900 rounded-[32px] p-8 border border-gray-100 dark:border-gray-800 shadow-sm space-y-6">
+                    <h2 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">
                         <User className="text-purple-500" /> Secondary Contact (Optional)
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -279,7 +279,7 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
 
                 {/* SECTION 3b: ADDITIONAL CONTACTS */}
                 {additionalContacts.map((contact, index) => (
-                    <section key={index} className="bg-white rounded-[32px] p-8 border border-gray-100 shadow-sm space-y-6 relative">
+                    <section key={index} className="bg-white dark:bg-gray-900 rounded-[32px] p-8 border border-gray-100 dark:border-gray-800 shadow-sm space-y-6 relative">
                         <button
                             type="button"
                             onClick={() => removeContact(index)}
@@ -287,7 +287,7 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
                         >
                             Remove
                         </button>
-                        <h2 className="text-xl font-black text-gray-900 flex items-center gap-2">
+                        <h2 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">
                             <User className="text-gray-400" /> Additional Contact {index + 1}
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -307,15 +307,15 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
                     <button
                         type="button"
                         onClick={addContact}
-                        className="flex items-center gap-2 text-gray-500 font-bold hover:text-black transition-colors px-6 py-3 rounded-xl hover:bg-gray-100"
+                        className="flex items-center gap-2 text-gray-500 dark:text-gray-400 font-bold hover:text-black dark:hover:text-white transition-colors px-6 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
                         <User size={18} /> Add Additional Contact
                     </button>
                 </div>
 
                 {/* NOTES SECTION - Moved here for better flow but distinct from Partnership Data */}
-                <section className="bg-white rounded-[32px] p-8 border border-gray-100 shadow-sm space-y-6">
-                    <h2 className="text-xl font-black text-gray-900 flex items-center gap-2">
+                <section className="bg-white dark:bg-gray-900 rounded-[32px] p-8 border border-gray-100 dark:border-gray-800 shadow-sm space-y-6">
+                    <h2 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">
                         <ClipboardList className="text-gray-400" /> Agency Notes
                     </h2>
                     <div className="space-y-6">
@@ -330,8 +330,8 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
             <div className="xl:col-span-1 space-y-8">
 
                 {/* SECTION 4: PARTNERSHIP DETAILS - NO STICKY, NO NOTES */}
-                <section className="bg-white rounded-[32px] p-8 border border-gray-100 shadow-sm space-y-6">
-                    <h2 className="text-xl font-black text-gray-900 flex items-center gap-2">
+                <section className="bg-white dark:bg-gray-900 rounded-[32px] p-8 border border-gray-100 dark:border-gray-800 shadow-sm space-y-6">
+                    <h2 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">
                         <Globe className="text-green-500" /> Partnership
                     </h2>
                     <div className="space-y-6">
@@ -350,8 +350,8 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
                 </section>
 
                 {/* SECTION 5: PROFILE DETAILS - MOVED TO RIGHT COLUMN */}
-                <section className="bg-white rounded-[32px] p-8 border border-gray-100 shadow-sm space-y-6">
-                    <h2 className="text-xl font-black text-gray-900 flex items-center gap-2">
+                <section className="bg-white dark:bg-gray-900 rounded-[32px] p-8 border border-gray-100 dark:border-gray-800 shadow-sm space-y-6">
+                    <h2 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">
                         <Globe className="text-purple-500" /> Agency Profile
                     </h2>
 
@@ -359,7 +359,7 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
                     <div className="grid grid-cols-1 gap-8">
                         {/* Recruiting Countries */}
                         <div>
-                            <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Countries Recruited From</label>
+                            <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">Countries Recruited From</label>
                             <div className="space-y-3">
                                 {(formData.recruitingCountries || []).map((country, idx) => {
                                     // Sort options: Agency Country first, then alphabetical
@@ -414,11 +414,11 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
                             </div>
                         </div>
 
-                        <div className="h-px bg-gray-100 my-2" />
+                        <div className="h-px bg-gray-100 dark:bg-gray-800 my-2" />
 
                         {/* Grades Offered */}
                         <div>
-                            <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Grades Offered</label>
+                            <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">Grades Offered</label>
                             <CheckboxGroup
                                 options={['Elementary', 'Middle School', 'High School', 'College/University']}
                                 selected={formData.gradesOffered || []}
@@ -428,7 +428,7 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
 
                         {/* Duration */}
                         <div>
-                            <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Duration</label>
+                            <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">Duration</label>
                             <CheckboxGroup
                                 options={['Short Term', 'Semester', 'Academic Year', 'Calendar Year', 'Summer']}
                                 selected={formData.duration || []}
@@ -438,7 +438,7 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
 
                         {/* Target Countries */}
                         <div>
-                            <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Target Countries</label>
+                            <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">Target Countries</label>
                             <CountrySelector
                                 selected={formData.targetCountries || []}
                                 onChange={v => setFormData({ ...formData, targetCountries: v })}

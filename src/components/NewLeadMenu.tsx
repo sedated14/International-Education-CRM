@@ -54,8 +54,8 @@ export const NewLeadMenu: React.FC<Props> = ({ onOpenManual }) => {
 
                 {/* DROPDOWN MENU */}
                 {isOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 p-2 z-50 animate-in fade-in zoom-in-95 duration-200">
-                        <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-4 py-2">Ingestion Method</div>
+                    <div className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 p-2 z-50 animate-in fade-in zoom-in-95 duration-200">
+                        <div className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest px-4 py-2">Ingestion Method</div>
 
                         <MenuItem
                             icon={<PenTool size={16} />}
@@ -102,14 +102,14 @@ export const NewLeadMenu: React.FC<Props> = ({ onOpenManual }) => {
 const MenuItem = ({ icon, label, desc, onClick, isLast }: { icon: React.ReactNode, label: string, desc: string, onClick: () => void, isLast?: boolean }) => (
     <button
         onClick={onClick}
-        className={`w-full text-left p-3 hover:bg-gray-50 rounded-xl transition-colors flex items-center gap-4 group ${!isLast ? 'mb-1' : ''}`}
+        className={`w-full text-left p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors flex items-center gap-4 group ${!isLast ? 'mb-1' : ''}`}
     >
-        <div className="w-8 h-8 rounded-lg bg-gray-100 text-gray-500 flex items-center justify-center group-hover:bg-black group-hover:text-white transition-colors">
+        <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-white flex items-center justify-center group-hover:bg-black dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-black transition-colors">
             {icon}
         </div>
         <div>
-            <div className="font-bold text-sm text-gray-900">{label}</div>
-            <div className="text-xs text-gray-400 font-medium">{desc}</div>
+            <div className="font-bold text-sm text-gray-900 dark:text-white">{label}</div>
+            <div className="text-xs text-gray-400 dark:text-gray-400 font-medium">{desc}</div>
         </div>
     </button>
 );

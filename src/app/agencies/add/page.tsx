@@ -42,26 +42,26 @@ export default function AddAgencyPage() {
     };
 
     return (
-        <div className="flex h-screen bg-[#F0F2F5] text-[#1D1D1F] overflow-hidden font-sans">
+        <div className="flex h-screen bg-[#F0F2F5] dark:bg-gray-950 text-[#1D1D1F] dark:text-gray-100 overflow-hidden font-sans">
             <Navigation />
 
             <main className="flex-1 flex flex-col h-screen overflow-y-auto">
 
                 {/* Header */}
-                <header className="bg-white border-b border-gray-200 px-8 py-6 flex items-center gap-4 z-20 sticky top-0">
-                    <Link href="/agencies" className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500">
+                <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-8 py-6 flex items-center gap-4 z-20 sticky top-0">
+                    <Link href="/agencies" className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-500 dark:text-gray-400">
                         <ArrowLeft size={20} />
                     </Link>
                     <div>
-                        <h1 className="text-2xl font-black text-gray-900">Add New Agency</h1>
-                        <p className="text-gray-500 font-medium text-sm">Enter partnership details and contacts</p>
+                        <h1 className="text-2xl font-black text-gray-900 dark:text-white">Add New Agency</h1>
+                        <p className="text-gray-500 dark:text-gray-400 font-medium text-sm">Enter partnership details and contacts</p>
                     </div>
 
                     <div className="flex-1" />
 
                     <div className="flex gap-4">
                         <Link href="/agencies">
-                            <button className="px-6 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-100 transition-colors">
+                            <button className="px-6 py-3 rounded-xl font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                                 Cancel
                             </button>
                         </Link>
@@ -69,7 +69,7 @@ export default function AddAgencyPage() {
                             form="agency-form"
                             type="submit"
                             disabled={isSubmitting}
-                            className="px-6 py-3 bg-black text-white rounded-xl font-bold hover:bg-gray-900 transition-colors shadow-lg hover:shadow-xl flex items-center gap-2"
+                            className="px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-xl font-bold hover:bg-gray-900 dark:hover:bg-gray-200 transition-colors shadow-lg hover:shadow-xl flex items-center gap-2"
                         >
                             <Save size={18} />
                             {isSubmitting ? 'Saving...' : 'Save Agency'}

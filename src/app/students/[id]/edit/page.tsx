@@ -165,27 +165,27 @@ export default function EditStudentPage() {
     }
 
     return (
-        <div className="flex h-screen bg-[#F0F2F5] text-[#1D1D1F] overflow-hidden font-sans">
+        <div className="flex h-screen bg-[#F0F2F5] dark:bg-gray-950 text-[#1D1D1F] dark:text-gray-100 overflow-hidden font-sans">
             <Navigation />
 
             <main className="flex-1 flex flex-col h-screen overflow-y-auto custom-scrollbar">
 
                 {/* Header */}
-                <div className="px-8 pt-8 pb-6 flex items-center justify-between sticky top-0 bg-[#F0F2F5] z-20">
+                <div className="px-8 pt-8 pb-6 flex items-center justify-between sticky top-0 bg-[#F0F2F5] dark:bg-gray-950 z-20">
                     <div className="flex items-center gap-4">
-                        <Link href={`/students/${lead.id}`} className="p-2 hover:bg-white rounded-full transition-colors text-gray-500">
+                        <Link href={`/students/${lead.id}`} className="p-2 hover:bg-white dark:hover:bg-gray-900 rounded-full transition-colors text-gray-500 dark:text-gray-400">
                             <ArrowLeft size={20} />
                         </Link>
                         <div>
-                            <h1 className="text-2xl font-black text-gray-900">Edit Student</h1>
-                            <p className="text-gray-500 font-medium text-sm">Update details for {lead.studentName}</p>
+                            <h1 className="text-2xl font-black text-gray-900 dark:text-white">Edit Student</h1>
+                            <p className="text-gray-500 dark:text-gray-400 font-medium text-sm">Update details for {lead.studentName}</p>
                         </div>
                     </div>
                     <div className="flex gap-3">
                         <button
                             type="button"
                             onClick={handleDelete}
-                            className="px-5 py-2.5 text-red-600 bg-red-50 hover:bg-red-100 rounded-xl font-bold text-sm transition-colors flex items-center gap-2"
+                            className="px-5 py-2.5 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-xl font-bold text-sm transition-colors flex items-center gap-2"
                         >
                             <Trash2 size={16} />
                             Delete
@@ -193,7 +193,7 @@ export default function EditStudentPage() {
                         <button
                             onClick={handleSubmit}
                             disabled={isSubmitting}
-                            className="px-8 py-2.5 bg-black text-white rounded-xl font-bold text-sm shadow-lg hover:bg-gray-800 transition-all flex items-center gap-2"
+                            className="px-8 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-xl font-bold text-sm shadow-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-all flex items-center gap-2"
                         >
                             {isSubmitting ? 'Saving...' : <><Save size={16} /> Save Changes</>}
                         </button>
@@ -204,12 +204,12 @@ export default function EditStudentPage() {
                     <form onSubmit={handleSubmit} className="space-y-8">
 
                         {/* Personal Info */}
-                        <section className="bg-white rounded-[32px] p-8 shadow-sm border border-gray-100">
+                        <section className="bg-white dark:bg-gray-900 rounded-[32px] p-8 shadow-sm border border-gray-100 dark:border-gray-800">
                             <div className="flex items-center gap-4 mb-6">
-                                <div className="w-10 h-10 rounded-2xl bg-orange-100 flex items-center justify-center text-orange-600">
+                                <div className="w-10 h-10 rounded-2xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400">
                                     <User size={20} />
                                 </div>
-                                <h2 className="text-xl font-black text-gray-900">Personal Information</h2>
+                                <h2 className="text-xl font-black text-gray-900 dark:text-white">Personal Information</h2>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <Input label="Full Name" value={formData.studentName} onChange={v => setFormData({ ...formData, studentName: v })} />
@@ -219,7 +219,7 @@ export default function EditStudentPage() {
                                 <SearchableSelect label="Nationality" options={COUNTRIES} value={formData.nationality} onChange={v => setFormData({ ...formData, nationality: v })} placeholder="Select Country" />
                                 <SearchableSelect label="Country of Residence" options={COUNTRIES} value={formData.residence} onChange={v => setFormData({ ...formData, residence: v })} placeholder="Select Residence" />
 
-                                <div className="col-span-full h-px bg-gray-50 my-2" />
+                                <div className="col-span-full h-px bg-gray-50 dark:bg-gray-800 my-2" />
 
                                 <div className="col-span-full">
                                     <div className="flex items-center gap-2 mb-2">
@@ -235,7 +235,7 @@ export default function EditStudentPage() {
                                     <p className="text-[10px] text-gray-400 mt-2 ml-1">Type to search existing agencies to link this student to.</p>
                                 </div>
 
-                                <div className="col-span-full h-px bg-gray-50 my-2" />
+                                <div className="col-span-full h-px bg-gray-50 dark:bg-gray-800 my-2" />
 
                                 <Input label="Email" value={formData.studentEmail} onChange={v => setFormData({ ...formData, studentEmail: v })} />
                                 <Input label="Phone Number" value={formData.phoneNumber} onChange={v => setFormData({ ...formData, phoneNumber: v })} />
@@ -244,20 +244,20 @@ export default function EditStudentPage() {
                         </section>
 
                         {/* Academics */}
-                        <section className="bg-white rounded-[32px] p-8 shadow-sm border border-gray-100">
+                        <section className="bg-white dark:bg-gray-900 rounded-[32px] p-8 shadow-sm border border-gray-100 dark:border-gray-800">
                             <div className="flex items-center gap-4 mb-6">
-                                <div className="w-10 h-10 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600">
+                                <div className="w-10 h-10 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
                                     <BookOpen size={20} />
                                 </div>
-                                <h2 className="text-xl font-black text-gray-900">Education</h2>
+                                <h2 className="text-xl font-black text-gray-900 dark:text-white">Education</h2>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <Input label="Current School" value={formData.currentSchool} onChange={v => setFormData({ ...formData, currentSchool: v })} />
                                 <Select label="Current Grade" options={GRADE_OPTIONS} value={formData.currentGrade} onChange={v => setFormData({ ...formData, currentGrade: v })} />
 
                                 {formData.currentGrade === '12th' && (
-                                    <div className="col-span-full bg-yellow-50 p-4 rounded-xl border border-yellow-200">
-                                        <p className="text-[10px] font-bold text-yellow-600 uppercase mb-2">Graduated in Home Country?</p>
+                                    <div className="col-span-full bg-yellow-50 dark:bg-yellow-900/10 p-4 rounded-xl border border-yellow-200 dark:border-yellow-900/30">
+                                        <p className="text-[10px] font-bold text-yellow-600 dark:text-yellow-400 uppercase mb-2">Graduated in Home Country?</p>
                                         <div className="flex gap-2">
                                             {['Yes', 'No'].map(opt => (
                                                 <button
@@ -266,7 +266,7 @@ export default function EditStudentPage() {
                                                     onClick={() => setFormData({ ...formData, graduatedInHomeCountry: opt === 'Yes' })}
                                                     className={`flex-1 py-1.5 text-xs font-bold rounded-lg border transition-all ${(formData.graduatedInHomeCountry === (opt === 'Yes'))
                                                         ? 'bg-yellow-500 text-white border-yellow-600'
-                                                        : 'bg-white text-gray-500 border-gray-200 hover:bg-yellow-50'
+                                                        : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:bg-yellow-50 dark:hover:bg-yellow-900/20'
                                                         }`}
                                                 >
                                                     {opt}
@@ -282,12 +282,12 @@ export default function EditStudentPage() {
                         </section>
 
                         {/* Destination */}
-                        <section className="bg-white rounded-[32px] p-8 shadow-sm border border-gray-100">
+                        <section className="bg-white dark:bg-gray-900 rounded-[32px] p-8 shadow-sm border border-gray-100 dark:border-gray-800">
                             <div className="flex items-center gap-4 mb-6">
-                                <div className="w-10 h-10 rounded-2xl bg-purple-100 flex items-center justify-center text-purple-600">
+                                <div className="w-10 h-10 rounded-2xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400">
                                     <MapPin size={20} />
                                 </div>
-                                <h2 className="text-xl font-black text-gray-900">Study Plans</h2>
+                                <h2 className="text-xl font-black text-gray-900 dark:text-white">Study Plans</h2>
                             </div>
                             <div className="space-y-6">
                                 <div>
@@ -300,7 +300,7 @@ export default function EditStudentPage() {
                                 </div>
 
                                 {(formData.destinations.length > 0) && (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-6 rounded-2xl">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 dark:bg-gray-800/50 p-6 rounded-2xl">
                                         {formData.destinations.map(dest => (
                                             <Select
                                                 key={dest}
@@ -315,8 +315,8 @@ export default function EditStudentPage() {
                                         ))}
 
                                         {Object.values(formData.targetGrades).some(g => g === '12th') && (
-                                            <div className="col-span-full bg-indigo-50 p-4 rounded-xl border border-indigo-200 mt-2">
-                                                <p className="text-[10px] font-bold text-indigo-600 uppercase mb-2">Seeking Graduation?</p>
+                                            <div className="col-span-full bg-indigo-50 dark:bg-indigo-900/10 p-4 rounded-xl border border-indigo-200 dark:border-indigo-900/30 mt-2">
+                                                <p className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase mb-2">Seeking Graduation?</p>
                                                 <div className="flex gap-2">
                                                     {['Yes', 'No'].map(opt => (
                                                         <button
@@ -325,7 +325,7 @@ export default function EditStudentPage() {
                                                             onClick={() => setFormData({ ...formData, seekingGraduation: opt === 'Yes' })}
                                                             className={`flex-1 py-1.5 text-xs font-bold rounded-lg border transition-all ${(formData.seekingGraduation === (opt === 'Yes'))
                                                                 ? 'bg-indigo-500 text-white border-indigo-600'
-                                                                : 'bg-white text-gray-500 border-gray-200 hover:bg-indigo-50'
+                                                                : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/20'
                                                                 }`}
                                                         >
                                                             {opt}
@@ -340,12 +340,12 @@ export default function EditStudentPage() {
                         </section>
 
                         {/* Additional Info */}
-                        <section className="bg-white rounded-[32px] p-8 shadow-sm border border-gray-100">
+                        <section className="bg-white dark:bg-gray-900 rounded-[32px] p-8 shadow-sm border border-gray-100 dark:border-gray-800">
                             <div className="flex items-center gap-4 mb-6">
-                                <div className="w-10 h-10 rounded-2xl bg-pink-100 flex items-center justify-center text-pink-600">
+                                <div className="w-10 h-10 rounded-2xl bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center text-pink-600 dark:text-pink-400">
                                     <Heart size={20} />
                                 </div>
-                                <h2 className="text-xl font-black text-gray-900">Interests & Details</h2>
+                                <h2 className="text-xl font-black text-gray-900 dark:text-white">Interests & Details</h2>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <Input label="Sports" placeholder="Soccer, Tennis..." value={formData.sports} onChange={v => setFormData({ ...formData, sports: v })} />
@@ -358,12 +358,12 @@ export default function EditStudentPage() {
                         </section>
 
                         {/* Notes */}
-                        <section className="bg-white rounded-[32px] p-8 shadow-sm border border-gray-100">
+                        <section className="bg-white dark:bg-gray-900 rounded-[32px] p-8 shadow-sm border border-gray-100 dark:border-gray-800">
                             <div className="flex items-center gap-4 mb-6">
-                                <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-600">
+                                <div className="w-10 h-10 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400">
                                     <FileText size={20} />
                                 </div>
-                                <h2 className="text-xl font-black text-gray-900">Notes & Essay</h2>
+                                <h2 className="text-xl font-black text-gray-900 dark:text-white">Notes & Essay</h2>
                             </div>
                             <div className="space-y-6">
                                 <Input label="Student Essay" isTextArea rows={6} value={formData.essay} onChange={v => setFormData({ ...formData, essay: v })} />

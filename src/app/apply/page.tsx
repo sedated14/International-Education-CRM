@@ -153,18 +153,18 @@ export default function ApplyPage() {
 
     if (submitted) {
         return (
-            <div className="min-h-screen bg-[#F0F2F5] flex items-center justify-center p-4 font-sans">
-                <div className="bg-white p-12 rounded-[32px] shadow-xl max-w-lg w-full text-center border border-white/50">
-                    <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-500 animate-in zoom-in duration-300">
+            <div className="min-h-screen bg-[#F0F2F5] dark:bg-gray-950 flex items-center justify-center p-4 font-sans">
+                <div className="bg-white dark:bg-gray-900 p-12 rounded-[32px] shadow-xl max-w-lg w-full text-center border border-white/50 dark:border-gray-800">
+                    <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6 text-green-500 dark:text-green-400 animate-in zoom-in duration-300">
                         <CheckCircle2 size={40} strokeWidth={3} />
                     </div>
-                    <h1 className="text-3xl font-black text-gray-900 mb-4 tracking-tight">Inquiry Received!</h1>
-                    <p className="text-gray-500 font-medium mb-8 text-lg">
+                    <h1 className="text-3xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">Inquiry Received!</h1>
+                    <p className="text-gray-500 dark:text-gray-400 font-medium mb-8 text-lg">
                         Thank you for your inquiry. You will be contacted soon via your preferred method(s) of communication ({formData.preferredCommunication.join(', ')}).
                     </p>
                     <button
                         onClick={() => router.push('/')}
-                        className="w-full py-4 bg-black text-white rounded-2xl font-bold text-lg hover:shadow-2xl hover:scale-[1.02] transition-all"
+                        className="w-full py-4 bg-black dark:bg-white text-white dark:text-black rounded-2xl font-bold text-lg hover:shadow-2xl hover:scale-[1.02] transition-all"
                     >
                         Return to Dashboard
                     </button>
@@ -174,9 +174,9 @@ export default function ApplyPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#F0F2F5] font-sans selection:bg-orange-100 selection:text-orange-900">
+        <div className="min-h-screen bg-[#F0F2F5] dark:bg-gray-950 font-sans selection:bg-orange-100 dark:selection:bg-orange-900/30 selection:text-orange-900 dark:selection:text-orange-400">
             {/* Background Decor */}
-            <div className="fixed inset-0 pointer-events-none opacity-50"
+            <div className="fixed inset-0 pointer-events-none opacity-50 dark:opacity-20"
                 style={{ backgroundImage: 'radial-gradient(circle at 50% 0%, #E0E7FF 0%, transparent 50%), radial-gradient(circle at 100% 100%, #FFF7ED 0%, transparent 30%)' }}
             />
 
@@ -184,28 +184,28 @@ export default function ApplyPage() {
 
                 {/* Header */}
                 <div className="text-center mb-12 animate-in slide-in-from-bottom-5 duration-500">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-md rounded-full shadow-sm border border-white/50 mb-6">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/60 dark:bg-gray-800/60 backdrop-blur-md rounded-full shadow-sm border border-white/50 dark:border-white/10 mb-6">
                         <Sparkles size={14} className="text-orange-500 fill-orange-500" />
-                        <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Student Inquiry / Consultation</span>
+                        <span className="text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-widest">Student Inquiry / Consultation</span>
                     </div>
-                    <h1 className="text-5xl md:text-6xl font-black text-gray-900 mb-6 tracking-tight">Begin Your Journey.</h1>
-                    <p className="text-xl text-gray-500 font-medium max-w-xl mx-auto">
+                    <h1 className="text-5xl md:text-6xl font-black text-gray-900 dark:text-white mb-6 tracking-tight">Begin Your Journey.</h1>
+                    <p className="text-xl text-gray-500 dark:text-gray-400 font-medium max-w-xl mx-auto">
                         Complete this inquiry form to receive school recommendations or schedule a consultation.
                     </p>
                 </div>
 
                 {/* Form Card */}
-                <form onSubmit={handleSubmit} className="bg-white/80 backdrop-blur-xl rounded-[40px] shadow-2xl border border-white p-8 md:p-12 animate-in slide-in-from-bottom-10 duration-700 delay-150">
+                <form onSubmit={handleSubmit} className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-[40px] shadow-2xl border border-white dark:border-white/10 p-8 md:p-12 animate-in slide-in-from-bottom-10 duration-700 delay-150">
 
                     <div className="space-y-10">
 
                         {/* SECTION 1: ABOUT YOU */}
                         <section className="space-y-6">
                             <div className="flex items-center gap-4 mb-2">
-                                <div className="w-10 h-10 rounded-2xl bg-orange-100 flex items-center justify-center text-orange-600">
+                                <div className="w-10 h-10 rounded-2xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400">
                                     <User size={20} />
                                 </div>
-                                <h2 className="text-xl font-black text-gray-900">About You</h2>
+                                <h2 className="text-xl font-black text-gray-900 dark:text-white">About You</h2>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -217,7 +217,7 @@ export default function ApplyPage() {
                                 <Combobox label="Country of Residence" placeholder="Select Country..." icon={<MapPin size={16} />} value={formData.residence} onChange={(v: any) => setFormData({ ...formData, residence: v })} options={COUNTRIES} />
                             </div>
 
-                            <div className="h-px bg-gray-100 w-full" />
+                            <div className="h-px bg-gray-100 dark:bg-gray-800 w-full" />
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <Input label="Email Address" placeholder="hello@example.com" value={formData.studentEmail} onChange={(v: any) => setFormData({ ...formData, studentEmail: v })} />
@@ -226,15 +226,15 @@ export default function ApplyPage() {
                             </div>
                         </section>
 
-                        <div className="h-px bg-gray-100 w-full" />
+                        <div className="h-px bg-gray-100 dark:bg-gray-800 w-full" />
 
                         {/* SECTION 2: ACADEMICS */}
                         <section className="space-y-6">
                             <div className="flex items-center gap-4 mb-2">
-                                <div className="w-10 h-10 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600">
+                                <div className="w-10 h-10 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
                                     <BookOpen size={20} />
                                 </div>
-                                <h2 className="text-xl font-black text-gray-900">Academics</h2>
+                                <h2 className="text-xl font-black text-gray-900 dark:text-white">Academics</h2>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -244,7 +244,7 @@ export default function ApplyPage() {
 
                             {/* Conditional: Graduated in Home Country */}
                             {formData.currentGrade === '12th' && (
-                                <div className="mt-4 bg-blue-50/50 p-4 rounded-2xl border border-blue-100 animate-in fade-in slide-in-from-top-2">
+                                <div className="mt-4 bg-blue-50/50 dark:bg-blue-900/10 p-4 rounded-2xl border border-blue-100 dark:border-blue-900/30 animate-in fade-in slide-in-from-top-2">
                                     <label className="block text-xs font-bold text-blue-400 uppercase tracking-widest mb-3">Graduated in Home Country?</label>
                                     <div className="flex gap-3">
                                         {['Yes', 'No'].map(opt => (
@@ -252,7 +252,7 @@ export default function ApplyPage() {
                                                 flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 cursor-pointer transition-all select-none
                                                 ${(formData.graduatedInHomeCountry === (opt === 'Yes'))
                                                     ? 'border-blue-500 bg-blue-500 text-white shadow-md'
-                                                    : 'border-transparent bg-white text-gray-500 hover:bg-gray-100'}
+                                                    : 'border-transparent bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}
                                             `}>
                                                 <input
                                                     type="radio"
@@ -273,26 +273,26 @@ export default function ApplyPage() {
                             </div>
                         </section>
 
-                        <div className="h-px bg-gray-100 w-full" />
+                        <div className="h-px bg-gray-100 dark:bg-gray-800 w-full" />
 
                         {/* SECTION 3: DESTINATION (Dynamic) */}
                         <section className="space-y-6">
                             <div className="flex items-center gap-4 mb-2">
-                                <div className="w-10 h-10 rounded-2xl bg-purple-100 flex items-center justify-center text-purple-600">
+                                <div className="w-10 h-10 rounded-2xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400">
                                     <MapPin size={20} />
                                 </div>
-                                <h2 className="text-xl font-black text-gray-900">Destination</h2>
+                                <h2 className="text-xl font-black text-gray-900 dark:text-white">Destination</h2>
                             </div>
 
-                            <div className="bg-gray-50/50 p-6 rounded-3xl border border-gray-100 space-y-6">
+                            <div className="bg-gray-50/50 dark:bg-gray-800/50 p-6 rounded-3xl border border-gray-100 dark:border-gray-800 space-y-6">
                                 <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Where do you want to study?</p>
                                 <div className="flex flex-wrap gap-4">
                                     {['USA', 'Canada', 'Online'].map(country => (
                                         <label key={country} className={`
                                             flex items-center gap-3 px-6 py-4 rounded-2xl border-2 cursor-pointer transition-all select-none
                                             ${formData.destinations.includes(country)
-                                                ? 'border-purple-500 bg-purple-50/50 text-purple-900'
-                                                : 'border-white bg-white text-gray-500 hover:border-gray-200'}
+                                                ? 'border-purple-500 bg-purple-50/50 dark:bg-purple-900/20 text-purple-900 dark:text-purple-100'
+                                                : 'border-white dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:border-gray-200 dark:hover:border-gray-600'}
                                         `}>
                                             <input
                                                 type="checkbox"
@@ -308,7 +308,7 @@ export default function ApplyPage() {
 
                                 {/* Dynamic Grade Inputs */}
                                 {formData.destinations.length > 0 && (
-                                    <div className="space-y-4 pt-4 border-t border-gray-200/50 animate-in fade-in slide-in-from-top-2">
+                                    <div className="space-y-4 pt-4 border-t border-gray-200/50 dark:border-gray-700/50 animate-in fade-in slide-in-from-top-2">
                                         {formData.destinations.includes('USA') && (
                                             <Select
                                                 label="Requested Grade for USA"
@@ -338,7 +338,7 @@ export default function ApplyPage() {
 
                                 {/* Conditional: Seeking Graduation */}
                                 {(Object.values(formData.targetGrades).some(g => g === '12th')) && (
-                                    <div className="mt-4 bg-purple-50/50 p-4 rounded-2xl border border-purple-100 animate-in fade-in slide-in-from-top-2">
+                                    <div className="mt-4 bg-purple-50/50 dark:bg-purple-900/10 p-4 rounded-2xl border border-purple-100 dark:border-purple-900/30 animate-in fade-in slide-in-from-top-2">
                                         <label className="block text-xs font-bold text-purple-400 uppercase tracking-widest mb-3">Seeking Graduation?</label>
                                         <div className="flex gap-3">
                                             {['Yes', 'No'].map(opt => (
@@ -346,7 +346,7 @@ export default function ApplyPage() {
                                                     flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 cursor-pointer transition-all select-none
                                                     ${(formData.seekingGraduation === (opt === 'Yes'))
                                                         ? 'border-purple-500 bg-purple-500 text-white shadow-md'
-                                                        : 'border-transparent bg-white text-gray-500 hover:bg-gray-100'}
+                                                        : 'border-transparent bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}
                                                 `}>
                                                     <input
                                                         type="radio"
@@ -368,10 +368,10 @@ export default function ApplyPage() {
                         {/* SECTION 4: INTERESTS & LIFESTYLE */}
                         <section className="space-y-6">
                             <div className="flex items-center gap-4 mb-2">
-                                <div className="w-10 h-10 rounded-2xl bg-pink-100 flex items-center justify-center text-pink-600">
+                                <div className="w-10 h-10 rounded-2xl bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center text-pink-600 dark:text-pink-400">
                                     <Heart size={20} />
                                 </div>
-                                <h2 className="text-xl font-black text-gray-900">Interests & Health</h2>
+                                <h2 className="text-xl font-black text-gray-900 dark:text-white">Interests & Health</h2>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -388,15 +388,15 @@ export default function ApplyPage() {
                             </div>
                         </section>
 
-                        <div className="h-px bg-gray-100 w-full" />
+                        <div className="h-px bg-gray-100 dark:bg-gray-800 w-full" />
 
                         {/* SECTION 5: FINAL THOUGHTS */}
                         <section className="space-y-6">
                             <div className="flex items-center gap-4 mb-2">
-                                <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-600">
+                                <div className="w-10 h-10 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400">
                                     <FileText size={20} />
                                 </div>
-                                <h2 className="text-xl font-black text-gray-900">Inquiry Details</h2>
+                                <h2 className="text-xl font-black text-gray-900 dark:text-white">Inquiry Details</h2>
                             </div>
 
                             <Input
@@ -416,15 +416,15 @@ export default function ApplyPage() {
                             />
 
                             {/* Preferred Communication - Multi-select Checkboxes */}
-                            <div className="bg-gray-50 border-2 border-dashed border-gray-200 p-6 rounded-3xl">
+                            <div className="bg-gray-50 dark:bg-gray-800/50 border-2 border-dashed border-gray-200 dark:border-gray-700 p-6 rounded-3xl">
                                 <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Preferred Method of Communication</label>
                                 <div className="flex flex-wrap gap-4">
                                     {['Email', 'Phone', 'Text'].map(method => (
                                         <label key={method} className={`
                                             flex items-center gap-3 px-5 py-3 rounded-xl border-2 cursor-pointer transition-all select-none
                                             ${formData.preferredCommunication.includes(method)
-                                                ? 'border-gray-900 bg-white text-gray-900 shadow-md'
-                                                : 'border-transparent bg-gray-200/50 text-gray-500 hover:bg-gray-200'}
+                                                ? 'border-gray-900 dark:border-gray-100 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-md'
+                                                : 'border-transparent bg-gray-200/50 dark:bg-gray-700/50 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'}
                                         `}>
                                             <input
                                                 type="checkbox"
@@ -432,7 +432,7 @@ export default function ApplyPage() {
                                                 checked={formData.preferredCommunication.includes(method)}
                                                 onChange={() => handleCommunicationChange(method)}
                                             />
-                                            {formData.preferredCommunication.includes(method) ? <CheckCircle2 size={18} className="text-black" /> : <div className="w-[18px]" />}
+                                            {formData.preferredCommunication.includes(method) ? <CheckCircle2 size={18} className="text-black dark:text-white" /> : <div className="w-[18px]" />}
                                             <span className="font-bold text-sm">{method}</span>
                                         </label>
                                     ))}
@@ -444,11 +444,11 @@ export default function ApplyPage() {
                     </div>
 
                     {/* Submit Button */}
-                    <div className="mt-12 pt-8 border-t border-gray-100">
+                    <div className="mt-12 pt-8 border-t border-gray-100 dark:border-gray-800">
                         <button
                             type="submit"
                             disabled={isSubmitting || formData.preferredCommunication.length === 0}
-                            className="w-full group relative flex items-center justify-center gap-3 py-5 bg-black text-white rounded-[24px] font-black text-lg hover:bg-gray-900 hover:shadow-2xl hover:scale-[1.01] transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+                            className="w-full group relative flex items-center justify-center gap-3 py-5 bg-black dark:bg-white text-white dark:text-black rounded-[24px] font-black text-lg hover:bg-gray-900 dark:hover:bg-gray-200 hover:shadow-2xl hover:scale-[1.01] transition-all disabled:opacity-70 disabled:cursor-not-allowed"
                         >
                             {isSubmitting ? (
                                 <span className="animate-pulse">Sending Inquiry...</span>
@@ -476,12 +476,12 @@ export default function ApplyPage() {
 
 const Input = ({ label, placeholder, value, onChange, type = "text", isTextArea = false, rows = 3, icon }: any) => (
     <div className="group">
-        <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-black transition-colors">{label}</label>
+        <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-black dark:group-focus-within:text-white transition-colors">{label}</label>
         <div className="relative">
             {icon && <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">{icon}</div>}
             {isTextArea ? (
                 <textarea
-                    className="w-full bg-gray-50 border-2 border-transparent focus:bg-white focus:border-black rounded-2xl px-5 py-4 font-bold text-gray-900 placeholder:text-gray-300 outline-none transition-all resize-none"
+                    className="w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:bg-white dark:focus:bg-gray-900 focus:border-black dark:focus:border-white rounded-2xl px-5 py-4 font-bold text-gray-900 dark:text-white placeholder:text-gray-300 dark:placeholder:text-gray-600 outline-none transition-all resize-none"
                     placeholder={placeholder}
                     value={value}
                     onChange={e => onChange(e.target.value)}
@@ -490,7 +490,7 @@ const Input = ({ label, placeholder, value, onChange, type = "text", isTextArea 
             ) : (
                 <input
                     type={type}
-                    className={`w-full bg-gray-50 border-2 border-transparent focus:bg-white focus:border-black rounded-2xl px-5 py-4 font-bold text-gray-900 placeholder:text-gray-300 outline-none transition-all ${icon ? 'pl-10' : ''}`}
+                    className={`w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:bg-white dark:focus:bg-gray-900 focus:border-black dark:focus:border-white rounded-2xl px-5 py-4 font-bold text-gray-900 dark:text-white placeholder:text-gray-300 dark:placeholder:text-gray-600 outline-none transition-all ${icon ? 'pl-10' : ''}`}
                     placeholder={placeholder}
                     value={value}
                     onChange={e => onChange(e.target.value)}
@@ -502,10 +502,10 @@ const Input = ({ label, placeholder, value, onChange, type = "text", isTextArea 
 
 const Select = ({ label, options, value, onChange }: any) => (
     <div className="group">
-        <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-black transition-colors">{label}</label>
+        <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-black dark:group-focus-within:text-white transition-colors">{label}</label>
         <div className="relative">
             <select
-                className="w-full bg-gray-50 border-2 border-transparent focus:bg-white focus:border-black rounded-2xl px-5 py-4 font-bold text-gray-900 outline-none appearance-none cursor-pointer transition-all"
+                className="w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:bg-white dark:focus:bg-gray-900 focus:border-black dark:focus:border-white rounded-2xl px-5 py-4 font-bold text-gray-900 dark:text-white outline-none appearance-none cursor-pointer transition-all"
                 value={value}
                 onChange={e => onChange(e.target.value)}
             >
@@ -552,7 +552,7 @@ const Combobox = ({ label, placeholder, value, onChange, options, icon }: any) =
 
     return (
         <div className="group relative" ref={wrapperRef}>
-            <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-black transition-colors">{label}</label>
+            <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-black dark:group-focus-within:text-white transition-colors">{label}</label>
             <div className="relative">
                 {icon && <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">{icon}</div>}
                 <div
@@ -561,7 +561,7 @@ const Combobox = ({ label, placeholder, value, onChange, options, icon }: any) =
                 >
                     <input
                         type="text"
-                        className={`w-full bg-gray-50 border-2 border-transparent focus:bg-white focus:border-black rounded-2xl px-5 py-4 font-bold text-gray-900 placeholder:text-gray-300 outline-none transition-all ${icon ? 'pl-10' : ''}`}
+                        className={`w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:bg-white dark:focus:bg-gray-900 focus:border-black dark:focus:border-white rounded-2xl px-5 py-4 font-bold text-gray-900 dark:text-white placeholder:text-gray-300 dark:placeholder:text-gray-600 outline-none transition-all ${icon ? 'pl-10' : ''}`}
                         placeholder={placeholder}
                         value={isOpen ? searchTerm : value}
                         onChange={e => {
@@ -609,12 +609,12 @@ const Combobox = ({ label, placeholder, value, onChange, options, icon }: any) =
 
                 {/* Dropdown Menu */}
                 {isOpen && (
-                    <div className="absolute z-50 w-full mt-2 bg-white rounded-2xl shadow-xl border border-gray-100 max-h-60 overflow-y-auto overflow-x-hidden animate-in fade-in slide-in-from-top-2">
+                    <div className="absolute z-50 w-full mt-2 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 max-h-60 overflow-y-auto overflow-x-hidden animate-in fade-in slide-in-from-top-2">
                         {filteredOptions.length > 0 ? (
                             filteredOptions.map((opt: string) => (
                                 <div
                                     key={opt}
-                                    className={`px-5 py-3 cursor-pointer hover:bg-gray-50 transition-colors font-bold text-sm text-gray-700 flex justify-between items-center ${value === opt ? 'bg-orange-50 text-orange-600' : ''}`}
+                                    className={`px-5 py-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-bold text-sm text-gray-700 dark:text-gray-200 flex justify-between items-center ${value === opt ? 'bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400' : ''}`}
                                     onClick={() => {
                                         onChange(opt);
                                         setIsOpen(false);

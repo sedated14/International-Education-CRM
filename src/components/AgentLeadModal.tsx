@@ -59,15 +59,15 @@ export const AgentLeadModal: React.FC<Props> = ({ onClose }) => {
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
             {/* Modal Container - Maximize height and allow scroll */}
-            <div className="bg-[#F0F2F5] w-full max-w-5xl h-[90vh] rounded-[32px] shadow-2xl overflow-hidden relative flex flex-col animate-in zoom-in-95 duration-200">
+            <div className="bg-[#F0F2F5] dark:bg-gray-950 w-full max-w-5xl h-[90vh] rounded-[32px] shadow-2xl overflow-hidden relative flex flex-col animate-in zoom-in-95 duration-200">
 
                 {/* Header */}
-                <div className="bg-white px-8 py-6 border-b border-gray-200 flex justify-between items-center sticky top-0 z-10">
+                <div className="bg-white dark:bg-gray-900 px-8 py-6 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center sticky top-0 z-10">
                     <div>
-                        <h2 className="text-2xl font-black text-gray-900">New Agent Lead</h2>
-                        <p className="text-gray-500 font-medium text-sm">Enter agency details manually</p>
+                        <h2 className="text-2xl font-black text-gray-900 dark:text-white">New Agent Lead</h2>
+                        <p className="text-gray-500 dark:text-gray-400 font-medium text-sm">Enter agency details manually</p>
                     </div>
-                    <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                    <button onClick={onClose} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
                         <X size={24} className="text-gray-400" />
                     </button>
                 </div>

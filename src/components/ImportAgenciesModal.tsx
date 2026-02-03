@@ -397,15 +397,15 @@ export const ImportAgenciesModal: React.FC<Props> = ({ onClose }) => {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white w-full max-w-4xl rounded-[32px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="bg-white dark:bg-gray-900 w-full max-w-4xl rounded-[32px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
 
                 {/* Header */}
-                <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <div className="p-8 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-950">
                     <div>
-                        <h2 className="text-2xl font-black text-gray-900">Import Agencies</h2>
-                        <p className="text-gray-500 font-medium text-sm">Upload a spreadsheet to bulk create leads</p>
+                        <h2 className="text-2xl font-black text-gray-900 dark:text-white">Import Agencies</h2>
+                        <p className="text-gray-500 dark:text-gray-400 font-medium text-sm">Upload a spreadsheet to bulk create leads</p>
                     </div>
-                    <button onClick={onClose} className="p-2 hover:bg-black/5 rounded-full transition-colors">
+                    <button onClick={onClose} className="p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors">
                         <X size={24} className="text-gray-400" />
                     </button>
                 </div>
@@ -413,32 +413,32 @@ export const ImportAgenciesModal: React.FC<Props> = ({ onClose }) => {
                 <div className="flex-1 overflow-y-auto p-8">
                     {step === 'upload' && (
                         <div
-                            className="border-4 border-dashed border-gray-200 rounded-3xl h-[400px] flex flex-col items-center justify-center cursor-pointer hover:border-black/20 hover:bg-gray-50 transition-all group"
+                            className="border-4 border-dashed border-gray-200 dark:border-gray-700 rounded-3xl h-[400px] flex flex-col items-center justify-center cursor-pointer hover:border-black/20 dark:hover:border-white/20 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all group"
                             onClick={() => fileInputRef.current?.click()}
                         >
                             <input ref={fileInputRef} type="file" accept=".xlsx,.csv,.xls" className="hidden" onChange={handleFileUpload} />
-                            <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <div className="w-20 h-20 bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                 <Upload size={32} className="text-blue-500" />
                             </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">Click to Upload Spreadsheet</h3>
-                            <p className="text-gray-400 font-medium">Supports .xlsx, .xls, .csv</p>
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Click to Upload Spreadsheet</h3>
+                            <p className="text-gray-400 dark:text-gray-500 font-medium">Supports .xlsx, .xls, .csv</p>
                         </div>
                     )}
 
                     {step === 'map' && (
                         <div className="h-full flex flex-col">
-                            <div className="flex items-center gap-4 mb-6 bg-blue-50 p-4 rounded-xl border border-blue-100">
+                            <div className="flex items-center gap-4 mb-6 bg-blue-50 dark:bg-blue-900/10 p-4 rounded-xl border border-blue-100 dark:border-blue-800/50">
                                 <FileSpreadsheet className="text-blue-500" />
                                 <div className="flex-1">
-                                    <p className="font-bold text-gray-900">{fileName}</p>
-                                    <p className="text-xs text-blue-600 font-bold uppercase">{fileData.length} Rows Found</p>
+                                    <p className="font-bold text-gray-900 dark:text-white">{fileName}</p>
+                                    <p className="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase">{fileData.length} Rows Found</p>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <span className="text-xs font-bold text-gray-400 uppercase">Set Status:</span>
+                                    <span className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase">Set Status:</span>
                                     <select
                                         value={globalStatus}
                                         onChange={e => setGlobalStatus(e.target.value)}
-                                        className="bg-white border border-blue-200 text-blue-900 text-sm font-bold rounded-lg px-3 py-2 outline-none focus:border-blue-500"
+                                        className="bg-white dark:bg-gray-800 border border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-100 text-sm font-bold rounded-lg px-3 py-2 outline-none focus:border-blue-500"
                                     >
                                         <option value="Prospective">Prospective (Default)</option>
                                         <option value="Active">Active</option>
@@ -449,7 +449,7 @@ export const ImportAgenciesModal: React.FC<Props> = ({ onClose }) => {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-[1fr,auto,1fr] gap-4 items-center mb-4 px-4 font-bold text-xs text-gray-400 uppercase tracking-widest">
+                            <div className="grid grid-cols-[1fr,auto,1fr] gap-4 items-center mb-4 px-4 font-bold text-xs text-gray-400 dark:text-gray-500 uppercase tracking-widest">
                                 <div>Spreadsheet Column</div>
                                 <div></div>
                                 <div>CRM Field</div>
@@ -457,11 +457,11 @@ export const ImportAgenciesModal: React.FC<Props> = ({ onClose }) => {
 
                             <div className="space-y-3 flex-1 overflow-y-auto pr-2 custom-scrollbar">
                                 {headers.map((header) => (
-                                    <div key={header} className="grid grid-cols-[1fr,auto,1fr] gap-4 items-center bg-gray-50 p-4 rounded-xl border border-gray-100">
-                                        <div className="font-bold text-gray-700 truncate" title={header}>{header}</div>
-                                        <ArrowRight size={16} className="text-gray-300" />
+                                    <div key={header} className="grid grid-cols-[1fr,auto,1fr] gap-4 items-center bg-gray-50 dark:bg-gray-800 p-4 rounded-xl border border-gray-100 dark:border-gray-700">
+                                        <div className="font-bold text-gray-700 dark:text-gray-300 truncate" title={header}>{header}</div>
+                                        <ArrowRight size={16} className="text-gray-300 dark:text-gray-600" />
                                         <select
-                                            className={`w-full p-2 rounded-lg font-bold text-sm outline-none border-2 transition-colors ${mapping[header] ? 'border-green-500 bg-white text-gray-900' : 'border-gray-200 bg-gray-100 text-gray-400'}`}
+                                            className={`w-full p-2 rounded-lg font-bold text-sm outline-none border-2 transition-colors ${mapping[header] ? 'border-green-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white' : 'border-gray-200 dark:border-gray-600 bg-gray-100 dark:bg-gray-900 text-gray-400 dark:text-gray-500'}`}
                                             value={mapping[header] || ''}
                                             onChange={e => setMapping(prev => ({ ...prev, [header]: e.target.value }))}
                                         >
@@ -492,44 +492,44 @@ export const ImportAgenciesModal: React.FC<Props> = ({ onClose }) => {
                                 </div>
                             ))}
 
-                            <h3 className="text-2xl font-black text-gray-900 mb-2">
+                            <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-2">
                                 {importStats.total > 0 && importStats.total === (importStats.success + importStats.duplicates + importStats.skipped + importStats.colleagues + importStats.inReview)
                                     ? "Import Complete!"
                                     : "Processing Import..."}
                             </h3>
-                            <p className="text-gray-500 font-medium">
+                            <p className="text-gray-500 dark:text-gray-400 font-medium">
                                 Found {importStats.success} valid, {importStats.duplicates} duplicates, {importStats.colleagues} colleagues, and {importStats.skipped} skipped.
                             </p>
 
                             {importStats.total > 0 && importStats.total === (importStats.success + importStats.duplicates + importStats.skipped + importStats.colleagues + importStats.inReview) && (
                                 <div className="mt-8 space-y-3 w-full max-w-md">
                                     {importStats.success > 0 && (
-                                        <div className="bg-green-50 px-6 py-3 rounded-full text-green-700 font-bold border border-green-100">
+                                        <div className="bg-green-50 dark:bg-green-900/20 px-6 py-3 rounded-full text-green-700 dark:text-green-300 font-bold border border-green-100 dark:border-green-800">
                                             {importStats.success} Leads Imported Successfully
                                         </div>
                                     )}
                                     {importStats.duplicates > 0 && (
-                                        <div className="bg-yellow-50 px-6 py-3 rounded-full text-yellow-700 font-bold border border-yellow-100">
+                                        <div className="bg-yellow-50 dark:bg-yellow-900/20 px-6 py-3 rounded-full text-yellow-700 dark:text-yellow-300 font-bold border border-yellow-100 dark:border-yellow-800">
                                             {importStats.duplicates} Duplicates Moved to Review
                                         </div>
                                     )}
                                     {importStats.colleagues > 0 && (
-                                        <div className="bg-blue-50 px-6 py-3 rounded-full text-blue-700 font-bold border border-blue-100">
+                                        <div className="bg-blue-50 dark:bg-blue-900/20 px-6 py-3 rounded-full text-blue-700 dark:text-blue-300 font-bold border border-blue-100 dark:border-blue-800">
                                             {importStats.colleagues} Potential Colleagues Found
                                         </div>
                                     )}
                                     {importStats.inReview > 0 && (
-                                        <div className="bg-purple-50 px-6 py-3 rounded-full text-purple-700 font-bold border border-purple-100">
+                                        <div className="bg-purple-50 dark:bg-purple-900/20 px-6 py-3 rounded-full text-purple-700 dark:text-purple-300 font-bold border border-purple-100 dark:border-purple-800">
                                             {importStats.inReview} Leads Already in Review
                                         </div>
                                     )}
                                     {importStats.skipped > 0 && (
-                                        <div className="bg-gray-100 px-6 py-3 rounded-2xl text-gray-700 font-bold border border-gray-200 text-left">
+                                        <div className="bg-gray-100 dark:bg-gray-800 px-6 py-3 rounded-2xl text-gray-700 dark:text-gray-300 font-bold border border-gray-200 dark:border-gray-700 text-left">
                                             <div className="flex justify-between items-center mb-2">
                                                 <span>{importStats.skipped} Identical Records Skipped</span>
-                                                <span className="text-xs bg-gray-200 px-2 py-1 rounded">Already Exists</span>
+                                                <span className="text-xs bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">Already Exists</span>
                                             </div>
-                                            <div className="max-h-32 overflow-y-auto text-xs text-gray-500 space-y-1 custom-scrollbar">
+                                            <div className="max-h-32 overflow-y-auto text-xs text-gray-500 dark:text-gray-400 space-y-1 custom-scrollbar">
                                                 {skippedLog.map((name, i) => (
                                                     <div key={i} className="truncate">• {name}</div>
                                                 ))}
@@ -545,11 +545,11 @@ export const ImportAgenciesModal: React.FC<Props> = ({ onClose }) => {
 
                 {/* Footer Actions */}
                 {step === 'map' && (
-                    <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3 rounded-b-[32px]">
-                        <button onClick={() => setStep('upload')} className="px-6 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-200 transition-colors">Back</button>
+                    <div className="p-6 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 flex justify-end gap-3 rounded-b-[32px]">
+                        <button onClick={() => setStep('upload')} className="px-6 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">Back</button>
                         <button
                             onClick={handleImport}
-                            className="px-8 py-3 bg-black text-white rounded-xl font-bold hover:shadow-lg transition-all flex items-center gap-2"
+                            className="px-8 py-3 bg-black dark:bg-white text-white dark:text-black rounded-xl font-bold hover:shadow-lg transition-all flex items-center gap-2"
                             disabled={!Object.values(mapping).includes('agencyName')} // Require at least agency name
                         >
                             Start Import <ArrowRight size={16} />
