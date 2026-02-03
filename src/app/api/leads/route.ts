@@ -39,7 +39,10 @@ export async function POST(request: Request) {
         const leads = readLeads();
 
         // Generate a new ID (simple max + 1)
-        const maxId = leads.reduce((max, lead) => (lead.id > max ? lead.id : max), 0);
+        const maxId = leads.reduce((max, lead) => {
+            const currentId = Number(lead.id);
+            return !isNaN(currentId) && currentId > max ? currentId : max;
+        }, 0);
         const newLead: Lead = {
             ...body,
             id: maxId + 1,
