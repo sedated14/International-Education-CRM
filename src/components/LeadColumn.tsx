@@ -9,14 +9,14 @@ interface Props {
 
 export const LeadColumn: React.FC<Props> = ({ title, icon, children }) => {
     return (
-        <div className="flex-1 flex flex-col bg-[#F9F9FB] rounded-[32px] overflow-hidden border border-gray-200/60 shadow-inner h-full">
-            <div className="p-6 pb-4 flex justify-between items-center bg-white/50 backdrop-blur-sm sticky top-0 z-10 border-b border-gray-100">
+        <div className="flex-1 flex flex-col bg-[#F9F9FB] dark:bg-gray-900/50 rounded-[32px] overflow-hidden border border-gray-200/60 dark:border-gray-800 shadow-inner h-full">
+            <div className="p-6 pb-4 flex justify-between items-center bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm sticky top-0 z-10 border-b border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-3">
                     {icon && <div className="text-gray-400">{icon}</div>}
-                    <h2 className="text-lg font-bold text-gray-800 tracking-tight">{title}</h2>
-                    <span className="bg-gray-200 text-gray-500 text-[10px] font-bold px-2 py-0.5 rounded-full">12</span>
+                    <h2 className="text-lg font-bold text-gray-800 dark:text-white tracking-tight">{title}</h2>
+                    <span className="bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-[10px] font-bold px-2 py-0.5 rounded-full">12</span>
                 </div>
-                <button className="text-gray-400 hover:text-black transition-colors">
+                <button className="text-gray-400 hover:text-black dark:hover:text-white transition-colors">
                     <Search size={18} />
                 </button>
             </div>

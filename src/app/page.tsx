@@ -37,7 +37,7 @@ export default function ApexCRM() {
   };
 
   return (
-    <div className="flex h-screen bg-[#F0F2F5] text-[#1D1D1F] overflow-hidden font-sans selection:bg-orange-100">
+    <div className="flex h-screen bg-[#F0F2F5] dark:bg-gray-950 text-[#1D1D1F] dark:text-gray-100 overflow-hidden font-sans selection:bg-orange-100">
 
       {/* 1. NAVIGATION */}
       <Navigation />
