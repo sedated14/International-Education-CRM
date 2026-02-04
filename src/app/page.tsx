@@ -102,7 +102,7 @@ export default function ApexCRM() {
               .map(lead => {
                 // Smart Checklist Logic for Agent Leads
                 let visibleChecklist = null;
-                if (lead.type === 'Agent' && lead.agencyProfile?.onboardingChecklist) {
+                if (lead.type === 'Agent' && lead.agencyProfile) {
                   const checklistItems = [
                     { key: 'agreementSent', label: 'Agreement Sent' },
                     { key: 'agreementSigned', label: 'Agreement Signed' },
@@ -115,7 +115,7 @@ export default function ApexCRM() {
                     { key: 'commissionRequestFormSent', label: 'Comm. Form Sent' }
                   ];
 
-                  const checklist = lead.agencyProfile.onboardingChecklist;
+                  const checklist = lead.agencyProfile.onboardingChecklist || {};
                   // @ts-ignore
                   const lastCheckedIndex = checklistItems.findLastIndex(item => checklist[item.key]);
 
