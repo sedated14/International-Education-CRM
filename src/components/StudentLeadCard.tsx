@@ -1,6 +1,6 @@
 import React from 'react';
 import { Lead } from '../types';
-import { User, MapPin, GraduationCap, Activity, Smile, Building2, StickyNote } from 'lucide-react';
+import { User, MapPin, GraduationCap, Activity, Smile, Building2, StickyNote, Edit2 } from 'lucide-react';
 
 interface Props {
     lead: Lead;
@@ -103,7 +103,7 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
 
 
                 {/* Latest Note Snippet (Always Visible) */}
-                <div className={`mb-4 bg-white dark:bg-gray-800/50 p-3 rounded-xl border-2 min-h-[60px] flex flex-col justify-between ${lead.notes && lead.notes.length > 0 ? 'border-yellow-500' : 'border-gray-100 dark:border-gray-800 items-center justify-center'}`}>
+                <div className={`mb-4 bg-white dark:bg-gray-800/50 p-3 rounded-xl border-2 border-yellow-500 min-h-[60px] flex flex-col justify-between ${lead.notes && lead.notes.length > 0 ? '' : 'items-center justify-center'}`}>
                     {lead.notes && lead.notes.length > 0 ? (
                         <>
                             <div className="flex gap-2 items-start mb-1 w-full">
@@ -117,7 +117,10 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
                             </div>
                         </>
                     ) : (
-                        <span className="text-[10px] text-gray-400 font-medium italic">No notes yet</span>
+                        <div className="flex items-center gap-1.5 opacity-50">
+                            <Edit2 size={12} className="text-gray-400" />
+                            <span className="text-[10px] text-gray-400 font-medium italic">No notes yet</span>
+                        </div>
                     )}
                 </div>
 

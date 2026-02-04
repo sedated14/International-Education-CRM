@@ -1,6 +1,6 @@
 import React from 'react';
 import { Lead } from '../types';
-import { MapPin, StickyNote, Calendar, Clock } from 'lucide-react';
+import { MapPin, StickyNote, Calendar, Clock, Edit2 } from 'lucide-react';
 import Link from 'next/link';
 import { useLeads } from '../context/LeadContext';
 
@@ -78,8 +78,11 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
                         </div>
                     </div>
                 ) : (
-                    <div className="mb-4 bg-white dark:bg-gray-800/50 p-3 rounded-xl border-2 border-gray-100 dark:border-gray-800 flex items-center justify-center min-h-[60px]">
-                        <span className="text-[10px] text-gray-400 font-medium italic">No notes yet</span>
+                    <div className="mb-4 bg-white dark:bg-gray-800/50 p-3 rounded-xl border-2 border-yellow-500 flex items-center justify-center min-h-[60px]">
+                        <div className="flex items-center gap-1.5 opacity-50">
+                            <Edit2 size={12} className="text-gray-400" />
+                            <span className="text-[10px] text-gray-400 font-medium italic">No notes yet</span>
+                        </div>
                     </div>
                 )}
 

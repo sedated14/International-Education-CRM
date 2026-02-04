@@ -8,7 +8,7 @@ import { AgentLeadCard } from '../components/AgentLeadCard';
 import { LeadDetailModal } from '../components/LeadDetailModal';
 import { NewLeadMenu } from '../components/NewLeadMenu';
 import { Lead } from '../types';
-import { Briefcase, GraduationCap, AlertCircle, Clock } from 'lucide-react';
+import { Briefcase, GraduationCap, AlertCircle, Clock, Edit2 } from 'lucide-react';
 
 export default function ApexCRM() {
 
@@ -168,7 +168,7 @@ export default function ApexCRM() {
                     )}
 
                     {/* Note Snippet (Always Visible) */}
-                    <div className={`mb-3 bg-gray-50 dark:bg-gray-800/30 p-2 rounded-lg border min-h-[50px] flex flex-col justify-between ${lead.notes && lead.notes.length > 0 ? 'border-yellow-500/50' : 'border-gray-100 dark:border-gray-800 items-center justify-center'}`}>
+                    <div className={`mb-3 bg-gray-50 dark:bg-gray-800/30 p-2 rounded-lg border min-h-[50px] flex flex-col justify-between border-yellow-500/50 ${lead.notes && lead.notes.length > 0 ? '' : 'items-center justify-center'}`}>
                       {lead.notes && lead.notes.length > 0 ? (
                         <>
                           <p className="text-[9px] text-gray-600 dark:text-gray-300 font-medium line-clamp-2 leading-snug italic w-full text-left">
@@ -179,7 +179,10 @@ export default function ApexCRM() {
                           </div>
                         </>
                       ) : (
-                        <span className="text-[9px] text-gray-400 font-medium italic">No notes yet</span>
+                        <div className="flex items-center gap-1.5 opacity-50">
+                          <Edit2 size={12} className="text-gray-400" />
+                          <span className="text-[9px] text-gray-400 font-medium italic">No notes yet</span>
+                        </div>
                       )}
                     </div>
 
@@ -317,7 +320,7 @@ export default function ApexCRM() {
                     )}
 
                     {/* Note Snippet (Always Visible) */}
-                    <div className={`mb-3 bg-gray-50 dark:bg-gray-800/30 p-2 rounded-lg border min-h-[50px] flex flex-col justify-between ${lead.notes && lead.notes.length > 0 ? 'border-yellow-500/50' : 'border-gray-100 dark:border-gray-800 items-center justify-center'}`}>
+                    <div className={`mb-3 bg-gray-50 dark:bg-gray-800/30 p-2 rounded-lg border min-h-[50px] flex flex-col justify-between border-yellow-500/50 ${lead.notes && lead.notes.length > 0 ? '' : 'items-center justify-center'}`}>
                       {lead.notes && lead.notes.length > 0 ? (
                         <>
                           <p className="text-[9px] text-gray-600 dark:text-gray-300 font-medium line-clamp-2 leading-snug italic w-full text-left">
@@ -328,7 +331,10 @@ export default function ApexCRM() {
                           </div>
                         </>
                       ) : (
-                        <span className="text-[9px] text-gray-400 font-medium italic">No notes yet</span>
+                        <div className="flex items-center gap-1.5 opacity-50">
+                          <Edit2 size={12} className="text-gray-400" />
+                          <span className="text-[9px] text-gray-400 font-medium italic">No notes yet</span>
+                        </div>
                       )}
                     </div>
 
