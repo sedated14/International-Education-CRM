@@ -23,8 +23,10 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
                 <div className="col-span-2 flex items-center gap-1.5 text-[11px] text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 px-2 py-1.5 rounded-lg border-2 border-blue-500 w-full backdrop-blur-sm shadow-sm">
                     <span className="text-gray-400 font-extrabold text-[9px] uppercase tracking-wider shrink-0">SO:</span>
                     <div className="flex flex-wrap items-center gap-1 font-bold">
-                        <span className="text-gray-900 dark:text-gray-200">{lead.agencyProfile ? lead.agencyProfile.name : 'Independent'}</span>
-                        {lead.agencyProfile && (
+                        <span className="text-gray-900 dark:text-gray-200">
+                            {lead.agencyProfile && lead.agencyProfile.name ? lead.agencyProfile.name : 'Independent'}
+                        </span>
+                        {lead.agencyProfile && lead.agencyProfile.name && (
                             <>
                                 <span className="text-gray-300 dark:text-gray-600">•</span>
                                 <span className="text-gray-500 dark:text-gray-400 font-medium">{lead.agencyProfile.country}</span>
