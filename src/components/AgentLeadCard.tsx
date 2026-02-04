@@ -20,6 +20,12 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
             <div className="bg-white dark:bg-gray-900 p-5 border-b-2 border-blue-500 flex justify-between items-start">
                 <div className="flex flex-col">
                     <h3 className="font-bold text-gray-900 dark:text-white text-base leading-tight">{lead.agentName || lead.title}</h3>
+                    <div className="flex items-center gap-1.5 mt-1">
+                        <MapPin size={12} className="text-gray-400 shrink-0" />
+                        <span className="text-xs font-bold text-gray-500 dark:text-gray-400 truncate">
+                            {lead.agencyProfile?.city ? `${lead.agencyProfile.city}, ` : ''}{lead.country}
+                        </span>
+                    </div>
                 </div>
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-sm shrink-0 bg-blue-500`}>
                     {lead.country.substring(0, 2).toUpperCase()}
@@ -44,13 +50,7 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
                             </a>
                         </div>
                     )}
-                    {/* Location */}
-                    <div className="flex items-center gap-2">
-                        <MapPin size={12} className="text-gray-400" />
-                        <span className="text-xs font-bold text-gray-500 dark:text-gray-300 truncate">
-                            {lead.agencyProfile?.city ? `${lead.agencyProfile.city}, ` : ''}{lead.country}
-                        </span>
-                    </div>
+
                 </div>
 
                 {/* Latest Note Snippet */}
