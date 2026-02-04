@@ -332,7 +332,7 @@ export default function ApexCRM() {
                     ) : null}
                   </div>
                 )
-              })
+              })}
           </LeadColumn>
 
         </div>
