@@ -302,7 +302,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
 
 
                     {/* TOP METRICS: DATES (Moved & Refined) */}
-                    <div className="grid grid-cols-2 gap-3 mb-6">
+                    <div className={`grid gap-3 mb-6 ${(['Prospective', 'Pending'].includes(lead.agencyProfile?.partnershipStatus || 'Prospective')) ? 'grid-cols-3' : 'grid-cols-2'}`}>
                         {/* Date Added */}
                         <div className="bg-gray-50/80 dark:bg-gray-800/80 p-3 rounded-2xl border border-gray-100/60 dark:border-gray-700/60">
                             <p className="text-[9px] text-gray-400 dark:text-gray-500 font-black uppercase tracking-wider mb-1">Date Added</p>
@@ -341,6 +341,42 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                 </p>
                             )}
                         </div>
+
+                        {/* Follow Up Due - Conditional Display */}
+                        {(['Prospective', 'Pending'].includes(lead.agencyProfile?.partnershipStatus || 'Prospective')) && (
+                            <div className="bg-blue-50/50 dark:bg-blue-900/20 p-3 rounded-2xl border border-blue-100/60 dark:border-blue-800/40 relative group">
+                                <div className="flex justify-between items-center mb-1">
+                                    <p className="text-[9px] text-blue-400 dark:text-blue-300 font-black uppercase tracking-wider">Follow Up</p>
+                                    {!isEditing && <PenTool size={10} onClick={() => setIsEditing(true)} className="text-blue-300 dark:text-blue-400 opacity-0 group-hover:opacity-100 cursor-pointer" />}
+                                </div>
+                                {isEditing ? (
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="date"
+                                            className="bg-white dark:bg-gray-700 border border-blue-200 dark:border-blue-700 rounded-lg px-2 py-1 text-[10px] font-bold text-blue-900 dark:text-blue-100 w-full"
+                                            value={formData.followUpDate ? new Date(formData.followUpDate).toISOString().split('T')[0] : ''}
+                                            onChange={e => updateDateTime('followUpDate', 'date', e.target.value)}
+                                        />
+                                        <select
+                                            className="bg-white dark:bg-gray-700 border border-blue-200 dark:border-blue-700 rounded-lg px-2 py-1 text-[10px] font-bold text-blue-900 dark:text-blue-100"
+                                            value={formData.followUpDate ? new Date(formData.followUpDate).getHours() : 9}
+                                            onChange={e => updateDateTime('followUpDate', 'hour', e.target.value)}
+                                        >
+                                            {HOURS.map(h => (
+                                                <option key={h.value} value={h.value}>{h.label}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                ) : (
+                                    <p className="font-black text-blue-600 dark:text-blue-300 text-xs">
+                                        {lead.followUpDate
+                                            ? new Date(lead.followUpDate).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric' })
+                                            : new Date(new Date(lead.createdAt).getTime() + (72 * 60 * 60 * 1000)).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric' })
+                                        }
+                                    </p>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     {/* NOTES SECTION (Moved to Body) */}
