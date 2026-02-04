@@ -1,6 +1,6 @@
 import React from 'react';
 import { Lead } from '../types';
-import { Globe, MapPin, StickyNote, Calendar, Clock } from 'lucide-react';
+import { MapPin, StickyNote, Calendar, Clock } from 'lucide-react';
 import Link from 'next/link';
 import { useLeads } from '../context/LeadContext';
 
@@ -62,25 +62,7 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
             </div>
 
             <div className="p-5 pt-4 flex-1 flex flex-col">
-                {/* Company Info Snippets */}
-                <div className="space-y-2 mb-4 bg-white dark:bg-gray-800/50 p-3 rounded-xl border-2 border-blue-500">
-                    {/* Website */}
-                    {lead.agencyProfile?.website && (
-                        <div className="flex items-center gap-2 group/link">
-                            <Globe size={12} className="text-gray-400 group-hover/link:text-blue-500" />
-                            <a
-                                href={lead.agencyProfile.website.startsWith('http') ? lead.agencyProfile.website : `https://${lead.agencyProfile.website}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-xs font-bold text-gray-500 dark:text-gray-300 hover:text-blue-600 truncate hover:underline"
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                {lead.agencyProfile.website.replace(/^https?:\/\//, '')}
-                            </a>
-                        </div>
-                    )}
 
-                </div>
 
                 {/* Latest Note Snippet */}
                 {latestNote ? (
