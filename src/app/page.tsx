@@ -16,11 +16,7 @@ export default function ApexCRM() {
   const { leads } = useLeads();
 
   // Filter out archived (Lost) leads from the dashboard
-  const activeLeads = leads.filter(l => l.status !== 'Lost');
 
-  const studentLeads = activeLeads.filter(l => l.type === 'Student');
-  // Only show Prospective agents on the Dashboard
-  const agentLeads = activeLeads.filter(l => l.type === 'Agent' && l.agencyProfile?.partnershipStatus === 'Prospective');
 
   const [selectedLeadId, setSelectedLeadId] = useState<string | number | null>(null);
   const selectedLead = leads.find(l => l.id === selectedLeadId) || null; // Allow selecting any lead even if archived? Or just active? Let's keep detail lookup on all leads.
@@ -61,28 +57,40 @@ export default function ApexCRM() {
         {/* 4-COLUMN GRID */}
         <div className="flex-1 grid grid-cols-4 gap-6 min-h-0 pb-2">
 
-          {/* COLUMN 1: STUDENT LEADS */}
+          {/* COLUMN 1: STUDENT LEADS (Inquiry ONLY) */}
           <LeadColumn title="Student Leads" icon={<GraduationCap size={20} />}>
-            {studentLeads.map(lead => (
-              <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)}>
-                <StudentLeadCard lead={lead} />
-              </div>
-            ))}
+            {leads
+              .filter(l => l.status !== 'Lost' && l.type === 'Student' && l.status === 'Inquiry')
+              .map(lead => (
+                <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)}>
+                  <StudentLeadCard lead={lead} />
+                </div>
+              ))}
           </LeadColumn>
 
-          {/* COLUMN 2: AGENT LEADS */}
+          {/* COLUMN 2: AGENT LEADS (Prospective ONLY) */}
           <LeadColumn title="Agent Leads" icon={<Briefcase size={20} />}>
-            {agentLeads.map(lead => (
-              <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)}>
-                <AgentLeadCard lead={lead} />
-              </div>
-            ))}
+            {leads
+              .filter(l => l.status !== 'Lost' && l.type === 'Agent' && l.agencyProfile?.partnershipStatus === 'Prospective')
+              .map(lead => (
+                <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)}>
+                  <AgentLeadCard lead={lead} />
+                </div>
+              ))}
           </LeadColumn>
 
-          {/* COLUMN 3: FOLLOW UP (Future) */}
+          {/* COLUMN 3: FOLLOW UP (Contacted Students OR Pending Agents - FUTURE DATES) */}
           <LeadColumn title="Follow Up" icon={<Clock size={20} />}>
-            {[...activeLeads]
+            {[...leads]
               .filter(lead => {
+                if (lead.status === 'Lost') return false;
+
+                // Logic: Must be (Student + Contacted) OR (Agent + Pending)
+                const isRelevantStudent = lead.type === 'Student' && lead.status === 'Contacted';
+                const isRelevantAgent = lead.type === 'Agent' && lead.agencyProfile?.partnershipStatus === 'Pending';
+                if (!isRelevantStudent && !isRelevantAgent) return false;
+
+                // Date Logic: Must be in FUTURE
                 const dueDate = lead.followUpDate ? new Date(lead.followUpDate) : new Date(new Date(lead.createdAt).getTime() + (72 * 60 * 60 * 1000));
                 return dueDate >= new Date();
               })
@@ -112,10 +120,18 @@ export default function ApexCRM() {
               ))}
           </LeadColumn>
 
-          {/* COLUMN 4: PAST DUE (New) */}
+          {/* COLUMN 4: PAST DUE (Contacted Students OR Pending Agents - PAST DATES) */}
           <LeadColumn title="Past Due" icon={<AlertCircle size={20} />}>
-            {[...activeLeads]
+            {[...leads]
               .filter(lead => {
+                if (lead.status === 'Lost') return false;
+
+                // Logic: Must be (Student + Contacted) OR (Agent + Pending)
+                const isRelevantStudent = lead.type === 'Student' && lead.status === 'Contacted';
+                const isRelevantAgent = lead.type === 'Agent' && lead.agencyProfile?.partnershipStatus === 'Pending';
+                if (!isRelevantStudent && !isRelevantAgent) return false;
+
+                // Date Logic: Must be in PAST
                 const dueDate = lead.followUpDate ? new Date(lead.followUpDate) : new Date(new Date(lead.createdAt).getTime() + (72 * 60 * 60 * 1000));
                 return dueDate < new Date();
               })
