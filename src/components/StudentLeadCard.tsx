@@ -14,23 +14,22 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
     return (
         <div className="bg-white dark:bg-gray-900 rounded-[24px] border-4 border-emerald-500 shadow-sm hover:shadow-md transition-all cursor-pointer group overflow-hidden">
             {/* Header: Name, Agency, Status */}
-            <div className="bg-white dark:bg-gray-900 p-5 border-b-2 border-emerald-500 grid grid-cols-[1fr_auto] gap-4 items-start">
-                <div className="min-w-0">
-                    <h3 className="font-bold text-lg text-gray-900 dark:text-white leading-tight">{lead.studentName}</h3>
-                    {lead.agencyProfile && (
-                        <div className="flex items-center gap-1.5 text-[11px] text-gray-600 dark:text-gray-400 mt-1.5 bg-white dark:bg-gray-800 px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-700 w-full backdrop-blur-sm">
-                            <span className="text-gray-400 font-extrabold text-[9px] uppercase tracking-wider shrink-0">SO:</span>
-                            <div className="flex flex-wrap items-center gap-1 font-bold">
-                                <span className="text-gray-900 dark:text-gray-200">{lead.agencyProfile.name}</span>
-                                <span className="text-gray-300 dark:text-gray-600">•</span>
-                                <span className="text-gray-500 dark:text-gray-400 font-medium">{lead.agencyProfile.country}</span>
-                            </div>
-                        </div>
-                    )}
-                </div>
-                <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.status === 'Inquiry' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300'}`}>
+            <div className="bg-white dark:bg-gray-900 p-5 border-b-2 border-emerald-500 grid grid-cols-[1fr_auto] gap-x-4 gap-y-3 items-start">
+                <h3 className="font-bold text-lg text-gray-900 dark:text-white leading-tight min-w-0">{lead.studentName}</h3>
+                <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded w-fit ml-auto ${lead.status === 'Inquiry' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300'}`}>
                     {lead.status}
                 </span>
+
+                {lead.agencyProfile && (
+                    <div className="col-span-2 flex items-center gap-1.5 text-[11px] text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 px-2 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 w-full backdrop-blur-sm shadow-sm">
+                        <span className="text-gray-400 font-extrabold text-[9px] uppercase tracking-wider shrink-0">SO:</span>
+                        <div className="flex flex-wrap items-center gap-1 font-bold">
+                            <span className="text-gray-900 dark:text-gray-200">{lead.agencyProfile.name}</span>
+                            <span className="text-gray-300 dark:text-gray-600">•</span>
+                            <span className="text-gray-500 dark:text-gray-400 font-medium">{lead.agencyProfile.country}</span>
+                        </div>
+                    </div>
+                )}
             </div>
 
             <div className="p-5 pt-4">
