@@ -799,24 +799,43 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                 { key: 'studentHandbookSent', label: 'Student Handbook' },
                                                 { key: 'commissionRequestFormSent', label: 'Comm. Form Sent' }
                                             ].map(item => {
-                                                const isChecked = formData.agencyProfile?.onboardingChecklist?.[item.key] || false;
+                                                // Determine checked state based on mode
+                                                const isChecked = isEditing
+                                                    ? formData.agencyProfile?.onboardingChecklist?.[item.key] || false
+                                                    : lead.agencyProfile?.onboardingChecklist?.[item.key as keyof typeof lead.agencyProfile.onboardingChecklist] || false;
+
                                                 return (
                                                     <div
                                                         key={item.key}
                                                         className="flex items-center gap-2 cursor-pointer group/check"
                                                         onClick={() => {
-                                                            // Always toggleable
-                                                            const current = formData.agencyProfile?.onboardingChecklist || {};
-                                                            setFormData((prev: any) => ({
-                                                                ...prev,
-                                                                agencyProfile: {
-                                                                    ...prev.agencyProfile,
-                                                                    onboardingChecklist: {
-                                                                        ...current,
-                                                                        [item.key]: !isChecked
+                                                            if (isEditing) {
+                                                                // Edit Mode: Update local formData
+                                                                const current = formData.agencyProfile?.onboardingChecklist || {};
+                                                                setFormData((prev: any) => ({
+                                                                    ...prev,
+                                                                    agencyProfile: {
+                                                                        ...prev.agencyProfile,
+                                                                        onboardingChecklist: {
+                                                                            ...current,
+                                                                            [item.key]: !isChecked
+                                                                        }
                                                                     }
-                                                                }
-                                                            }));
+                                                                }));
+                                                            } else {
+                                                                // View Mode: Update DIRECTLY (Real-time)
+                                                                if (!lead.agencyProfile) return;
+                                                                const currentList = lead.agencyProfile.onboardingChecklist || ({} as any);
+                                                                updateLead(lead.id, {
+                                                                    agencyProfile: {
+                                                                        ...lead.agencyProfile,
+                                                                        onboardingChecklist: {
+                                                                            ...currentList,
+                                                                            [item.key]: !isChecked
+                                                                        }
+                                                                    }
+                                                                });
+                                                            }
                                                         }}
                                                     >
                                                         <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-blue-500 border-blue-500' : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 group-hover/check:border-blue-400'}`}>
