@@ -142,13 +142,17 @@ export default function ApexCRM() {
                       {lead.type === 'Student' ? `${lead.status}: Student - ${lead.country}` : lead.title}
                     </p>
 
-                    {lead.type === 'Student' && lead.agencyProfile && (
-                      <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 px-2 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 w-full mb-3">
+                    {lead.type === 'Student' && (
+                      <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 px-2 py-1.5 rounded-lg border-2 border-blue-500 w-full mb-3">
                         <span className="text-gray-400 font-extrabold text-[8px] uppercase tracking-wider shrink-0">SO:</span>
                         <div className="flex flex-wrap items-center gap-1 font-bold">
-                          <span className="text-gray-900 dark:text-gray-200">{lead.agencyProfile.name}</span>
-                          <span className="text-gray-300 dark:text-gray-600">•</span>
-                          <span className="text-gray-500 dark:text-gray-400 font-medium">{lead.agencyProfile.country}</span>
+                          <span className="text-gray-900 dark:text-gray-200">{lead.agencyProfile ? lead.agencyProfile.name : 'Independent'}</span>
+                          {lead.agencyProfile && (
+                            <>
+                              <span className="text-gray-300 dark:text-gray-600">•</span>
+                              <span className="text-gray-500 dark:text-gray-400 font-medium">{lead.agencyProfile.country}</span>
+                            </>
+                          )}
                         </div>
                       </div>
                     )}
@@ -270,13 +274,17 @@ export default function ApexCRM() {
                       {lead.type === 'Student' ? `${lead.status}: Student - ${lead.country}` : lead.title}
                     </p>
 
-                    {lead.type === 'Student' && lead.agencyProfile && (
-                      <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 px-2 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 w-full mb-3">
+                    {lead.type === 'Student' && (
+                      <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 px-2 py-1.5 rounded-lg border-2 border-blue-500 w-full mb-3">
                         <span className="text-gray-400 font-extrabold text-[8px] uppercase tracking-wider shrink-0">SO:</span>
                         <div className="flex flex-wrap items-center gap-1 font-bold">
-                          <span className="text-gray-900 dark:text-gray-200">{lead.agencyProfile.name}</span>
-                          <span className="text-gray-300 dark:text-gray-600">•</span>
-                          <span className="text-gray-500 dark:text-gray-400 font-medium">{lead.agencyProfile.country}</span>
+                          <span className="text-gray-900 dark:text-gray-200">{lead.agencyProfile ? lead.agencyProfile.name : 'Independent'}</span>
+                          {lead.agencyProfile && (
+                            <>
+                              <span className="text-gray-300 dark:text-gray-600">•</span>
+                              <span className="text-gray-500 dark:text-gray-400 font-medium">{lead.agencyProfile.country}</span>
+                            </>
+                          )}
                         </div>
                       </div>
                     )}
