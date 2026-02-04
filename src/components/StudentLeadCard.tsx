@@ -14,16 +14,16 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
     return (
         <div className="bg-white dark:bg-gray-900 rounded-[24px] border-4 border-emerald-500 shadow-sm hover:shadow-md transition-all cursor-pointer group overflow-hidden">
             {/* Header: Name, Agency, Status */}
-            <div className="bg-white dark:bg-gray-900 p-5 border-b-2 border-emerald-500 flex gap-4 items-start">
-                <div className="flex-1 min-w-0">
+            <div className="bg-white dark:bg-gray-900 p-5 border-b-2 border-emerald-500 grid grid-cols-[1fr_auto] gap-4 items-start">
+                <div className="min-w-0">
                     <h3 className="font-bold text-lg text-gray-900 dark:text-white leading-tight">{lead.studentName}</h3>
                     {lead.agencyProfile && (
                         <div className="flex items-center gap-1.5 text-[11px] text-gray-600 dark:text-gray-400 mt-1.5 bg-white dark:bg-gray-800 px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-700 w-full backdrop-blur-sm">
-                            <span className="text-gray-400 font-extrabold text-[9px] uppercase tracking-wider">SO:</span>
-                            <div className="flex items-center gap-1.5 font-bold flex-1 min-w-0">
-                                <span className="text-gray-900 dark:text-gray-200 truncate">{lead.agencyProfile.name}</span>
-                                <span className="text-gray-300 dark:text-gray-600 shrink-0">•</span>
-                                <span className="text-gray-500 dark:text-gray-400 font-medium truncate">{lead.agencyProfile.country}</span>
+                            <span className="text-gray-400 font-extrabold text-[9px] uppercase tracking-wider shrink-0">SO:</span>
+                            <div className="flex flex-wrap items-center gap-1 font-bold">
+                                <span className="text-gray-900 dark:text-gray-200">{lead.agencyProfile.name}</span>
+                                <span className="text-gray-300 dark:text-gray-600">•</span>
+                                <span className="text-gray-500 dark:text-gray-400 font-medium">{lead.agencyProfile.country}</span>
                             </div>
                         </div>
                     )}
