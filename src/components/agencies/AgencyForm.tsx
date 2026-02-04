@@ -245,7 +245,7 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
                         <Input label="Nickname" value={formData.nickname} onChange={v => setFormData({ ...formData, nickname: v })} />
 
                         <Input label="Position" value={primaryContact.position} onChange={v => setPrimaryContact({ ...primaryContact, position: v })} required />
-                        <Input label="Met At" placeholder="Event or Location" value={formData.metAt} onChange={v => setFormData({ ...formData, metAt: v })} />
+                        <Input label="Met At" placeholder="Event or Location" value={formData.metAt} onChange={v => setFormData({ ...formData, metAt: v })} className="md:col-span-2" />
                         <Select label="Preferred Communication" options={['Email', 'WhatsApp', 'Phone', 'Skype']} value={primaryContact.preferredCommunication} onChange={v => setPrimaryContact({ ...primaryContact, preferredCommunication: v })} />
 
                         <Input label="Email" type="email" icon={<Mail size={16} />} value={primaryContact.email} onChange={v => setPrimaryContact({ ...primaryContact, email: v })} required />

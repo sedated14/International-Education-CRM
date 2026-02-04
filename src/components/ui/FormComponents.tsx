@@ -71,24 +71,25 @@ export const PhoneInput = ({ label, value = '', onChange, defaultCountry, requir
 
     // Initialize/Sync State
     useEffect(() => {
-        // 1. If value is provided, try to parse it
         if (value) {
-            // Find longest matching code to avoid issues with +1 vs +1-246
+            // Find longest matching code
             const match = COUNTRY_PHONE_CODES
                 .filter(c => value.startsWith(c.code))
                 .sort((a, b) => b.code.length - a.code.length)[0];
 
             if (match) {
                 setSelectedCode(match.code);
-                setPhoneNumber(value.replace(match.code, '').trim());
+                const rawNumber = value.replace(match.code, '').trim();
+                // Apply formatting if it's US/Canada
+                if (match.code === '+1') {
+                    setPhoneNumber(formatUSNumber(rawNumber));
+                } else {
+                    setPhoneNumber(rawNumber);
+                }
             } else {
-                // If no code match found (might be raw number), keep code as is (or default) and set whole value as number?
-                // Or just set whole value as number and let user fix it.
-                // Assuming well-formed input if possible.
                 setPhoneNumber(value);
             }
         }
-        // 2. If value is empty, try to set default code from defaultCountry
         else if (defaultCountry && !value) {
             const countryMatch = COUNTRY_PHONE_CODES.find(c => c.country === defaultCountry);
             if (countryMatch) {
@@ -97,28 +98,62 @@ export const PhoneInput = ({ label, value = '', onChange, defaultCountry, requir
         }
     }, [defaultCountry, value]);
 
-    const handleCodeChange = (newCode: string) => {
-        setSelectedCode(newCode);
-        onChange(`${newCode} ${phoneNumber}`);
+    const formatUSNumber = (val: string) => {
+        const digits = val.replace(/\D/g, '').substring(0, 10);
+        if (digits.length === 0) return '';
+        if (digits.length <= 3) return `(${digits}`;
+        if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+        return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
     };
 
-    const handleNumberChange = (newNumber: string) => {
-        setPhoneNumber(newNumber);
-        onChange(`${selectedCode} ${newNumber}`);
+    const handleCodeChange = (newCode: string) => {
+        setSelectedCode(newCode);
+        // re-format number based on new code if needed, strictly separate for now
+        // If switching to +1, format existing number
+        if (newCode === '+1') {
+            const formatted = formatUSNumber(phoneNumber);
+            setPhoneNumber(formatted);
+            onChange(`${newCode} ${formatted}`);
+        } else {
+            // If switching away from +1, maybe strip format?
+            const raw = phoneNumber.replace(/[\(\)\- ]/g, '');
+            setPhoneNumber(raw);
+            onChange(`${newCode} ${raw}`);
+        }
+    };
+
+    const handleNumberChange = (input: string) => {
+        // Enforce formatting based on selected code
+        let newVal = input;
+
+        if (selectedCode === '+1') {
+            // Strict US/Canada Masking
+            // We want to handle backspace correctly, so we mostly rely on raw index
+            // But for simple "typing forward", formatting logic works.
+            // A simple approach: strip non-digits, truncate to 10, re-format.
+            // But we need to handle user deletion.
+
+            // If user deletes, `input` might be " (555) 555-555 " -> len less. 
+            // Just stripping and re-formatting usually works well for fixed masks.
+            newVal = formatUSNumber(input);
+        }
+
+        setPhoneNumber(newVal);
+        onChange(`${selectedCode} ${newVal}`);
     };
 
     return (
-        <div className="group">
+        <div className="group w-full">
             {label && (
                 <label className="block text-xs font-bold text-gray-500 dark:text-gray-500 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-black dark:group-focus-within:text-white transition-colors">
                     {label} {required && <span className="text-red-400">*</span>}
                 </label>
             )}
-            <div className="flex gap-2">
+            <div className="flex gap-2 w-full">
                 {/* Country Code Select */}
-                <div className="relative w-32 shrink-0">
+                <div className="relative w-[140px] shrink-0">
                     <select
-                        className="w-full h-full bg-gray-100 dark:bg-gray-800 border-2 border-gray-200 dark:border-transparent focus:bg-white dark:focus:bg-gray-700 focus:border-black dark:focus:border-white rounded-2xl px-3 py-4 font-bold text-gray-900 dark:text-white outline-none text-xs appearance-none cursor-pointer transition-all"
+                        className="w-full bg-gray-100 dark:bg-gray-800 border-2 border-gray-200 dark:border-transparent focus:bg-white dark:focus:bg-gray-700 focus:border-black dark:focus:border-white rounded-2xl px-3 py-4 font-bold text-gray-900 dark:text-white outline-none text-xs appearance-none cursor-pointer transition-all"
                         value={selectedCode}
                         onChange={e => handleCodeChange(e.target.value)}
                     >
@@ -134,15 +169,16 @@ export const PhoneInput = ({ label, value = '', onChange, defaultCountry, requir
                 </div>
 
                 {/* Number Input */}
-                <div className="relative flex-1">
+                <div className="relative flex-1 min-w-0">
                     {icon && <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">{icon}</div>}
                     <input
                         type="tel"
                         className={`w-full bg-gray-100 dark:bg-gray-800 border-2 border-gray-200 dark:border-transparent focus:bg-white dark:focus:bg-gray-700 focus:border-black dark:focus:border-white rounded-2xl px-5 py-4 font-bold text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 outline-none transition-all ${icon ? 'pl-10' : ''}`}
-                        placeholder="123 456 7890"
+                        placeholder={selectedCode === '+1' ? "(555) 555-5555" : "123 456 7890"}
                         value={phoneNumber}
                         onChange={e => handleNumberChange(e.target.value)}
                         required={required}
+                        maxLength={selectedCode === '+1' ? 14 : 20} // (XXX) XXX-XXXX is 14 chars
                     />
                 </div>
             </div>
