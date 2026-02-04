@@ -4,7 +4,7 @@ import { Agency } from '../../types';
 import { User, Globe, Building2, Phone, Mail, MessageCircle, Video, Save, Search, Plus, X, ClipboardList } from 'lucide-react';
 import Link from 'next/link';
 import { countryToRegion, getTimezone } from '../../utils/countries';
-import { Input, Select, SearchableSelect, CheckboxGroup, CountrySelector } from '../ui/FormComponents';
+import { Input, Select, SearchableSelect, CheckboxGroup, CountrySelector, PhoneInput } from '../ui/FormComponents';
 
 interface AgencyFormProps {
     initialData?: Agency;
@@ -249,8 +249,8 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
                         <Select label="Preferred Communication" options={['Email', 'WhatsApp', 'Phone', 'Skype']} value={primaryContact.preferredCommunication} onChange={v => setPrimaryContact({ ...primaryContact, preferredCommunication: v })} />
 
                         <Input label="Email" type="email" icon={<Mail size={16} />} value={primaryContact.email} onChange={v => setPrimaryContact({ ...primaryContact, email: v })} required />
-                        <Input label="Phone Number" icon={<Phone size={16} />} value={primaryContact.phone} onChange={v => setPrimaryContact({ ...primaryContact, phone: v })} />
-                        <Input label="WhatsApp" icon={<MessageCircle size={16} />} value={primaryContact.whatsapp} onChange={v => setPrimaryContact({ ...primaryContact, whatsapp: v })} />
+                        <PhoneInput label="Phone Number" icon={<Phone size={16} />} value={primaryContact.phone} onChange={v => setPrimaryContact({ ...primaryContact, phone: v })} defaultCountry={formData.country} />
+                        <PhoneInput label="WhatsApp" icon={<MessageCircle size={16} />} value={primaryContact.whatsapp} onChange={v => setPrimaryContact({ ...primaryContact, whatsapp: v })} defaultCountry={formData.country} />
                         <Input label="Skype Address" icon={<Video size={16} />} value={primaryContact.skype} onChange={v => setPrimaryContact({ ...primaryContact, skype: v })} />
 
                         <div className="md:col-span-3">
@@ -270,7 +270,7 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
                         <Input label="Position" value={secondaryContact.position} onChange={v => setSecondaryContact({ ...secondaryContact, position: v })} />
                         <div className="hidden md:block" />
                         <Input label="Email" icon={<Mail size={16} />} value={secondaryContact.email} onChange={v => setSecondaryContact({ ...secondaryContact, email: v })} />
-                        <Input label="WhatsApp" icon={<MessageCircle size={16} />} value={secondaryContact.whatsapp} onChange={v => setSecondaryContact({ ...secondaryContact, whatsapp: v })} />
+                        <PhoneInput label="WhatsApp" icon={<MessageCircle size={16} />} value={secondaryContact.whatsapp} onChange={v => setSecondaryContact({ ...secondaryContact, whatsapp: v })} defaultCountry={formData.country} />
                         <div className="md:col-span-2">
                             <Input label="Contact Notes" isTextArea value={secondaryContact.notes} onChange={v => setSecondaryContact({ ...secondaryContact, notes: v })} />
                         </div>
@@ -294,7 +294,7 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
                             <Input label="Full Name" value={contact.name} onChange={v => updateAdditionalContact(index, 'name', v)} required />
                             <Input label="Position" value={contact.role} onChange={v => updateAdditionalContact(index, 'role', v)} />
                             <Input label="Email" icon={<Mail size={16} />} value={contact.email} onChange={v => updateAdditionalContact(index, 'email', v)} />
-                            <Input label="WhatsApp" icon={<MessageCircle size={16} />} value={contact.whatsapp} onChange={v => updateAdditionalContact(index, 'whatsapp', v)} />
+                            <PhoneInput label="WhatsApp" icon={<MessageCircle size={16} />} value={contact.whatsapp} onChange={v => updateAdditionalContact(index, 'whatsapp', v)} defaultCountry={formData.country} />
                             {/* <Input label="Phone" icon={<Phone size={16} />} value={contact.phone} onChange={v => updateAdditionalContact(index, 'phone', v)} /> */}
                             <div className="md:col-span-2">
                                 <Input label="Contact Notes" isTextArea value={contact.notes} onChange={v => updateAdditionalContact(index, 'notes', v)} />

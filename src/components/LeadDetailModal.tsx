@@ -5,7 +5,7 @@ import { useLeads } from '../context/LeadContext';
 import { X, User, Calendar, Languages, GraduationCap, School as SchoolIcon, Activity, Smile, BookOpen, Briefcase, PenTool, MapPin, Save, Edit2, StickyNote, Clock } from 'lucide-react';
 import Link from 'next/link';
 import { COUNTRIES } from '../data/countries';
-import { CheckboxGroup, CountrySelector, Input, Select } from './ui/FormComponents';
+import { CheckboxGroup, CountrySelector, Input, Select, PhoneInput } from './ui/FormComponents';
 
 interface Props {
     lead: Lead | null;
@@ -71,6 +71,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
 
             setFormData(initialData);
             setNewNote('');
+            setIsEditing(false);
         }
     }, [lead]);
 
@@ -464,7 +465,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                         <DetailItem
                                             icon={<Activity />}
                                             label="Phone"
-                                            value={<Input value={editProfile.phoneNumber} onChange={v => updateProfileField('phoneNumber', v)} />}
+                                            value={<PhoneInput value={editProfile.phoneNumber} onChange={v => updateProfileField('phoneNumber', v)} defaultCountry={editProfile.nationality || editProfile.residence} />}
                                         />
                                     )}
                                     <DetailItem
@@ -930,7 +931,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                     }));
                                                 }}
                                             />
-                                            <Input
+                                            <PhoneInput
                                                 label="Phone / WhatsApp"
                                                 value={formData.agencyProfile?.keyContacts?.[0]?.phone || formData.agencyProfile?.keyContacts?.[0]?.whatsapp}
                                                 onChange={v => {
@@ -943,6 +944,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                         agencyProfile: { ...prev.agencyProfile, keyContacts: contacts }
                                                     }));
                                                 }}
+                                                defaultCountry={lead?.agencyProfile?.country}
                                             />
                                             <Input
                                                 label="Skype"
@@ -1058,7 +1060,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                         }));
                                                     }}
                                                 />
-                                                <Input
+                                                <PhoneInput
                                                     label="Phone"
                                                     value={formData.agencyProfile?.secondaryContact?.phone || ''}
                                                     onChange={v => {
@@ -1069,6 +1071,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                             agencyProfile: { ...prev.agencyProfile, secondaryContact: contact }
                                                         }));
                                                     }}
+                                                    defaultCountry={lead?.agencyProfile?.country}
                                                 />
                                             </div>
                                         </div>

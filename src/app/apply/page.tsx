@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 
 import { useLeads } from '../../context/LeadContext';
 import { Lead } from '../../types';
+import { Input, Select, PhoneInput, SearchableSelect as Combobox } from '../../components/ui/FormComponents';
+import { COUNTRIES } from '../../data/countries';
 
 export default function ApplyPage() {
     const router = useRouter();
@@ -221,8 +223,8 @@ export default function ApplyPage() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <Input label="Email Address" placeholder="hello@example.com" value={formData.studentEmail} onChange={(v: any) => setFormData({ ...formData, studentEmail: v })} />
-                                <Input label="Phone Number" placeholder="+1 234 567 890" icon={<Phone size={16} />} value={formData.phoneNumber} onChange={(v: any) => setFormData({ ...formData, phoneNumber: v })} />
-                                <Input label="WhatsApp Number" placeholder="+1 234 567 890" icon={<MessageCircle size={16} />} value={formData.whatsappNumber} onChange={(v: any) => setFormData({ ...formData, whatsappNumber: v })} />
+                                <PhoneInput label="Phone Number" icon={<Phone size={16} />} value={formData.phoneNumber} onChange={(v: any) => setFormData({ ...formData, phoneNumber: v })} defaultCountry={formData.residence || formData.nationality} />
+                                <PhoneInput label="WhatsApp Number" icon={<MessageCircle size={16} />} value={formData.whatsappNumber} onChange={(v: any) => setFormData({ ...formData, whatsappNumber: v })} defaultCountry={formData.residence || formData.nationality} />
                             </div>
                         </section>
 
@@ -472,195 +474,6 @@ export default function ApplyPage() {
     );
 }
 
-// --- Reusable Components ---
-
-const Input = ({ label, placeholder, value, onChange, type = "text", isTextArea = false, rows = 3, icon }: any) => (
-    <div className="group">
-        <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-black dark:group-focus-within:text-white transition-colors">{label}</label>
-        <div className="relative">
-            {icon && <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">{icon}</div>}
-            {isTextArea ? (
-                <textarea
-                    className="w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:bg-white dark:focus:bg-gray-900 focus:border-black dark:focus:border-white rounded-2xl px-5 py-4 font-bold text-gray-900 dark:text-white placeholder:text-gray-300 dark:placeholder:text-gray-600 outline-none transition-all resize-none"
-                    placeholder={placeholder}
-                    value={value}
-                    onChange={e => onChange(e.target.value)}
-                    rows={rows}
-                />
-            ) : (
-                <input
-                    type={type}
-                    className={`w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:bg-white dark:focus:bg-gray-900 focus:border-black dark:focus:border-white rounded-2xl px-5 py-4 font-bold text-gray-900 dark:text-white placeholder:text-gray-300 dark:placeholder:text-gray-600 outline-none transition-all ${icon ? 'pl-10' : ''}`}
-                    placeholder={placeholder}
-                    value={value}
-                    onChange={e => onChange(e.target.value)}
-                />
-            )}
-        </div>
-    </div>
-);
-
-const Select = ({ label, options, value, onChange }: any) => (
-    <div className="group">
-        <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-black dark:group-focus-within:text-white transition-colors">{label}</label>
-        <div className="relative">
-            <select
-                className="w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:bg-white dark:focus:bg-gray-900 focus:border-black dark:focus:border-white rounded-2xl px-5 py-4 font-bold text-gray-900 dark:text-white outline-none appearance-none cursor-pointer transition-all"
-                value={value}
-                onChange={e => onChange(e.target.value)}
-            >
-                <option value="" disabled>Select an option</option>
-                {options.map((opt: string) => <option key={opt} value={opt}>{opt}</option>)}
-            </select>
-            <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                <ChevronDown size={16} />
-            </div>
-        </div>
-    </div>
-);
-
-// Searchable Combobox Component
-const Combobox = ({ label, placeholder, value, onChange, options, icon }: any) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
-    const wrapperRef = useRef<HTMLDivElement>(null);
-
-    // Initial value
-    useEffect(() => {
-        if (!isOpen) {
-            // When closing, reset search term to match value or clear if empty
-            // But we don't want to clear search if user is just clicking out
-            // Actually, we usually want search term to reflect value if present
-            setSearchTerm(value);
-        }
-    }, [isOpen, value]);
-
-    // Handle clicking outside
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-                setIsOpen(false);
-            }
-        }
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [wrapperRef]);
-
-    const filteredOptions = options.filter((opt: string) =>
-        opt.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    return (
-        <div className="group relative" ref={wrapperRef}>
-            <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-black dark:group-focus-within:text-white transition-colors">{label}</label>
-            <div className="relative">
-                {icon && <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">{icon}</div>}
-                <div
-                    className="relative"
-                    onClick={() => setIsOpen(true)}
-                >
-                    <input
-                        type="text"
-                        className={`w-full bg-gray-50 dark:bg-gray-800 border-2 border-transparent focus:bg-white dark:focus:bg-gray-900 focus:border-black dark:focus:border-white rounded-2xl px-5 py-4 font-bold text-gray-900 dark:text-white placeholder:text-gray-300 dark:placeholder:text-gray-600 outline-none transition-all ${icon ? 'pl-10' : ''}`}
-                        placeholder={placeholder}
-                        value={isOpen ? searchTerm : value}
-                        onChange={e => {
-                            setSearchTerm(e.target.value);
-                            setIsOpen(true);
-                        }}
-                        onFocus={() => {
-                            setIsOpen(true);
-                            setSearchTerm(value);
-                        }}
-                        onKeyDown={e => {
-                            if (e.key === 'Enter') {
-                                e.preventDefault();
-                                // Try to find an exact match first, then case-insensitive
-                                const exactMatch = options.find((opt: string) => opt.toLowerCase() === searchTerm.toLowerCase());
-                                if (exactMatch) {
-                                    onChange(exactMatch);
-                                    setSearchTerm(exactMatch);
-                                    setIsOpen(false);
-                                } else if (filteredOptions.length > 0) {
-                                    // If no exact match but we have filtered results, select the first one
-                                    onChange(filteredOptions[0]);
-                                    setSearchTerm(filteredOptions[0]);
-                                    setIsOpen(false);
-                                }
-                            }
-                        }}
-                        onBlur={() => {
-                            // Give time for click event on dropdown items to fire
-                            setTimeout(() => {
-                                setIsOpen(false);
-                                // If user leaves field, revert to value if no match found, 
-                                // OR if we want to be smart, 'auto-select' if it's a perfect match
-                                const exactMatch = options.find((opt: string) => opt.toLowerCase() === searchTerm.toLowerCase());
-                                if (exactMatch) {
-                                    onChange(exactMatch);
-                                }
-                            }, 200);
-                        }}
-                    />
-                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                        {isOpen ? <Search size={16} /> : <ChevronDown size={16} />}
-                    </div>
-                </div>
-
-                {/* Dropdown Menu */}
-                {isOpen && (
-                    <div className="absolute z-50 w-full mt-2 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 max-h-60 overflow-y-auto overflow-x-hidden animate-in fade-in slide-in-from-top-2">
-                        {filteredOptions.length > 0 ? (
-                            filteredOptions.map((opt: string) => (
-                                <div
-                                    key={opt}
-                                    className={`px-5 py-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-bold text-sm text-gray-700 dark:text-gray-200 flex justify-between items-center ${value === opt ? 'bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400' : ''}`}
-                                    onClick={() => {
-                                        onChange(opt);
-                                        setIsOpen(false);
-                                        setSearchTerm(opt);
-                                    }}
-                                >
-                                    {opt}
-                                    {value === opt && <Check size={14} />}
-                                </div>
-                            ))
-                        ) : (
-                            <div className="px-5 py-4 text-sm text-gray-400 font-medium text-center">No results found</div>
-                        )}
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-};
-
-
-const COUNTRIES = [
-    "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan",
-    "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi",
-    "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo (Congo-Brazzaville)", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czechia (Czech Republic)",
-    "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic",
-    "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia",
-    "Fiji", "Finland", "France",
-    "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana",
-    "Haiti", "Honduras", "Hungary",
-    "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Ivory Coast",
-    "Jamaica", "Japan", "Jordan",
-    "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan",
-    "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg",
-    "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar",
-    "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway",
-    "Oman",
-    "Pakistan", "Palau", "Palestine State", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal",
-    "Qatar",
-    "Romania", "Russia", "Rwanda",
-    "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria",
-    "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu",
-    "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America", "Uruguay", "Uzbekistan",
-    "Vanuatu", "Vatican City", "Venezuela", "Vietnam",
-    "Yemen",
-    "Zambia", "Zimbabwe"
-];
+// --- Reusable Components Imported from ../../components/ui/FormComponents ---
 
 const GRADE_OPTIONS = ['5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th'];
