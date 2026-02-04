@@ -302,10 +302,10 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
 
 
                     {/* TOP METRICS: DATES (Moved & Refined) */}
-                    <div className="grid grid-cols-3 gap-3 mb-6">
-                        {/* Date Received */}
+                    <div className="grid grid-cols-2 gap-3 mb-6">
+                        {/* Date Added */}
                         <div className="bg-gray-50/80 dark:bg-gray-800/80 p-3 rounded-2xl border border-gray-100/60 dark:border-gray-700/60">
-                            <p className="text-[9px] text-gray-400 dark:text-gray-500 font-black uppercase tracking-wider mb-1">Received</p>
+                            <p className="text-[9px] text-gray-400 dark:text-gray-500 font-black uppercase tracking-wider mb-1">Date Added</p>
                             <p className="font-black text-gray-800 dark:text-gray-200 text-xs">
                                 {new Date(lead.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric' })}
                             </p>
@@ -337,40 +337,6 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                     {lead.lastContacted
                                         ? new Date(lead.lastContacted).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric' })
                                         : 'Never'
-                                    }
-                                </p>
-                            )}
-                        </div>
-
-                        {/* Follow Up Due */}
-                        <div className="bg-blue-50/50 dark:bg-blue-900/20 p-3 rounded-2xl border border-blue-100/60 dark:border-blue-800/40 relative group">
-                            <div className="flex justify-between items-center mb-1">
-                                <p className="text-[9px] text-blue-400 dark:text-blue-300 font-black uppercase tracking-wider">Follow Up</p>
-                                {!isEditing && <PenTool size={10} onClick={() => setIsEditing(true)} className="text-blue-300 dark:text-blue-400 opacity-0 group-hover:opacity-100 cursor-pointer" />}
-                            </div>
-                            {isEditing ? (
-                                <div className="flex gap-2">
-                                    <input
-                                        type="date"
-                                        className="bg-white dark:bg-gray-700 border border-blue-200 dark:border-blue-700 rounded-lg px-2 py-1 text-[10px] font-bold text-blue-900 dark:text-blue-100 w-full"
-                                        value={formData.followUpDate ? new Date(formData.followUpDate).toISOString().split('T')[0] : ''}
-                                        onChange={e => updateDateTime('followUpDate', 'date', e.target.value)}
-                                    />
-                                    <select
-                                        className="bg-white dark:bg-gray-700 border border-blue-200 dark:border-blue-700 rounded-lg px-2 py-1 text-[10px] font-bold text-blue-900 dark:text-blue-100"
-                                        value={formData.followUpDate ? new Date(formData.followUpDate).getHours() : 9}
-                                        onChange={e => updateDateTime('followUpDate', 'hour', e.target.value)}
-                                    >
-                                        {HOURS.map(h => (
-                                            <option key={h.value} value={h.value}>{h.label}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                            ) : (
-                                <p className="font-black text-blue-600 dark:text-blue-300 text-xs">
-                                    {lead.followUpDate
-                                        ? new Date(lead.followUpDate).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric' })
-                                        : new Date(new Date(lead.createdAt).getTime() + (72 * 60 * 60 * 1000)).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric' })
                                     }
                                 </p>
                             )}
@@ -731,19 +697,34 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                 </div>
                             </section>
 
-                            {/* Key Contacts */}
+                            {/* Primary Contact */}
                             <section>
-                                <h3 className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">Key Contact</h3>
+                                <h3 className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">Primary Contact</h3>
                                 {isEditing ? (
                                     <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 space-y-4">
                                         <div className="grid grid-cols-2 gap-4">
                                             <Input
-                                                label="Full Name"
-                                                value={formData.agencyProfile?.keyContacts?.[0]?.name}
+                                                label="First Name"
+                                                value={formData.agencyProfile?.keyContacts?.[0]?.firstName}
                                                 onChange={v => {
                                                     const contacts = [...(formData.agencyProfile?.keyContacts || [])];
                                                     if (!contacts[0]) contacts[0] = {};
-                                                    contacts[0].name = v;
+                                                    contacts[0].firstName = v;
+                                                    contacts[0].name = `${v} ${contacts[0].lastName || ''}`.trim();
+                                                    setFormData((prev: any) => ({
+                                                        ...prev,
+                                                        agencyProfile: { ...prev.agencyProfile, keyContacts: contacts }
+                                                    }));
+                                                }}
+                                            />
+                                            <Input
+                                                label="Last Name"
+                                                value={formData.agencyProfile?.keyContacts?.[0]?.lastName}
+                                                onChange={v => {
+                                                    const contacts = [...(formData.agencyProfile?.keyContacts || [])];
+                                                    if (!contacts[0]) contacts[0] = {};
+                                                    contacts[0].lastName = v;
+                                                    contacts[0].name = `${contacts[0].firstName || ''} ${v}`.trim();
                                                     setFormData((prev: any) => ({
                                                         ...prev,
                                                         agencyProfile: { ...prev.agencyProfile, keyContacts: contacts }
@@ -778,8 +759,8 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                             />
                                             <Input
                                                 label="Met At"
-                                                value={formData.metAt}
-                                                onChange={v => setFormData((prev: any) => ({ ...prev, metAt: v }))}
+                                                value={formData.agencyProfile?.metAt || ''}
+                                                onChange={v => setFormData((prev: any) => ({ ...prev, agencyProfile: { ...prev.agencyProfile, metAt: v } }))}
                                             />
                                             <Input
                                                 label="Email"

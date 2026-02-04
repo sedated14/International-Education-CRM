@@ -443,7 +443,7 @@ export default function AgencyProfilePage() {
                         <div className="bg-white dark:bg-gray-900 rounded-[32px] p-8 border border-gray-100 dark:border-gray-800 shadow-sm">
                             <h2 className="text-xl font-black text-gray-900 dark:text-white mb-6 flex items-center gap-2">
                                 <User size={20} className="text-orange-500" />
-                                Key Contacts
+                                Primary Contact
                             </h2>
 
                             <div className="space-y-6">
@@ -538,6 +538,11 @@ export default function AgencyProfilePage() {
                                 Metadata
                             </h2>
                             <div className="space-y-4 text-sm">
+                                <div className="flex justify-between">
+                                    <span className="text-gray-500 dark:text-gray-400">Date Added</span>
+                                    {/* Use foundLead.createdAt directly as it is available in scope */}
+                                    <span className="font-bold text-gray-900 dark:text-white">{new Date(foundLead?.createdAt || new Date()).toLocaleDateString()}</span>
+                                </div>
                                 {agency.contractSignedDate && (
                                     <div className="flex justify-between">
                                         <span className="text-gray-500 dark:text-gray-400">Contract Signed</span>
@@ -548,6 +553,30 @@ export default function AgencyProfilePage() {
                                     <span className="text-gray-500 dark:text-gray-400">Last Contact</span>
                                     <span className="font-bold text-gray-900 dark:text-white">{new Date(agency.lastContactDate).toLocaleDateString()}</span>
                                 </div>
+                            </div>
+                        </div>
+
+                        {/* Notes & History (Added) */}
+                        <div className="bg-white dark:bg-gray-900 rounded-[32px] p-8 border border-gray-100 dark:border-gray-800 shadow-sm">
+                            <h2 className="text-xl font-black text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                                <MessageCircle size={20} className="text-yellow-500" />
+                                Notes & History
+                            </h2>
+                            <div className="space-y-4">
+                                {foundLead?.notes && foundLead.notes.length > 0 ? (
+                                    <div className="flex flex-col gap-3 max-h-60 overflow-y-auto custom-scrollbar pr-2">
+                                        {[...foundLead.notes].sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).map((note: any) => (
+                                            <div key={note.id} className="bg-yellow-50/50 dark:bg-yellow-900/10 p-3 rounded-xl border border-yellow-100 dark:border-yellow-900/20 text-sm">
+                                                <p className="text-gray-700 dark:text-gray-300 font-medium leading-relaxed whitespace-pre-wrap">{note.content}</p>
+                                                <p className="text-[10px] text-gray-400 dark:text-gray-500 font-bold text-right mt-2 flex justify-end items-center gap-1">
+                                                    {new Date(note.timestamp).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-gray-400 italic text-sm">No history notes available.</p>
+                                )}
                             </div>
                         </div>
 
