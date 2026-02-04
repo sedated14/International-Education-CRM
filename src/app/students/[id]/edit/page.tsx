@@ -5,7 +5,7 @@ import { Navigation } from '../../../../components/Navigation';
 import { useLeads } from '../../../../context/LeadContext';
 import { ArrowLeft, Save, Trash2, User, BookOpen, MapPin, Heart, FileText, DollarSign, MessageCircle, Globe } from 'lucide-react';
 import Link from 'next/link';
-import { Input, Select, SearchableSelect, CheckboxGroup } from '../../../../components/ui/FormComponents';
+import { Input, Select, SearchableSelect, CheckboxGroup, PhoneInput } from '../../../../components/ui/FormComponents';
 import { COUNTRIES } from '../../../../data/countries';
 
 export default function EditStudentPage() {
@@ -238,8 +238,19 @@ export default function EditStudentPage() {
                                 <div className="col-span-full h-px bg-gray-50 dark:bg-gray-800 my-2" />
 
                                 <Input label="Email" value={formData.studentEmail} onChange={v => setFormData({ ...formData, studentEmail: v })} />
-                                <Input label="Phone Number" value={formData.phoneNumber} onChange={v => setFormData({ ...formData, phoneNumber: v })} />
-                                <Input label="WhatsApp" value={formData.whatsappNumber} onChange={v => setFormData({ ...formData, whatsappNumber: v })} icon={<MessageCircle size={16} />} />
+                                <PhoneInput
+                                    label="Phone Number"
+                                    value={formData.phoneNumber}
+                                    onChange={v => setFormData({ ...formData, phoneNumber: v })}
+                                    defaultCountry={formData.residence || formData.nationality}
+                                />
+                                <PhoneInput
+                                    label="WhatsApp"
+                                    value={formData.whatsappNumber}
+                                    onChange={v => setFormData({ ...formData, whatsappNumber: v })}
+                                    icon={<MessageCircle size={16} />}
+                                    defaultCountry={formData.residence || formData.nationality}
+                                />
                             </div>
                         </section>
 

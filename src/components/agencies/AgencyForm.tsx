@@ -239,7 +239,7 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
                     <h2 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">
                         <User className="text-orange-500" /> Primary Contact
                     </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <Input label="First Name" value={formData.contactFirstName} onChange={v => setFormData({ ...formData, contactFirstName: v })} required />
                         <Input label="Last Name" value={formData.contactLastName} onChange={v => setFormData({ ...formData, contactLastName: v })} required />
                         <Input label="Nickname" value={formData.nickname} onChange={v => setFormData({ ...formData, nickname: v })} />
@@ -253,7 +253,7 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
                         <PhoneInput label="WhatsApp" icon={<MessageCircle size={16} />} value={primaryContact.whatsapp} onChange={v => setPrimaryContact({ ...primaryContact, whatsapp: v })} defaultCountry={formData.country} />
                         <Input label="Skype Address" icon={<Video size={16} />} value={primaryContact.skype} onChange={v => setPrimaryContact({ ...primaryContact, skype: v })} />
 
-                        <div className="md:col-span-3">
+                        <div className="md:col-span-2">
                             <Input label="Contact Notes" isTextArea value={primaryContact.notes} onChange={v => setPrimaryContact({ ...primaryContact, notes: v })} />
                         </div>
                     </div>

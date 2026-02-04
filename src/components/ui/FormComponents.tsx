@@ -151,19 +151,19 @@ export const PhoneInput = ({ label, value = '', onChange, defaultCountry, requir
             )}
             <div className="flex gap-2 w-full">
                 {/* Country Code Select */}
-                <div className="relative w-[140px] shrink-0">
+                <div className="relative w-[110px] shrink-0">
                     <select
-                        className="w-full bg-gray-100 dark:bg-gray-800 border-2 border-gray-200 dark:border-transparent focus:bg-white dark:focus:bg-gray-700 focus:border-black dark:focus:border-white rounded-2xl px-3 py-4 font-bold text-gray-900 dark:text-white outline-none text-xs appearance-none cursor-pointer transition-all"
+                        className="w-full bg-gray-100 dark:bg-gray-800 border-2 border-gray-200 dark:border-transparent focus:bg-white dark:focus:bg-gray-700 focus:border-black dark:focus:border-white rounded-2xl px-2 py-4 font-bold text-gray-900 dark:text-white outline-none text-xs appearance-none cursor-pointer transition-all"
                         value={selectedCode}
                         onChange={e => handleCodeChange(e.target.value)}
                     >
                         {sortedCodes.map((c) => (
                             <option key={c.country} value={c.code}>
-                                {c.country} ({c.code})
+                                {c.code}
                             </option>
                         ))}
                     </select>
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
                         <ChevronDown size={14} />
                     </div>
                 </div>

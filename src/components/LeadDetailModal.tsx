@@ -5,7 +5,7 @@ import { useLeads } from '../context/LeadContext';
 import { X, User, Calendar, Languages, GraduationCap, School as SchoolIcon, Activity, Smile, BookOpen, Briefcase, PenTool, MapPin, Save, Edit2, StickyNote, Clock, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 import { COUNTRIES } from '../data/countries';
-import { CheckboxGroup, CountrySelector, Input, Select, PhoneInput } from './ui/FormComponents';
+import { CheckboxGroup, CountrySelector, Input, Select, PhoneInput, SearchableSelect } from './ui/FormComponents';
 
 interface Props {
     lead: Lead | null;
@@ -462,11 +462,28 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                             profile.englishLevel}
                                     />
                                     {isEditing && (
-                                        <DetailItem
-                                            icon={<Activity />}
-                                            label="Phone"
-                                            value={<PhoneInput value={editProfile.phoneNumber} onChange={v => updateProfileField('phoneNumber', v)} defaultCountry={editProfile.nationality || editProfile.residence} />}
-                                        />
+                                        <>
+                                            <DetailItem
+                                                icon={<Globe />}
+                                                label="Nationality"
+                                                value={<SearchableSelect value={editProfile.nationality || ''} onChange={v => updateProfileField('nationality', v)} options={COUNTRIES} placeholder="Select Country" />}
+                                            />
+                                            <DetailItem
+                                                icon={<MapPin />}
+                                                label="Residence"
+                                                value={<SearchableSelect value={editProfile.residence || ''} onChange={v => updateProfileField('residence', v)} options={COUNTRIES} placeholder="Select Country" />}
+                                            />
+                                            <DetailItem
+                                                icon={<Activity />}
+                                                label="Phone"
+                                                value={<PhoneInput value={editProfile.phoneNumber} onChange={v => updateProfileField('phoneNumber', v)} defaultCountry={editProfile.nationality || editProfile.residence} />}
+                                            />
+                                            <DetailItem
+                                                icon={<MessageCircle />}
+                                                label="WhatsApp"
+                                                value={<PhoneInput value={editProfile.whatsappNumber} onChange={v => updateProfileField('whatsappNumber', v)} defaultCountry={editProfile.nationality || editProfile.residence} icon={<MessageCircle size={14} />} />}
+                                            />
+                                        </>
                                     )}
                                     <DetailItem
                                         icon={<Briefcase />}
@@ -517,6 +534,20 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                 />
                                             </div> :
                                             (Array.isArray(profile.desiredDestination) ? profile.desiredDestination.join(', ') : profile.desiredDestination)}
+                                    />
+                                    <DetailItem
+                                        icon={<SchoolIcon />}
+                                        label="Current School"
+                                        value={isEditing ?
+                                            <Input value={editProfile.currentSchool} onChange={v => updateProfileField('currentSchool', v)} /> :
+                                            (profile.currentSchool || 'Undecided')}
+                                    />
+                                    <DetailItem
+                                        icon={<BookOpen />}
+                                        label="GPA"
+                                        value={isEditing ?
+                                            <Input value={editProfile.gpa} onChange={v => updateProfileField('gpa', v)} /> :
+                                            (profile.gpa || '-')}
                                     />
                                     <DetailItem
                                         icon={<SchoolIcon />}
@@ -635,6 +666,9 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                         <Input label="Sports (comma sep)" value={Array.isArray(editProfile.sports) ? editProfile.sports.join(', ') : editProfile.sports} onChange={v => updateProfileField('sports', v.split(',').map((s: string) => s.trim()))} />
                                         <Input label="Hobbies (comma sep)" value={Array.isArray(editProfile.hobbies) ? editProfile.hobbies.join(', ') : editProfile.hobbies} onChange={v => updateProfileField('hobbies', v.split(',').map((s: string) => s.trim()))} />
                                         <Input label="Fav Subject" value={editProfile.favoriteSubject} onChange={v => updateProfileField('favoriteSubject', v)} />
+                                        <Input label="Dietary Restrictions" value={editProfile.dietaryRestrictions || ''} onChange={v => updateProfileField('dietaryRestrictions', v)} />
+                                        <Input label="Allergies" value={editProfile.allergies || ''} onChange={v => updateProfileField('allergies', v)} />
+                                        <Input label="Medical Info" isTextArea value={editProfile.medicalInfo || ''} onChange={v => updateProfileField('medicalInfo', v)} />
                                     </div>
                                 ) : (
                                     <div className="flex flex-wrap gap-2">
