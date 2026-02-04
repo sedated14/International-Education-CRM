@@ -32,6 +32,31 @@ export default function ApexCRM() {
     return date.toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   };
 
+  // 1. Student Leads (Inquiry)
+  const studentLeads = leads.filter(l => l.status !== 'Lost' && l.type === 'Student' && l.status === 'Inquiry');
+
+  // 2. Agent Leads (Prospective)
+  const agentLeads = leads.filter(l => l.status !== 'Lost' && l.type === 'Agent' && l.agencyProfile?.partnershipStatus === 'Prospective');
+
+  // Helper for Follow Up / Past Due Logic
+  const getDueDate = (lead: Lead) => lead.followUpDate ? new Date(lead.followUpDate) : new Date(new Date(lead.createdAt).getTime() + (72 * 60 * 60 * 1000));
+
+  const relevantLeads = leads.filter(lead => {
+    if (lead.status === 'Lost') return false;
+    const isRelevantStudent = lead.type === 'Student' && lead.status === 'Contacted';
+    const isRelevantAgent = lead.type === 'Agent' && lead.agencyProfile?.partnershipStatus === 'Pending';
+    return isRelevantStudent || isRelevantAgent;
+  });
+
+  // 3. Follow Up (Future)
+  const followUpLeads = relevantLeads.filter(lead => getDueDate(lead) >= new Date())
+    .sort((a, b) => getDueDate(a).getTime() - getDueDate(b).getTime());
+
+  // 4. Past Due (Past)
+  const pastDueLeads = relevantLeads.filter(lead => getDueDate(lead) < new Date())
+    .sort((a, b) => getDueDate(a).getTime() - getDueDate(b).getTime());
+
+
   return (
     <div className="flex h-screen bg-[#F0F2F5] dark:bg-gray-950 text-[#1D1D1F] dark:text-gray-100 overflow-hidden font-sans selection:bg-orange-100">
 
@@ -58,331 +83,274 @@ export default function ApexCRM() {
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 min-h-0 pb-2 overflow-y-auto">
 
           {/* COLUMN 1: STUDENT LEADS (Inquiry ONLY) */}
-          <LeadColumn title="Student Leads" icon={<GraduationCap size={20} />}>
-            {leads
-              .filter(l => l.status !== 'Lost' && l.type === 'Student' && l.status === 'Inquiry')
-              .map(lead => (
-                <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)}>
-                  <StudentLeadCard lead={lead} />
-                </div>
-              ))}
+          <LeadColumn title="Student Leads" icon={<GraduationCap size={20} />} count={studentLeads.length}>
+            {studentLeads.map(lead => (
+              <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)}>
+                <StudentLeadCard lead={lead} />
+              </div>
+            ))}
           </LeadColumn>
 
           {/* COLUMN 2: AGENT LEADS (Prospective ONLY) */}
-          <LeadColumn title="Agent Leads" icon={<Briefcase size={20} />}>
-            {leads
-              .filter(l => l.status !== 'Lost' && l.type === 'Agent' && l.agencyProfile?.partnershipStatus === 'Prospective')
-              .map(lead => (
-                <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)}>
-                  <AgentLeadCard lead={lead} />
+          <LeadColumn title="Agent Leads" icon={<Briefcase size={20} />} count={agentLeads.length}>
+            {agentLeads.map(lead => (
+              <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)}>
+                <AgentLeadCard lead={lead} />
+              </div>
+            ))}
+          </LeadColumn>
+
+          {/* COLUMN 3: FOLLOW UP */}
+          <LeadColumn title="Follow Up" icon={<Clock size={20} />} count={followUpLeads.length}>
+            {followUpLeads.map(lead => {
+              // Smart Checklist Logic for Agent Leads
+              let visibleChecklist = null;
+              if (lead.type === 'Agent' && lead.agencyProfile) {
+                const checklistItems = [
+                  { key: 'agreementSent', label: 'Agreement Sent' },
+                  { key: 'agreementSigned', label: 'Agreement Signed' },
+                  { key: 'applicationAccountCreated', label: 'App Account Created' },
+                  { key: 'schoolPriceListSent', label: 'Price List Sent' },
+                  { key: 'schoolProfilesSent', label: 'Profiles Sent' },
+                  { key: 'addedMarketingList', label: 'Added to Marketing' },
+                  { key: 'agentHandbookSent', label: 'Agent Handbook' },
+                  { key: 'studentHandbookSent', label: 'Student Handbook' },
+                  { key: 'commissionRequestFormSent', label: 'Comm. Form Sent' }
+                ];
+
+                const checklist = lead.agencyProfile.onboardingChecklist || {};
+
+                // @ts-ignore
+                const unselected = checklistItems.filter(item => checklist[item.key] !== true);
+                // @ts-ignore
+                const selected = checklistItems.filter(item => checklist[item.key] === true);
+
+                // Logic: Show unselected first. If < 3, fill with selected.
+                visibleChecklist = [...unselected, ...selected].slice(0, 3);
+
+                // Flag for "All Items Completed" message
+                if (unselected.length === 0 && checklistItems.length > 0) {
+                  // @ts-ignore
+                  lead.allOnboardingCompleted = true; // Hack to pass this to render without refactoring 'map' return type too much
+                }
+              }
+
+              return (
+                <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)} className={`bg-white dark:bg-gray-900 p-4 rounded-[20px] border-4 shadow-sm hover:shadow-md cursor-pointer transition-all group mb-2 ${lead.type === 'Student' ? 'border-emerald-500 hover:border-emerald-600' : 'border-blue-500 hover:border-blue-600'}`}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.type === 'Student' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' : 'bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'}`}>
+                      {lead.type === 'Student' ? lead.status : 'Pending'}
+                    </span>
+                    <span className={`text-[10px] font-bold ${lead.type === 'Student' ? 'text-emerald-600 dark:text-emerald-400' : 'text-blue-500 dark:text-blue-400'}`}>
+                      {lead.followUpDate
+                        ? new Date(lead.followUpDate).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric' })
+                        : 'Auto Due'
+                      }
+                    </span>
+                  </div>
+                  <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1">{lead.type === 'Student' ? lead.studentName : lead.agentName}</h3>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-1">
+                    {lead.type === 'Student' ? `${lead.status}: Student - ${lead.country}` : lead.title}
+                  </p>
+
+                  {lead.type === 'Student' && (
+                    <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 px-2 py-1.5 rounded-lg border-2 border-blue-500 w-full mb-3">
+                      <span className="text-gray-400 font-extrabold text-[8px] uppercase tracking-wider shrink-0">SO:</span>
+                      <div className="flex flex-wrap items-center gap-1 font-bold">
+                        <span className="text-gray-900 dark:text-gray-200">
+                          {lead.agencyProfile && lead.agencyProfile.name ? lead.agencyProfile.name : 'Independent'}
+                        </span>
+                        {lead.agencyProfile && lead.agencyProfile.name && (
+                          <>
+                            <span className="text-gray-300 dark:text-gray-600">•</span>
+                            <span className="text-gray-500 dark:text-gray-400 font-medium">{lead.agencyProfile.country}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Note Snippet (Always Visible) */}
+                  <div className={`mb-3 bg-gray-50 dark:bg-gray-800/30 p-2 rounded-lg border min-h-[50px] flex flex-col justify-between border-yellow-500/50 ${lead.notes && lead.notes.length > 0 ? '' : 'items-center justify-center'}`}>
+                    {lead.notes && lead.notes.length > 0 ? (
+                      <>
+                        <p className="text-[9px] text-gray-600 dark:text-gray-300 font-medium line-clamp-2 leading-snug italic w-full text-left">
+                          "{lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].content}"
+                        </p>
+                        <div className="text-[8px] text-yellow-600/60 dark:text-yellow-500/60 font-bold text-right w-full mt-1">
+                          {new Date(lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex items-center gap-1.5 opacity-50">
+                        <Edit2 size={12} className="text-gray-400" />
+                        <span className="text-[9px] text-gray-400 font-medium italic">No notes yet</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {visibleChecklist && visibleChecklist.length > 0 && lead.type === 'Agent' ? (
+                    <div className="flex flex-col gap-1.5 mt-2 bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg border border-blue-500">
+                      {/* @ts-ignore */}
+                      {lead.allOnboardingCompleted && (
+                        <div className="flex items-center gap-1.5 pb-1.5 mb-1 border-b border-gray-200 dark:border-gray-700">
+                          <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                          <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">All Items Completed</span>
+                        </div>
+                      )}
+                      {visibleChecklist.map((item) => {
+                        // @ts-ignore
+                        const isChecked = lead.agencyProfile?.onboardingChecklist?.[item.key] || false;
+                        return (
+                          <div
+                            key={item.key}
+                            className="flex items-center gap-2"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (!lead.agencyProfile) return;
+                              const currentList = lead.agencyProfile.onboardingChecklist || ({} as any);
+                              updateLead(lead.id, {
+                                agencyProfile: {
+                                  ...lead.agencyProfile,
+                                  onboardingChecklist: {
+                                    ...currentList,
+                                    [item.key]: !isChecked
+                                  }
+                                }
+                              });
+                            }}
+                          >
+                            <div className={`w-3 h-3 rounded border flex items-center justify-center ${isChecked ? 'bg-blue-500 border-blue-500' : 'bg-white border-gray-300 dark:border-gray-600'}`}>
+                              {isChecked && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
+                            </div>
+                            <span className={`text-[10px] font-bold ${isChecked ? 'text-gray-900 dark:text-gray-200' : 'text-gray-400'}`}>{item.label}</span>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ) : null}
                 </div>
-              ))}
+              )
+            })}
           </LeadColumn>
 
-          {/* COLUMN 3: FOLLOW UP (Contacted Students OR Pending Agents - FUTURE DATES) */}
-          <LeadColumn title="Follow Up" icon={<Clock size={20} />}>
-            {[...leads]
-              .filter(lead => {
-                if (lead.status === 'Lost') return false;
+          {/* COLUMN 4: PAST DUE */}
+          <LeadColumn title="Past Due" icon={<AlertCircle size={20} />} count={pastDueLeads.length}>
+            {pastDueLeads.map(lead => {
+              // Smart Checklist Logic for Agent Leads (Same as Follow Up)
+              let visibleChecklist = null;
+              if (lead.type === 'Agent' && lead.agencyProfile) {
+                const checklistItems = [
+                  { key: 'agreementSent', label: 'Agreement Sent' },
+                  { key: 'agreementSigned', label: 'Agreement Signed' },
+                  { key: 'applicationAccountCreated', label: 'App Account Created' },
+                  { key: 'schoolPriceListSent', label: 'Price List Sent' },
+                  { key: 'schoolProfilesSent', label: 'Profiles Sent' },
+                  { key: 'addedMarketingList', label: 'Added to Marketing' },
+                  { key: 'agentHandbookSent', label: 'Agent Handbook' },
+                  { key: 'studentHandbookSent', label: 'Student Handbook' },
+                  { key: 'commissionRequestFormSent', label: 'Comm. Form Sent' }
+                ];
 
-                // Logic: Must be (Student + Contacted) OR (Agent + Pending)
-                const isRelevantStudent = lead.type === 'Student' && lead.status === 'Contacted';
-                const isRelevantAgent = lead.type === 'Agent' && lead.agencyProfile?.partnershipStatus === 'Pending';
-                if (!isRelevantStudent && !isRelevantAgent) return false;
+                const checklist = lead.agencyProfile.onboardingChecklist || {};
 
-                // Date Logic: Must be in FUTURE
-                const dueDate = lead.followUpDate ? new Date(lead.followUpDate) : new Date(new Date(lead.createdAt).getTime() + (72 * 60 * 60 * 1000));
-                return dueDate >= new Date();
-              })
-              .sort((a, b) => {
-                const dateA = a.followUpDate ? new Date(a.followUpDate).getTime() : new Date(a.createdAt).getTime() + (72 * 60 * 60 * 1000);
-                const dateB = b.followUpDate ? new Date(b.followUpDate).getTime() : new Date(b.createdAt).getTime() + (72 * 60 * 60 * 1000);
-                return dateA - dateB; // Soonest first
-              })
-              .map(lead => {
-                // Smart Checklist Logic for Agent Leads
-                let visibleChecklist = null;
-                if (lead.type === 'Agent' && lead.agencyProfile) {
-                  const checklistItems = [
-                    { key: 'agreementSent', label: 'Agreement Sent' },
-                    { key: 'agreementSigned', label: 'Agreement Signed' },
-                    { key: 'applicationAccountCreated', label: 'App Account Created' },
-                    { key: 'schoolPriceListSent', label: 'Price List Sent' },
-                    { key: 'schoolProfilesSent', label: 'Profiles Sent' },
-                    { key: 'addedMarketingList', label: 'Added to Marketing' },
-                    { key: 'agentHandbookSent', label: 'Agent Handbook' },
-                    { key: 'studentHandbookSent', label: 'Student Handbook' },
-                    { key: 'commissionRequestFormSent', label: 'Comm. Form Sent' }
-                  ];
+                // @ts-ignore
+                const unselected = checklistItems.filter(item => checklist[item.key] !== true);
+                // @ts-ignore
+                const selected = checklistItems.filter(item => checklist[item.key] === true);
 
-                  const checklist = lead.agencyProfile.onboardingChecklist || {};
+                // Logic: Show unselected first. If < 3, fill with selected.
+                visibleChecklist = [...unselected, ...selected].slice(0, 3);
 
+                // Flag for "All Items Completed" message
+                if (unselected.length === 0 && checklistItems.length > 0) {
                   // @ts-ignore
-                  const unselected = checklistItems.filter(item => checklist[item.key] !== true);
-                  // @ts-ignore
-                  const selected = checklistItems.filter(item => checklist[item.key] === true);
-
-                  // Logic: Show unselected first. If < 3, fill with selected.
-                  visibleChecklist = [...unselected, ...selected].slice(0, 3);
-
-                  // Flag for "All Items Completed" message
-                  if (unselected.length === 0 && checklistItems.length > 0) {
-                    // @ts-ignore
-                    lead.allOnboardingCompleted = true; // Hack to pass this to render without refactoring 'map' return type too much
-                  }
+                  lead.allOnboardingCompleted = true;
                 }
+              }
 
-                return (
-                  <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)} className={`bg-white dark:bg-gray-900 p-4 rounded-[20px] border-4 shadow-sm hover:shadow-md cursor-pointer transition-all group mb-2 ${lead.type === 'Student' ? 'border-emerald-500 hover:border-emerald-600' : 'border-blue-500 hover:border-blue-600'}`}>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.type === 'Student' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' : 'bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'}`}>
-                        {lead.type === 'Student' ? lead.status : 'Pending'}
-                      </span>
-                      <span className={`text-[10px] font-bold ${lead.type === 'Student' ? 'text-emerald-600 dark:text-emerald-400' : 'text-blue-500 dark:text-blue-400'}`}>
-                        {lead.followUpDate
-                          ? new Date(lead.followUpDate).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric' })
-                          : 'Auto Due'
-                        }
-                      </span>
-                    </div>
-                    <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1">{lead.type === 'Student' ? lead.studentName : lead.agentName}</h3>
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-1">
-                      {lead.type === 'Student' ? `${lead.status}: Student - ${lead.country}` : lead.title}
-                    </p>
+              return (
+                <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)} className={`bg-white dark:bg-gray-900 p-4 rounded-[20px] border-4 shadow-sm hover:shadow-md cursor-pointer transition-all group mb-2 ${lead.type === 'Student' ? 'border-emerald-500 hover:border-emerald-600' : 'border-blue-500 hover:border-blue-600'}`}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.type === 'Student' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' : 'bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'}`}>
+                      {lead.type === 'Student' ? lead.status : 'Pending'}
+                    </span>
+                    <span className="text-[10px] font-bold text-red-500 dark:text-red-400">
+                      {lead.followUpDate
+                        ? new Date(lead.followUpDate).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric' })
+                        : 'Overdue (72h)'
+                      }
+                    </span>
+                  </div>
+                  <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1">{lead.type === 'Student' ? lead.studentName : lead.agentName}</h3>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-1">
+                    {lead.type === 'Student' ? `${lead.status}: Student - ${lead.country}` : lead.title}
+                  </p>
 
-                    {lead.type === 'Student' && (
-                      <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 px-2 py-1.5 rounded-lg border-2 border-blue-500 w-full mb-3">
-                        <span className="text-gray-400 font-extrabold text-[8px] uppercase tracking-wider shrink-0">SO:</span>
-                        <div className="flex flex-wrap items-center gap-1 font-bold">
-                          <span className="text-gray-900 dark:text-gray-200">
-                            {lead.agencyProfile && lead.agencyProfile.name ? lead.agencyProfile.name : 'Independent'}
-                          </span>
-                          {lead.agencyProfile && lead.agencyProfile.name && (
-                            <>
-                              <span className="text-gray-300 dark:text-gray-600">•</span>
-                              <span className="text-gray-500 dark:text-gray-400 font-medium">{lead.agencyProfile.country}</span>
-                            </>
-                          )}
+                  {/* Note Snippet (Always Visible) */}
+                  <div className={`mb-3 bg-gray-50 dark:bg-gray-800/30 p-2 rounded-lg border min-h-[50px] flex flex-col justify-between border-yellow-500/50 ${lead.notes && lead.notes.length > 0 ? '' : 'items-center justify-center'}`}>
+                    {lead.notes && lead.notes.length > 0 ? (
+                      <>
+                        <p className="text-[9px] text-gray-600 dark:text-gray-300 font-medium line-clamp-2 leading-snug italic w-full text-left">
+                          "{lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].content}"
+                        </p>
+                        <div className="text-[8px] text-yellow-600/60 dark:text-yellow-500/60 font-bold text-right w-full mt-1">
+                          {new Date(lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                         </div>
+                      </>
+                    ) : (
+                      <div className="flex items-center gap-1.5 opacity-50">
+                        <Edit2 size={12} className="text-gray-400" />
+                        <span className="text-[9px] text-gray-400 font-medium italic">No notes yet</span>
                       </div>
                     )}
+                  </div>
 
-                    {/* Note Snippet (Always Visible) */}
-                    <div className={`mb-3 bg-gray-50 dark:bg-gray-800/30 p-2 rounded-lg border min-h-[50px] flex flex-col justify-between border-yellow-500/50 ${lead.notes && lead.notes.length > 0 ? '' : 'items-center justify-center'}`}>
-                      {lead.notes && lead.notes.length > 0 ? (
-                        <>
-                          <p className="text-[9px] text-gray-600 dark:text-gray-300 font-medium line-clamp-2 leading-snug italic w-full text-left">
-                            "{lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].content}"
-                          </p>
-                          <div className="text-[8px] text-yellow-600/60 dark:text-yellow-500/60 font-bold text-right w-full mt-1">
-                            {new Date(lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                          </div>
-                        </>
-                      ) : (
-                        <div className="flex items-center gap-1.5 opacity-50">
-                          <Edit2 size={12} className="text-gray-400" />
-                          <span className="text-[9px] text-gray-400 font-medium italic">No notes yet</span>
+                  {visibleChecklist && visibleChecklist.length > 0 && lead.type === 'Agent' ? (
+                    <div className="flex flex-col gap-1.5 mt-2 bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg border border-blue-500">
+                      {/* @ts-ignore */}
+                      {lead.allOnboardingCompleted && (
+                        <div className="flex items-center gap-1.5 pb-1.5 mb-1 border-b border-gray-200 dark:border-gray-700">
+                          <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                          <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">All Items Completed</span>
                         </div>
                       )}
-                    </div>
-
-                    {visibleChecklist && visibleChecklist.length > 0 && lead.type === 'Agent' ? (
-                      <div className="flex flex-col gap-1.5 mt-2 bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg border border-blue-500">
-                        {/* @ts-ignore */}
-                        {lead.allOnboardingCompleted && (
-                          <div className="flex items-center gap-1.5 pb-1.5 mb-1 border-b border-gray-200 dark:border-gray-700">
-                            <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                            <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">All Items Completed</span>
-                          </div>
-                        )}
-                        {visibleChecklist.map((item) => {
-                          // @ts-ignore
-                          const isChecked = lead.agencyProfile?.onboardingChecklist?.[item.key] || false;
-                          return (
-                            <div
-                              key={item.key}
-                              className="flex items-center gap-2"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (!lead.agencyProfile) return;
-                                const currentList = lead.agencyProfile.onboardingChecklist || ({} as any);
-                                updateLead(lead.id, {
-                                  agencyProfile: {
-                                    ...lead.agencyProfile,
-                                    onboardingChecklist: {
-                                      ...currentList,
-                                      [item.key]: !isChecked
-                                    }
+                      {visibleChecklist.map((item) => {
+                        // @ts-ignore
+                        const isChecked = lead.agencyProfile?.onboardingChecklist?.[item.key] || false;
+                        return (
+                          <div
+                            key={item.key}
+                            className="flex items-center gap-2"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (!lead.agencyProfile) return;
+                              const currentList = lead.agencyProfile.onboardingChecklist || ({} as any);
+                              updateLead(lead.id, {
+                                agencyProfile: {
+                                  ...lead.agencyProfile,
+                                  onboardingChecklist: {
+                                    ...currentList,
+                                    [item.key]: !isChecked
                                   }
-                                });
-                              }}
-                            >
-                              <div className={`w-3 h-3 rounded border flex items-center justify-center ${isChecked ? 'bg-blue-500 border-blue-500' : 'bg-white border-gray-300 dark:border-gray-600'}`}>
-                                {isChecked && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
-                              </div>
-                              <span className={`text-[10px] font-bold ${isChecked ? 'text-gray-900 dark:text-gray-200' : 'text-gray-400'}`}>{item.label}</span>
+                                }
+                              });
+                            }}
+                          >
+                            <div className={`w-3 h-3 rounded border flex items-center justify-center ${isChecked ? 'bg-blue-500 border-blue-500' : 'bg-white border-gray-300 dark:border-gray-600'}`}>
+                              {isChecked && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
                             </div>
-                          )
-                        })}
-                      </div>
-                    ) : null}
-                  </div>
-                )
-              })}
-          </LeadColumn>
-
-          {/* COLUMN 4: PAST DUE (Contacted Students OR Pending Agents - PAST DATES) */}
-          <LeadColumn title="Past Due" icon={<AlertCircle size={20} />}>
-            {[...leads]
-              .filter(lead => {
-                if (lead.status === 'Lost') return false;
-
-                // Logic: Must be (Student + Contacted) OR (Agent + Pending)
-                const isRelevantStudent = lead.type === 'Student' && lead.status === 'Contacted';
-                const isRelevantAgent = lead.type === 'Agent' && lead.agencyProfile?.partnershipStatus === 'Pending';
-                if (!isRelevantStudent && !isRelevantAgent) return false;
-
-                // Date Logic: Must be in PAST
-                const dueDate = lead.followUpDate ? new Date(lead.followUpDate) : new Date(new Date(lead.createdAt).getTime() + (72 * 60 * 60 * 1000));
-                return dueDate < new Date();
-              })
-              .sort((a, b) => {
-                const dateA = a.followUpDate ? new Date(a.followUpDate).getTime() : new Date(a.createdAt).getTime() + (72 * 60 * 60 * 1000);
-                const dateB = b.followUpDate ? new Date(b.followUpDate).getTime() : new Date(b.createdAt).getTime() + (72 * 60 * 60 * 1000);
-                return dateA - dateB; // Oldest first (most overdue)
-              })
-              .map(lead => {
-                // Smart Checklist Logic for Agent Leads (Same as Follow Up)
-                let visibleChecklist = null;
-                if (lead.type === 'Agent' && lead.agencyProfile) {
-                  const checklistItems = [
-                    { key: 'agreementSent', label: 'Agreement Sent' },
-                    { key: 'agreementSigned', label: 'Agreement Signed' },
-                    { key: 'applicationAccountCreated', label: 'App Account Created' },
-                    { key: 'schoolPriceListSent', label: 'Price List Sent' },
-                    { key: 'schoolProfilesSent', label: 'Profiles Sent' },
-                    { key: 'addedMarketingList', label: 'Added to Marketing' },
-                    { key: 'agentHandbookSent', label: 'Agent Handbook' },
-                    { key: 'studentHandbookSent', label: 'Student Handbook' },
-                    { key: 'commissionRequestFormSent', label: 'Comm. Form Sent' }
-                  ];
-
-                  const checklist = lead.agencyProfile.onboardingChecklist || {};
-
-                  // @ts-ignore
-                  const unselected = checklistItems.filter(item => checklist[item.key] !== true);
-                  // @ts-ignore
-                  const selected = checklistItems.filter(item => checklist[item.key] === true);
-
-                  // Logic: Show unselected first. If < 3, fill with selected.
-                  visibleChecklist = [...unselected, ...selected].slice(0, 3);
-
-                  // Flag for "All Items Completed" message
-                  if (unselected.length === 0 && checklistItems.length > 0) {
-                    // @ts-ignore
-                    lead.allOnboardingCompleted = true;
-                  }
-                }
-
-                return (
-                  <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)} className={`bg-white dark:bg-gray-900 p-4 rounded-[20px] border-4 shadow-sm hover:shadow-md cursor-pointer transition-all group mb-2 ${lead.type === 'Student' ? 'border-emerald-500 hover:border-emerald-600' : 'border-blue-500 hover:border-blue-600'}`}>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.type === 'Student' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' : 'bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'}`}>
-                        {lead.type === 'Student' ? lead.status : 'Pending'}
-                      </span>
-                      <span className="text-[10px] font-bold text-red-500 dark:text-red-400">
-                        {lead.followUpDate
-                          ? new Date(lead.followUpDate).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric' })
-                          : 'Overdue (72h)'
-                        }
-                      </span>
-                    </div>
-                    <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1">{lead.type === 'Student' ? lead.studentName : lead.agentName}</h3>
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-1">
-                      {lead.type === 'Student' ? `${lead.status}: Student - ${lead.country}` : lead.title}
-                    </p>
-
-                    {lead.type === 'Student' && (
-                      <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 px-2 py-1.5 rounded-lg border-2 border-blue-500 w-full mb-3">
-                        <span className="text-gray-400 font-extrabold text-[8px] uppercase tracking-wider shrink-0">SO:</span>
-                        <div className="flex flex-wrap items-center gap-1 font-bold">
-                          <span className="text-gray-900 dark:text-gray-200">
-                            {lead.agencyProfile && lead.agencyProfile.name ? lead.agencyProfile.name : 'Independent'}
-                          </span>
-                          {lead.agencyProfile && lead.agencyProfile.name && (
-                            <>
-                              <span className="text-gray-300 dark:text-gray-600">•</span>
-                              <span className="text-gray-500 dark:text-gray-400 font-medium">{lead.agencyProfile.country}</span>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Note Snippet (Always Visible) */}
-                    <div className={`mb-3 bg-gray-50 dark:bg-gray-800/30 p-2 rounded-lg border min-h-[50px] flex flex-col justify-between border-yellow-500/50 ${lead.notes && lead.notes.length > 0 ? '' : 'items-center justify-center'}`}>
-                      {lead.notes && lead.notes.length > 0 ? (
-                        <>
-                          <p className="text-[9px] text-gray-600 dark:text-gray-300 font-medium line-clamp-2 leading-snug italic w-full text-left">
-                            "{lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].content}"
-                          </p>
-                          <div className="text-[8px] text-yellow-600/60 dark:text-yellow-500/60 font-bold text-right w-full mt-1">
-                            {new Date(lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                            <span className={`text-[10px] font-bold ${isChecked ? 'text-gray-900 dark:text-gray-200' : 'text-gray-400'}`}>{item.label}</span>
                           </div>
-                        </>
-                      ) : (
-                        <div className="flex items-center gap-1.5 opacity-50">
-                          <Edit2 size={12} className="text-gray-400" />
-                          <span className="text-[9px] text-gray-400 font-medium italic">No notes yet</span>
-                        </div>
-                      )}
+                        )
+                      })}
                     </div>
+                  ) : null}
 
-                    {visibleChecklist && visibleChecklist.length > 0 && lead.type === 'Agent' ? (
-                      <div className="flex flex-col gap-1.5 mt-2 bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg border border-blue-500">
-                        {/* @ts-ignore */}
-                        {lead.allOnboardingCompleted && (
-                          <div className="flex items-center gap-1.5 pb-1.5 mb-1 border-b border-gray-200 dark:border-gray-700">
-                            <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                            <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">All Items Completed</span>
-                          </div>
-                        )}
-                        {visibleChecklist.map((item) => {
-                          // @ts-ignore
-                          const isChecked = lead.agencyProfile?.onboardingChecklist?.[item.key] || false;
-                          return (
-                            <div
-                              key={item.key}
-                              className="flex items-center gap-2"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                if (!lead.agencyProfile) return;
-                                const currentList = lead.agencyProfile.onboardingChecklist || ({} as any);
-                                updateLead(lead.id, {
-                                  agencyProfile: {
-                                    ...lead.agencyProfile,
-                                    onboardingChecklist: {
-                                      ...currentList,
-                                      [item.key]: !isChecked
-                                    }
-                                  }
-                                });
-                              }}
-                            >
-                              <div className={`w-3 h-3 rounded border flex items-center justify-center ${isChecked ? 'bg-blue-500 border-blue-500' : 'bg-white border-gray-300 dark:border-gray-600'}`}>
-                                {isChecked && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
-                              </div>
-                              <span className={`text-[10px] font-bold ${isChecked ? 'text-gray-900 dark:text-gray-200' : 'text-gray-400'}`}>{item.label}</span>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    ) : null}
-                  </div>
-                )
-              })}
+                </div>
+              )
+            })}
           </LeadColumn>
-
         </div>
 
       </main>

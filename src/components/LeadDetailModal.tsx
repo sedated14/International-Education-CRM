@@ -6,6 +6,8 @@ import { X, User, Calendar, Languages, GraduationCap, School as SchoolIcon, Acti
 import Link from 'next/link';
 import { COUNTRIES } from '../data/countries';
 import { CheckboxGroup, CountrySelector, Input, Select, PhoneInput, SearchableSelect } from './ui/FormComponents';
+import { StudentForm } from './forms/StudentForm';
+import { StudentProfileView } from './views/StudentProfileView';
 
 interface Props {
     lead: Lead | null;
@@ -95,6 +97,11 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
         setFormData(submissionData);
         setIsEditing(false);
         setNewNote('');
+    };
+
+    const handleStudentFormSubmit = async (data: any) => {
+        await updateLead(lead.id, data);
+        setIsEditing(false);
     };
 
     const updateProfileField = (field: string, value: any) => {
@@ -425,268 +432,30 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                         </div>
                     </div>
 
-                    {/* STUDENT DETAILS */}
-                    {isStudent && profile ? (
-                        <div className="space-y-8">
+                    {/* STUDENT DETAILS STANDARDIZED */}
+                    {isStudent && (
+                        isEditing ? (
+                            <div className="bg-white dark:bg-gray-900 rounded-[32px] p-6 border border-gray-100 dark:border-gray-800">
+                                <StudentForm
+                                    lead={lead}
+                                    onSubmit={handleStudentFormSubmit}
+                                    isModal={true}
+                                />
+                            </div>
+                        ) : (
+                            <StudentProfileView lead={lead} />
+                        )
+                    )}
 
-                            {/* DEMOGRAPHICS */}
-                            <section>
-                                <h3 className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">Demographics</h3>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                                    <DetailItem
-                                        icon={<User />}
-                                        label="Age"
-                                        value={isEditing ?
-                                            <Input value={editProfile.age} onChange={v => updateProfileField('age', v)} type="number" /> :
-                                            `${profile.age} Years`}
-                                    />
-                                    <DetailItem
-                                        icon={<Calendar />}
-                                        label="DOB"
-                                        value={isEditing ?
-                                            <Input value={editProfile.dob} onChange={v => updateProfileField('dob', v)} type="date" /> :
-                                            profile.dob}
-                                    />
-                                    <DetailItem
-                                        icon={<User />}
-                                        label="Gender"
-                                        value={isEditing ?
-                                            <Input value={editProfile.gender} onChange={v => updateProfileField('gender', v)} /> :
-                                            profile.gender}
-                                    />
-                                    <DetailItem
-                                        icon={<Languages />}
-                                        label="English"
-                                        value={isEditing ?
-                                            <Select value={editProfile.englishLevel} onChange={v => updateProfileField('englishLevel', v)} options={['Low', 'Intermediate', 'Advanced']} /> :
-                                            profile.englishLevel}
-                                    />
-                                    {isEditing && (
-                                        <>
-                                            <DetailItem
-                                                icon={<Globe />}
-                                                label="Nationality"
-                                                value={<SearchableSelect value={editProfile.nationality || ''} onChange={v => updateProfileField('nationality', v)} options={COUNTRIES} placeholder="Select Country" />}
-                                            />
-                                            <DetailItem
-                                                icon={<MapPin />}
-                                                label="Residence"
-                                                value={<SearchableSelect value={editProfile.residence || ''} onChange={v => updateProfileField('residence', v)} options={COUNTRIES} placeholder="Select Country" />}
-                                            />
-                                            <DetailItem
-                                                icon={<Activity />}
-                                                label="Phone"
-                                                className="col-span-full"
-                                                value={<PhoneInput value={editProfile.phoneNumber} onChange={v => updateProfileField('phoneNumber', v)} defaultCountry={editProfile.nationality || editProfile.residence} />}
-                                            />
-                                            <DetailItem
-                                                icon={<MessageCircle />}
-                                                label="WhatsApp"
-                                                className="col-span-full"
-                                                value={<PhoneInput value={editProfile.whatsappNumber} onChange={v => updateProfileField('whatsappNumber', v)} defaultCountry={editProfile.nationality || editProfile.residence} icon={<MessageCircle size={14} />} />}
-                                            />
-                                        </>
-                                    )}
-                                    <DetailItem
-                                        icon={<Briefcase />}
-                                        label="Agency Source"
-                                        value={isEditing ?
-                                            <div className="relative">
-                                                <select
-                                                    value={editProfile.agencyId || ''}
-                                                    onChange={e => updateProfileField('agencyId', e.target.value)}
-                                                    className="w-full bg-transparent border-b border-gray-300 focus:border-black rounded-none px-0 py-0.5 text-sm font-medium outline-none appearance-none cursor-pointer"
-                                                >
-                                                    <option value="">Direct / None</option>
-                                                    {sortedAgencies.map(agency => (
-                                                        <option key={agency.id} value={agency.id}>
-                                                            {agency.agentName || agency.title}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                                <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                                                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                            :
-                                            (profile.agencyId ? (
-                                                <Link href={`/agencies/${profile.agencyId}`} className="text-blue-600 hover:underline">
-                                                    {leads.find(l => String(l.id) === String(profile.agencyId))?.agentName || 'Unknown Agency'}
-                                                </Link>
-                                            ) : 'Direct')}
-                                    />
-                                </div>
-                            </section>
 
-                            {/* PREFERENCES */}
-                            <section>
-                                <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Preferences</h3>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <DetailItem
-                                        icon={<GraduationCap />}
-                                        label="Desired Dest."
-                                        value={isEditing ?
-                                            <div className="min-w-[120px]">
-                                                <CheckboxGroup
-                                                    options={['USA', 'Canada', 'Online']}
-                                                    selected={Array.isArray(editProfile.desiredDestination) ? editProfile.desiredDestination : [editProfile.desiredDestination].filter(Boolean)}
-                                                    onChange={v => updateProfileField('desiredDestination', v)}
-                                                />
-                                            </div> :
-                                            (Array.isArray(profile.desiredDestination) ? profile.desiredDestination.join(', ') : profile.desiredDestination)}
-                                    />
-                                    <DetailItem
-                                        icon={<SchoolIcon />}
-                                        label="Current School"
-                                        value={isEditing ?
-                                            <Input value={editProfile.currentSchool} onChange={v => updateProfileField('currentSchool', v)} /> :
-                                            (profile.currentSchool || 'Undecided')}
-                                    />
-                                    <DetailItem
-                                        icon={<BookOpen />}
-                                        label="GPA"
-                                        value={isEditing ?
-                                            <Input value={editProfile.gpa} onChange={v => updateProfileField('gpa', v)} /> :
-                                            (profile.gpa || '-')}
-                                    />
-                                    <DetailItem
-                                        icon={<SchoolIcon />}
-                                        label="Target School"
-                                        value={isEditing ?
-                                            <Input value={editProfile.desiredSchool} onChange={v => updateProfileField('desiredSchool', v)} /> :
-                                            (profile.desiredSchool || 'Undecided')}
-                                    />
-                                    <DetailItem
-                                        icon={<SchoolIcon />}
-                                        label="Current Grade"
-                                        value={isEditing ?
-                                            <Select
-                                                value={editProfile.currentGrade}
-                                                onChange={v => updateProfileField('currentGrade', v)}
-                                                options={['5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th']}
-                                            /> :
-                                            (profile.currentGrade || '-')}
-                                    />
 
-                                    {/* Conditional: Graduated in Home Country (If Current Grade is 12th) */}
-                                    {editProfile.currentGrade === '12th' && isEditing && (
-                                        <div className="col-span-2 bg-yellow-50 p-3 rounded-xl border border-yellow-200">
-                                            <p className="text-[10px] font-bold text-yellow-600 uppercase mb-2">Graduated in Home Country?</p>
-                                            <div className="flex gap-2">
-                                                {['Yes', 'No'].map(opt => (
-                                                    <button
-                                                        key={opt}
-                                                        onClick={() => updateProfileField('graduatedInHomeCountry', opt === 'Yes')}
-                                                        className={`flex-1 py-1.5 text-xs font-bold rounded-lg border transition-all ${(editProfile.graduatedInHomeCountry === (opt === 'Yes'))
-                                                            ? 'bg-yellow-500 text-white border-yellow-600'
-                                                            : 'bg-white text-gray-500 border-gray-200 hover:bg-yellow-50'
-                                                            }`}
-                                                    >
-                                                        {opt}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
-                                    {/* Read Only Display for Condition */}
-                                    {!isEditing && profile.currentGrade === '12th' && (
-                                        <DetailItem
-                                            icon={<GraduationCap />}
-                                            label="Home Graduation?"
-                                            value={profile.graduatedInHomeCountry ? 'Yes' : 'No'}
-                                        />
-                                    )}
-
-                                    <DetailItem
-                                        icon={<SchoolIcon />}
-                                        label="Applying Grade"
-                                        value={isEditing ?
-                                            <Select
-                                                value={editProfile.gradeApplyingTo}
-                                                onChange={v => updateProfileField('gradeApplyingTo', v)}
-                                                options={['6th', '7th', '8th', '9th', '10th', '11th', '12th']}
-                                            /> :
-                                            (profile.gradeApplyingTo || '-')}
-                                    />
-
-                                    {/* Conditional: Seeking Graduation (If Applying Grade is 12th) */}
-                                    {editProfile.gradeApplyingTo === '12th' && isEditing && (
-                                        <div className="col-span-2 bg-indigo-50 p-3 rounded-xl border border-indigo-200">
-                                            <p className="text-[10px] font-bold text-indigo-600 uppercase mb-2">Seeking Graduation?</p>
-                                            <div className="flex gap-2">
-                                                {['Yes', 'No'].map(opt => (
-                                                    <button
-                                                        key={opt}
-                                                        onClick={() => updateProfileField('seekingGraduation', opt === 'Yes')}
-                                                        className={`flex-1 py-1.5 text-xs font-bold rounded-lg border transition-all ${(editProfile.seekingGraduation === (opt === 'Yes'))
-                                                            ? 'bg-indigo-500 text-white border-indigo-600'
-                                                            : 'bg-white text-gray-500 border-gray-200 hover:bg-indigo-50'
-                                                            }`}
-                                                    >
-                                                        {opt}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
-                                    {/* Read Only Display for Condition */}
-                                    {!isEditing && profile.gradeApplyingTo === '12th' && (
-                                        <DetailItem
-                                            icon={<GraduationCap />}
-                                            label="Seek Graduation?"
-                                            value={profile.seekingGraduation ? 'Yes' : 'No'}
-                                        />
-                                    )}
-                                    <DetailItem
-                                        icon={<Calendar />}
-                                        label="Duration"
-                                        value={isEditing ?
-                                            <Select
-                                                value={editProfile.duration}
-                                                onChange={v => updateProfileField('duration', v)}
-                                                options={['Short Term', 'Semester (Aug)', 'Semester (Jan)', 'Academic Year', 'Calendar Year']}
-                                            /> :
-                                            (profile.duration || '-')}
-                                    />
-                                    <DetailItem
-                                        icon={<SchoolIcon />}
-                                        label="Budget"
-                                        value={isEditing ?
-                                            <Input value={editProfile.budget} onChange={v => updateProfileField('budget', v)} /> :
-                                            (profile.budget || '-')}
-                                    />
-                                </div>
-                            </section>
-
-                            {/* INTERESTS */}
-                            <section>
-                                <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Interests & Hobbies</h3>
-                                {isEditing ? (
-                                    <div className="space-y-2">
-                                        <Input label="Sports (comma sep)" value={Array.isArray(editProfile.sports) ? editProfile.sports.join(', ') : editProfile.sports} onChange={v => updateProfileField('sports', v.split(',').map((s: string) => s.trim()))} />
-                                        <Input label="Hobbies (comma sep)" value={Array.isArray(editProfile.hobbies) ? editProfile.hobbies.join(', ') : editProfile.hobbies} onChange={v => updateProfileField('hobbies', v.split(',').map((s: string) => s.trim()))} />
-                                        <Input label="Fav Subject" value={editProfile.favoriteSubject} onChange={v => updateProfileField('favoriteSubject', v)} />
-                                        <Input label="Dietary Restrictions" value={editProfile.dietaryRestrictions || ''} onChange={v => updateProfileField('dietaryRestrictions', v)} />
-                                        <Input label="Allergies" value={editProfile.allergies || ''} onChange={v => updateProfileField('allergies', v)} />
-                                        <Input label="Medical Info" isTextArea value={editProfile.medicalInfo || ''} onChange={v => updateProfileField('medicalInfo', v)} />
-                                    </div>
-                                ) : (
-                                    <div className="flex flex-wrap gap-2">
-                                        {profile.sports?.map(s => <Tag key={s} icon={<Activity size={12} />} text={s} />)}
-                                        {profile.hobbies?.map(h => <Tag key={h} icon={<Smile size={12} />} text={h} />)}
-                                        <Tag icon={<BookOpen size={12} />} text={profile.favoriteSubject || 'N/A'} label="Fav Subject" />
-                                    </div>
-                                )}
-                            </section>
-                        </div>
-                    ) : (
+                    {!isStudent && (
                         /* AGENT DETAILS (Compact View) */
                         <div className="space-y-8">
                             {/* Profile Details Tag Cloud */}
                             <section>
                                 <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Agency Profile</h3>
+
                                 <div className="space-y-6">
                                     {/* Target Countries & Recruiting Countries */}
                                     <div className="grid grid-cols-2 gap-6">
@@ -1322,10 +1091,12 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                 <div className="p-6 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 flex justify-end gap-3 rounded-b-[32px]">
                     <button onClick={onClose} className="px-6 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">Close</button>
                     {isEditing ? (
-                        <button onClick={handleSave} className="px-6 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 hover:shadow-lg transition-all flex items-center gap-2">
-                            <Save size={18} />
-                            Save Changes
-                        </button>
+                        !isStudent ? (
+                            <button onClick={handleSave} className="px-6 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 hover:shadow-lg transition-all flex items-center gap-2">
+                                <Save size={18} />
+                                Save Changes
+                            </button>
+                        ) : null
                     ) : (
                         <button onClick={() => setIsEditing(true)} className="px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-xl font-bold hover:shadow-lg transition-all">Edit Lead</button>
                     )}

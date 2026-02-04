@@ -46,7 +46,7 @@ export const NewLeadMenu: React.FC<Props> = ({ onOpenManual }) => {
             <div className="relative" ref={menuRef}>
                 <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm shadow-lg transition-all ${isOpen ? 'bg-gray-900 text-white shadow-xl scale-[1.02]' : 'bg-black text-white hover:shadow-xl hover:-translate-y-0.5'}`}
+                    className={`flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 rounded-xl font-bold text-xs md:text-sm shadow-lg transition-all ${isOpen ? 'bg-gray-900 text-white shadow-xl scale-[1.02]' : 'bg-black text-white hover:shadow-xl hover:-translate-y-0.5'}`}
                 >
                     {isOpen ? <X size={18} /> : <Plus size={18} />}
                     <span>New Lead</span>
