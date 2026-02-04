@@ -116,12 +116,12 @@ export default function ApexCRM() {
                   ];
 
                   const checklist = lead.agencyProfile.onboardingChecklist || {};
-                  // @ts-ignore
-                  const lastCheckedIndex = checklistItems.findLastIndex(item => checklist[item.key]);
 
-                  let startIndex = lastCheckedIndex === -1 ? 0 : lastCheckedIndex;
-                  if (startIndex > checklistItems.length - 3) startIndex = Math.max(0, checklistItems.length - 3);
-                  visibleChecklist = checklistItems.slice(startIndex, startIndex + 3);
+                  // Filter for only unselected items
+                  const unselectedItems = checklistItems.filter(item => !checklist[item.key as keyof typeof checklist]);
+
+                  // Show top 3 unselected
+                  visibleChecklist = unselectedItems.slice(0, 3);
                 }
 
                 return (
@@ -175,7 +175,7 @@ export default function ApexCRM() {
                       )}
                     </div>
 
-                    {visibleChecklist && lead.type === 'Agent' ? (
+                    {visibleChecklist && visibleChecklist.length > 0 && lead.type === 'Agent' ? (
                       <div className="flex flex-col gap-1.5 mt-2 bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg border border-blue-500">
                         {visibleChecklist.map((item) => {
                           // @ts-ignore
@@ -250,12 +250,12 @@ export default function ApexCRM() {
                   ];
 
                   const checklist = lead.agencyProfile.onboardingChecklist || {};
-                  // @ts-ignore
-                  const lastCheckedIndex = checklistItems.findLastIndex(item => checklist[item.key]);
 
-                  let startIndex = lastCheckedIndex === -1 ? 0 : lastCheckedIndex;
-                  if (startIndex > checklistItems.length - 3) startIndex = Math.max(0, checklistItems.length - 3);
-                  visibleChecklist = checklistItems.slice(startIndex, startIndex + 3);
+                  // Filter for only unselected items
+                  const unselectedItems = checklistItems.filter(item => !checklist[item.key as keyof typeof checklist]);
+
+                  // Show top 3 unselected
+                  visibleChecklist = unselectedItems.slice(0, 3);
                 }
 
                 return (
@@ -309,7 +309,7 @@ export default function ApexCRM() {
                       )}
                     </div>
 
-                    {visibleChecklist && lead.type === 'Agent' ? (
+                    {visibleChecklist && visibleChecklist.length > 0 && lead.type === 'Agent' ? (
                       <div className="flex flex-col gap-1.5 mt-2 bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg border border-blue-500">
                         {visibleChecklist.map((item) => {
                           // @ts-ignore

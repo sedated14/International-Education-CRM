@@ -108,7 +108,8 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
                                     !lead.agencyProfile!.onboardingChecklist?.[item.key as keyof typeof lead.agencyProfile.onboardingChecklist]
                                 );
 
-                                const displayItems = unselectedItems.slice(0, 3);
+                                // Logic: If even 1 is unchecked, show WHOLE list (checked and unchecked).
+                                // If all checked, show "All Tasks Complete".
 
                                 if (unselectedItems.length === 0) {
                                     return (
@@ -123,23 +124,27 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
                                     );
                                 }
 
-                                return displayItems.map(item => (
-                                    <div
-                                        key={item.key}
-                                        className="flex items-center gap-2 cursor-pointer group/check"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            toggleChecklist(item.key);
-                                        }}
-                                    >
-                                        <div className="w-3 h-3 rounded border bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 group-hover/check:border-blue-400 flex items-center justify-center transition-colors">
-                                            {/* Unchecked state always for this view */}
+                                // Show ALL items (checklistOrder)
+                                return checklistOrder.map(item => {
+                                    const isChecked = lead.agencyProfile!.onboardingChecklist?.[item.key as keyof typeof lead.agencyProfile.onboardingChecklist] || false;
+                                    return (
+                                        <div
+                                            key={item.key}
+                                            className="flex items-center gap-2 cursor-pointer group/check"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                toggleChecklist(item.key);
+                                            }}
+                                        >
+                                            <div className={`w-3 h-3 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-emerald-500 border-emerald-500' : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 group-hover/check:border-blue-400'}`}>
+                                                {isChecked && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
+                                            </div>
+                                            <span className={`text-[9px] font-bold transition-colors ${isChecked ? 'text-gray-700 dark:text-gray-200' : 'text-gray-400 dark:text-gray-500 group-hover/check:text-blue-500'}`}>
+                                                {item.label}
+                                            </span>
                                         </div>
-                                        <span className="text-[9px] font-bold text-gray-500 dark:text-gray-400 group-hover/check:text-blue-500 transition-colors">
-                                            {item.label}
-                                        </span>
-                                    </div>
-                                ));
+                                    );
+                                });
                             })()}
                         </div>
                     </div>
