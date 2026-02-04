@@ -15,10 +15,10 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
         <div className="bg-white dark:bg-gray-900 rounded-[24px] border-4 border-emerald-500 shadow-sm hover:shadow-md transition-all cursor-pointer group overflow-hidden">
             {/* Header: Name, Agency, Status */}
             <div className="bg-white dark:bg-gray-900 p-5 border-b-2 border-emerald-500 flex justify-between items-start">
-                <div>
+                <div className="flex-1 pr-4">
                     <h3 className="font-bold text-lg text-gray-900 dark:text-white leading-tight">{lead.studentName}</h3>
                     {lead.agencyProfile && (
-                        <div className="flex items-center gap-1.5 text-[11px] text-gray-600 dark:text-gray-400 mt-1.5 bg-white dark:bg-gray-800 px-2 py-1 rounded-lg w-fit border border-gray-200 dark:border-gray-700 backdrop-blur-sm">
+                        <div className="flex items-center gap-1.5 text-[11px] text-gray-600 dark:text-gray-400 mt-1.5 bg-white dark:bg-gray-800 px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-700 backdrop-blur-sm">
                             <span className="text-gray-400 font-extrabold text-[9px] uppercase tracking-wider">SO:</span>
                             <div className="flex items-center gap-1.5 font-bold">
                                 <span className="text-gray-900 dark:text-gray-200">{lead.agencyProfile.name}</span>
@@ -97,14 +97,7 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
                     ))}
                 </div>
 
-                <div className="flex justify-between items-center text-xs text-gray-400 font-bold uppercase tracking-wider pt-3 border-t border-gray-50 dark:border-gray-800">
-                    <span>{lead.timestamp}</span>
-                    <div className="flex gap-1">
-                        {[...Array(5)].map((_, i) => (
-                            <div key={i} className={`w-1.5 h-1.5 rounded-full ${i < lead.score ? 'bg-orange-500' : 'bg-gray-200 dark:bg-gray-700'}`} />
-                        ))}
-                    </div>
-                </div>
+
 
                 {/* DATE TRACKING */}
                 <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800 grid grid-cols-1 gap-2">
