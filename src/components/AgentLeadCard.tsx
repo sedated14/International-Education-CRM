@@ -88,22 +88,42 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
                     <div className="mb-4 bg-white dark:bg-gray-800/50 p-3 rounded-xl border-2 border-blue-500">
                         <div className="flex items-center gap-2 mb-2 px-1">
                             <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-                            <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Onboarding</h4>
+                            <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Onboarding (Next Steps)</h4>
                         </div>
                         <div className="grid grid-cols-1 gap-1.5 bg-gray-50 dark:bg-gray-800/80 p-2 rounded-lg">
-                            {[
-                                { key: 'agreementSent', label: 'Agreement Sent' },
-                                { key: 'agreementSigned', label: 'Agreement Signed' },
-                                { key: 'applicationAccountCreated', label: 'App Account Created' },
-                                { key: 'schoolPriceListSent', label: 'Price List Sent' },
-                                { key: 'schoolProfilesSent', label: 'Profiles Sent' },
-                                { key: 'addedMarketingList', label: 'Added to Marketing' },
-                                { key: 'agentHandbookSent', label: 'Agent Handbook' },
-                                { key: 'studentHandbookSent', label: 'Student Handbook' },
-                                { key: 'commissionRequestFormSent', label: 'Comm. Form Sent' }
-                            ].map(item => {
-                                const isChecked = lead.agencyProfile!.onboardingChecklist?.[item.key as keyof typeof lead.agencyProfile.onboardingChecklist] || false;
-                                return (
+                            {(() => {
+                                const checklistOrder = [
+                                    { key: 'agreementSent', label: 'Agreement Sent' },
+                                    { key: 'agreementSigned', label: 'Agreement Signed' },
+                                    { key: 'applicationAccountCreated', label: 'App Account Created' },
+                                    { key: 'schoolPriceListSent', label: 'Price List Sent' },
+                                    { key: 'schoolProfilesSent', label: 'Profiles Sent' },
+                                    { key: 'addedMarketingList', label: 'Added to Marketing' },
+                                    { key: 'agentHandbookSent', label: 'Agent Handbook' },
+                                    { key: 'studentHandbookSent', label: 'Student Handbook' },
+                                    { key: 'commissionRequestFormSent', label: 'Comm. Form Sent' }
+                                ];
+
+                                const unselectedItems = checklistOrder.filter(item =>
+                                    !lead.agencyProfile!.onboardingChecklist?.[item.key as keyof typeof lead.agencyProfile.onboardingChecklist]
+                                );
+
+                                const displayItems = unselectedItems.slice(0, 3);
+
+                                if (unselectedItems.length === 0) {
+                                    return (
+                                        <div className="flex items-center gap-2 justify-center py-2">
+                                            <div className="w-4 h-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                                                <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                                </svg>
+                                            </div>
+                                            <span className="text-[10px] font-bold text-emerald-600">All Tasks Complete</span>
+                                        </div>
+                                    );
+                                }
+
+                                return displayItems.map(item => (
                                     <div
                                         key={item.key}
                                         className="flex items-center gap-2 cursor-pointer group/check"
@@ -112,15 +132,15 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
                                             toggleChecklist(item.key);
                                         }}
                                     >
-                                        <div className={`w-3 h-3 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-emerald-500 border-emerald-500' : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 group-hover/check:border-blue-400'}`}>
-                                            {isChecked && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
+                                        <div className="w-3 h-3 rounded border bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 group-hover/check:border-blue-400 flex items-center justify-center transition-colors">
+                                            {/* Unchecked state always for this view */}
                                         </div>
-                                        <span className={`text-[9px] font-bold transition-colors ${isChecked ? 'text-gray-700 dark:text-gray-200' : 'text-gray-400 dark:text-gray-500 group-hover/check:text-blue-500'}`}>
+                                        <span className="text-[9px] font-bold text-gray-500 dark:text-gray-400 group-hover/check:text-blue-500 transition-colors">
                                             {item.label}
                                         </span>
                                     </div>
-                                );
-                            })}
+                                ));
+                            })()}
                         </div>
                     </div>
                 )}

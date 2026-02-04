@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Lead } from '../types';
 import { useLeads } from '../context/LeadContext';
-import { X, User, Calendar, Languages, GraduationCap, School as SchoolIcon, Activity, Smile, BookOpen, Briefcase, PenTool, MapPin, Save, Edit2, StickyNote } from 'lucide-react';
+import { X, User, Calendar, Languages, GraduationCap, School as SchoolIcon, Activity, Smile, BookOpen, Briefcase, PenTool, MapPin, Save, Edit2, StickyNote, Clock } from 'lucide-react';
 import Link from 'next/link';
 import { COUNTRIES } from '../data/countries';
 import { CheckboxGroup, CountrySelector, Input, Select } from './ui/FormComponents';
@@ -651,28 +651,55 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                             <section>
                                 <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Agency Profile</h3>
                                 <div className="space-y-6">
-                                    {/* Countries */}
-                                    <div>
-                                        <p className="text-[10px] text-gray-400 font-bold uppercase mb-2">Target Countries</p>
-                                        {isEditing ? (
-                                            <CountrySelector
-                                                selected={formData.agencyProfile?.targetCountries || []}
-                                                onChange={v => setFormData((prev: any) => ({
-                                                    ...prev,
-                                                    agencyProfile: { ...prev.agencyProfile, targetCountries: v }
-                                                }))}
-                                            />
-                                        ) : (
-                                            <div className="flex flex-wrap gap-2">
-                                                {lead.agencyProfile?.targetCountries && lead.agencyProfile.targetCountries.length > 0 ? (
-                                                    lead.agencyProfile.targetCountries.map(c => (
-                                                        <span key={c} className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-md text-xs font-bold border border-blue-100 dark:border-blue-800">{c}</span>
-                                                    ))
-                                                ) : (
-                                                    <span className="text-xs text-gray-400 italic">Not Specified</span>
-                                                )}
-                                            </div>
-                                        )}
+                                    {/* Target Countries & Recruiting Countries */}
+                                    <div className="grid grid-cols-2 gap-6">
+                                        {/* Target Countries */}
+                                        <div>
+                                            <p className="text-[10px] text-gray-400 font-bold uppercase mb-2">Target Countries</p>
+                                            {isEditing ? (
+                                                <CountrySelector
+                                                    selected={formData.agencyProfile?.targetCountries || []}
+                                                    onChange={v => setFormData((prev: any) => ({
+                                                        ...prev,
+                                                        agencyProfile: { ...prev.agencyProfile, targetCountries: v }
+                                                    }))}
+                                                />
+                                            ) : (
+                                                <div className="flex flex-wrap gap-2">
+                                                    {lead.agencyProfile?.targetCountries && lead.agencyProfile.targetCountries.length > 0 ? (
+                                                        lead.agencyProfile.targetCountries.map(c => (
+                                                            <span key={c} className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-md text-xs font-bold border border-blue-100 dark:border-blue-800">{c}</span>
+                                                        ))
+                                                    ) : (
+                                                        <span className="text-xs text-gray-400 italic">Not Specified</span>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Recruiting Countries */}
+                                        <div>
+                                            <p className="text-[10px] text-gray-400 font-bold uppercase mb-2">Recruiting Countries</p>
+                                            {isEditing ? (
+                                                <CountrySelector
+                                                    selected={formData.agencyProfile?.recruitingCountries || []}
+                                                    onChange={v => setFormData((prev: any) => ({
+                                                        ...prev,
+                                                        agencyProfile: { ...prev.agencyProfile, recruitingCountries: v }
+                                                    }))}
+                                                />
+                                            ) : (
+                                                <div className="flex flex-wrap gap-2">
+                                                    {lead.agencyProfile?.recruitingCountries && lead.agencyProfile.recruitingCountries.length > 0 ? (
+                                                        lead.agencyProfile.recruitingCountries.map(c => (
+                                                            <span key={c} className="px-2 py-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 rounded-md text-xs font-bold border border-emerald-100 dark:border-emerald-800">{c}</span>
+                                                        ))
+                                                    ) : (
+                                                        <span className="text-xs text-gray-400 italic">Not Specified</span>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
 
 
@@ -729,6 +756,78 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                     )}
                                                 </div>
                                             )}
+                                        </div>
+                                    </div>
+
+                                    {/* Additional Agency Details (Commission, Language, Timezone) */}
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                        <DetailItem
+                                            icon={<Briefcase />}
+                                            label="Commission"
+                                            value={isEditing ?
+                                                <Input value={formData.agencyProfile?.commissionRate || ''} onChange={v => setFormData((p: any) => ({ ...p, agencyProfile: { ...p.agencyProfile, commissionRate: v } }))} placeholder="15%" /> :
+                                                (lead.agencyProfile?.commissionRate || '-')}
+                                        />
+                                        <DetailItem
+                                            icon={<Languages />}
+                                            label="Language"
+                                            value={isEditing ?
+                                                <Input value={formData.agencyProfile?.language || ''} onChange={v => setFormData((p: any) => ({ ...p, agencyProfile: { ...p.agencyProfile, language: v } }))} placeholder="English" /> :
+                                                (lead.agencyProfile?.language || '-')}
+                                        />
+                                        <DetailItem
+                                            icon={<Clock />}
+                                            label="Timezone"
+                                            value={isEditing ?
+                                                <Input value={formData.agencyProfile?.timezone || ''} onChange={v => setFormData((p: any) => ({ ...p, agencyProfile: { ...p.agencyProfile, timezone: v } }))} placeholder="EST" /> :
+                                                (lead.agencyProfile?.timezone || '-')}
+                                        />
+                                    </div>
+
+                                    {/* Onboarding Checklist */}
+                                    <div>
+                                        <p className="text-[10px] text-gray-400 font-bold uppercase mb-2">Onboarding Checklist</p>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-gray-50/50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-800">
+                                            {[
+                                                { key: 'agreementSent', label: 'Agreement Sent' },
+                                                { key: 'agreementSigned', label: 'Agreement Signed' },
+                                                { key: 'applicationAccountCreated', label: 'App Account Created' },
+                                                { key: 'schoolPriceListSent', label: 'Price List Sent' },
+                                                { key: 'schoolProfilesSent', label: 'Profiles Sent' },
+                                                { key: 'addedMarketingList', label: 'Added to Marketing' },
+                                                { key: 'agentHandbookSent', label: 'Agent Handbook' },
+                                                { key: 'studentHandbookSent', label: 'Student Handbook' },
+                                                { key: 'commissionRequestFormSent', label: 'Comm. Form Sent' }
+                                            ].map(item => {
+                                                const isChecked = formData.agencyProfile?.onboardingChecklist?.[item.key] || false;
+                                                return (
+                                                    <div
+                                                        key={item.key}
+                                                        className="flex items-center gap-2 cursor-pointer group/check"
+                                                        onClick={() => {
+                                                            // Always toggleable
+                                                            const current = formData.agencyProfile?.onboardingChecklist || {};
+                                                            setFormData((prev: any) => ({
+                                                                ...prev,
+                                                                agencyProfile: {
+                                                                    ...prev.agencyProfile,
+                                                                    onboardingChecklist: {
+                                                                        ...current,
+                                                                        [item.key]: !isChecked
+                                                                    }
+                                                                }
+                                                            }));
+                                                        }}
+                                                    >
+                                                        <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-blue-500 border-blue-500' : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 group-hover/check:border-blue-400'}`}>
+                                                            {isChecked && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
+                                                        </div>
+                                                        <span className={`text-[10px] font-bold ${isChecked ? 'text-gray-700 dark:text-gray-200' : 'text-gray-400 dark:text-gray-500'}`}>
+                                                            {item.label}
+                                                        </span>
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
                                     </div>
                                 </div>
@@ -882,6 +981,104 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                     </div>
                                 )}
                             </section>
+
+                            {/* Secondary Contact */}
+                            {(isEditing || lead.agencyProfile?.secondaryContact) && (
+                                <section>
+                                    <h3 className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">Secondary Contact</h3>
+                                    {isEditing ? (
+                                        <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 space-y-4">
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <Input
+                                                    label="First Name"
+                                                    value={formData.agencyProfile?.secondaryContact?.firstName || ''}
+                                                    onChange={v => {
+                                                        const contact = { ...(formData.agencyProfile?.secondaryContact || {}) };
+                                                        contact.firstName = v;
+                                                        contact.name = `${v} ${contact.lastName || ''}`.trim();
+                                                        setFormData((prev: any) => ({
+                                                            ...prev,
+                                                            agencyProfile: { ...prev.agencyProfile, secondaryContact: contact }
+                                                        }));
+                                                    }}
+                                                />
+                                                <Input
+                                                    label="Last Name"
+                                                    value={formData.agencyProfile?.secondaryContact?.lastName || ''}
+                                                    onChange={v => {
+                                                        const contact = { ...(formData.agencyProfile?.secondaryContact || {}) };
+                                                        contact.lastName = v;
+                                                        contact.name = `${contact.firstName || ''} ${v}`.trim();
+                                                        setFormData((prev: any) => ({
+                                                            ...prev,
+                                                            agencyProfile: { ...prev.agencyProfile, secondaryContact: contact }
+                                                        }));
+                                                    }}
+                                                />
+                                                <Input
+                                                    label="Role / Position"
+                                                    value={formData.agencyProfile?.secondaryContact?.role || ''}
+                                                    onChange={v => {
+                                                        const contact = { ...(formData.agencyProfile?.secondaryContact || {}) };
+                                                        contact.role = v;
+                                                        setFormData((prev: any) => ({
+                                                            ...prev,
+                                                            agencyProfile: { ...prev.agencyProfile, secondaryContact: contact }
+                                                        }));
+                                                    }}
+                                                />
+                                                <Input
+                                                    label="Email"
+                                                    value={formData.agencyProfile?.secondaryContact?.email || ''}
+                                                    onChange={v => {
+                                                        const contact = { ...(formData.agencyProfile?.secondaryContact || {}) };
+                                                        contact.email = v;
+                                                        setFormData((prev: any) => ({
+                                                            ...prev,
+                                                            agencyProfile: { ...prev.agencyProfile, secondaryContact: contact }
+                                                        }));
+                                                    }}
+                                                />
+                                                <Input
+                                                    label="Phone"
+                                                    value={formData.agencyProfile?.secondaryContact?.phone || ''}
+                                                    onChange={v => {
+                                                        const contact = { ...(formData.agencyProfile?.secondaryContact || {}) };
+                                                        contact.phone = v;
+                                                        setFormData((prev: any) => ({
+                                                            ...prev,
+                                                            agencyProfile: { ...prev.agencyProfile, secondaryContact: contact }
+                                                        }));
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700">
+                                            <div className="flex justify-between items-start mb-2">
+                                                <div>
+                                                    <p className="font-bold text-gray-900 dark:text-white">{lead.agencyProfile?.secondaryContact?.name || 'Unknown Name'}</p>
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400 font-bold">{lead.agencyProfile?.secondaryContact?.role || 'No Role'}</p>
+                                                </div>
+                                            </div>
+                                            <div className="space-y-1 mt-3">
+                                                {lead.agencyProfile?.secondaryContact?.email && (
+                                                    <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
+                                                        <span className="font-bold text-gray-400 w-12 text-[10px] uppercase">Email</span>
+                                                        <a href={`mailto:${lead.agencyProfile.secondaryContact.email}`} className="hover:text-blue-500 hover:underline">{lead.agencyProfile.secondaryContact.email}</a>
+                                                    </div>
+                                                )}
+                                                {lead.agencyProfile?.secondaryContact?.phone && (
+                                                    <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
+                                                        <span className="font-bold text-gray-400 w-12 text-[10px] uppercase">Phone</span>
+                                                        <div className="font-mono">{lead.agencyProfile.secondaryContact.phone}</div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                </section>
+                            )}
 
                             {/* General Notes Section (Moved Up) */}
                             <section className="animate-in fade-in slide-in-from-top-2">
