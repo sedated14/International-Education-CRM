@@ -62,8 +62,13 @@ export interface PhoneInputProps {
     icon?: React.ReactNode;
 }
 
+import { AsYouType, CountryCode, getCountryCallingCode } from 'libphonenumber-js';
+
+// ... Imports ...
+
 export const PhoneInput = ({ label, value = '', onChange, defaultCountry, required, icon }: PhoneInputProps) => {
-    const [selectedCode, setSelectedCode] = useState('+1');
+    // We store the ISO Country Code (e.g. 'US') as the source of truth for "Selected Country"
+    const [selectedIso, setSelectedIso] = useState<CountryCode>('US');
     const [phoneNumber, setPhoneNumber] = useState('');
 
     // Sort codes alphabetically by country name for the dropdown
@@ -72,75 +77,105 @@ export const PhoneInput = ({ label, value = '', onChange, defaultCountry, requir
     // Initialize/Sync State
     useEffect(() => {
         if (value) {
-            // Find longest matching code
+            // Value is typically "+1 5555555555" or similar
+            // We try to match the code primarily
+            // But now we have ISOs.
+            // If we have a value, we can try to guess the country if it's not set, or just use +code matching.
+
+            // Find matched country by code prefix
+            // We sort by code length (desc) to match longest code first (+1-246 vs +1) if strictly matching string start
             const match = COUNTRY_PHONE_CODES
                 .filter(c => value.startsWith(c.code))
                 .sort((a, b) => b.code.length - a.code.length)[0];
 
             if (match) {
-                setSelectedCode(match.code);
-                const rawNumber = value.replace(match.code, '').trim();
-                // Apply formatting if it's US/Canada
-                if (match.code === '+1') {
-                    setPhoneNumber(formatUSNumber(rawNumber));
-                } else {
-                    setPhoneNumber(rawNumber);
+                // Determine if we should update ISO. Only if we haven't touched it? 
+                // Or robustly: if the current selectedIso doesn't match the code in value, update it.
+                // But +1 corresponds to US, CA, etc. Match.iso might be Antigua (+1). 
+                // If value was saved as "+1 ...", we might default to US if we don't know better.
+
+                // If the user hasn't interacted, we trust the value.
+                if (match.iso) {
+                    if (match.code === '+1' && selectedIso === 'CA') {
+                        // Keep Canada if already selected?
+                    } else {
+                        setSelectedIso(match.iso as CountryCode);
+                    }
                 }
+
+                // Strip the code from the phone number for display
+                // Note: The value usually contains the code. 
+                const rawNumber = value.slice(match.code.length).trim();
+
+                // Format the *remaining* number using the ISO
+                const asYouType = new AsYouType(match.iso as CountryCode);
+                const formatted = asYouType.input(rawNumber);
+
+                setPhoneNumber(formatted);
             } else {
                 setPhoneNumber(value);
             }
         }
         else if (defaultCountry && !value) {
+            // Default country by Name -> find ISO
             const countryMatch = COUNTRY_PHONE_CODES.find(c => c.country === defaultCountry);
             if (countryMatch) {
-                setSelectedCode(countryMatch.code);
+                setSelectedIso(countryMatch.iso as CountryCode);
             }
         }
     }, [defaultCountry, value]);
 
-    const formatUSNumber = (val: string) => {
-        const digits = val.replace(/\D/g, '').substring(0, 10);
-        if (digits.length === 0) return '';
-        if (digits.length <= 3) return `(${digits}`;
-        if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
-        return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
-    };
+    const handleIsoChange = (newIso: string) => {
+        setSelectedIso(newIso as CountryCode);
+        const match = COUNTRY_PHONE_CODES.find(c => c.iso === newIso);
 
-    const handleCodeChange = (newCode: string) => {
-        setSelectedCode(newCode);
-        // re-format number based on new code if needed, strictly separate for now
-        // If switching to +1, format existing number
-        if (newCode === '+1') {
-            const formatted = formatUSNumber(phoneNumber);
+        // Re-format existing number with new ISO
+        if (match) {
+            const asYouType = new AsYouType(newIso as CountryCode);
+            // We strip non-digits to re-type
+            const clean = phoneNumber.replace(/\D/g, '');
+            const formatted = asYouType.input(clean);
             setPhoneNumber(formatted);
-            onChange(`${newCode} ${formatted}`);
-        } else {
-            // If switching away from +1, maybe strip format?
-            const raw = phoneNumber.replace(/[\(\)\- ]/g, '');
-            setPhoneNumber(raw);
-            onChange(`${newCode} ${raw}`);
+
+            // Construct full value: Code + Clean Number (or formatted? Usually DB stores formatted or raw with code)
+            // User requested "format based on country code".
+            // We usually save "+1 (555) 555-5555" or similar.
+            onChange(`${match.code} ${formatted}`);
         }
     };
 
     const handleNumberChange = (input: string) => {
-        // Enforce formatting based on selected code
-        let newVal = input;
+        // Input is the raw typing in the field
+        // We want to format AS YOU TYPE based on selectedIso
+        const asYouType = new AsYouType(selectedIso);
 
-        if (selectedCode === '+1') {
-            // Strict US/Canada Masking
-            // We want to handle backspace correctly, so we mostly rely on raw index
-            // But for simple "typing forward", formatting logic works.
-            // A simple approach: strip non-digits, truncate to 10, re-format.
-            // But we need to handle user deletion.
+        // AsYouType expects the characters.
+        // We typically clear formatting and re-feed?
+        // Actually asYouType.input() takes new chars.
+        // But for a controlled input where user might delete, standard practice:
+        // Feed the raw digits + input?
 
-            // If user deletes, `input` might be " (555) 555-555 " -> len less. 
-            // Just stripping and re-formatting usually works well for fixed masks.
-            newVal = formatUSNumber(input);
+        // Easiest: extract digits, feed to AsYouType.
+        // Note: this prevents typing punctuation manually if the library doesn't add it.
+        // But libphonenumber-js handles this well.
+
+        // NOTE: if user types "(", we might want to respect it? 
+        // Strict formatting: strip to digits, re-format.
+        // This forces the library's format.
+
+        let digits = input.replace(/[^0-9]/g, ''); // simplistic strip
+        // However, AsYouType input might want '+' if it was international? No, we have separate code.
+
+        const formatted = new AsYouType(selectedIso).input(digits);
+        setPhoneNumber(formatted);
+
+        const match = COUNTRY_PHONE_CODES.find(c => c.iso === selectedIso);
+        if (match) {
+            onChange(`${match.code} ${formatted}`);
         }
-
-        setPhoneNumber(newVal);
-        onChange(`${selectedCode} ${newVal}`);
     };
+
+    const currentCountry = COUNTRY_PHONE_CODES.find(c => c.iso === selectedIso);
 
     return (
         <div className="group w-full">
@@ -150,20 +185,20 @@ export const PhoneInput = ({ label, value = '', onChange, defaultCountry, requir
                 </label>
             )}
             <div className="flex gap-2 w-full">
-                {/* Country Code Select */}
-                <div className="relative w-[110px] shrink-0">
+                {/* Country Select - RESTORED WIDTH & CONTENT */}
+                <div className="relative w-[140px] shrink-0">
                     <select
-                        className="w-full bg-gray-100 dark:bg-gray-800 border-2 border-gray-200 dark:border-transparent focus:bg-white dark:focus:bg-gray-700 focus:border-black dark:focus:border-white rounded-2xl px-2 py-4 font-bold text-gray-900 dark:text-white outline-none text-xs appearance-none cursor-pointer transition-all"
-                        value={selectedCode}
-                        onChange={e => handleCodeChange(e.target.value)}
+                        className="w-full bg-gray-100 dark:bg-gray-800 border-2 border-gray-200 dark:border-transparent focus:bg-white dark:focus:bg-gray-700 focus:border-black dark:focus:border-white rounded-2xl px-3 py-4 font-bold text-gray-900 dark:text-white outline-none text-xs appearance-none cursor-pointer transition-all truncate pr-8"
+                        value={selectedIso}
+                        onChange={e => handleIsoChange(e.target.value)}
                     >
                         {sortedCodes.map((c) => (
-                            <option key={c.country} value={c.code}>
-                                {c.code}
+                            <option key={c.iso + c.country} value={c.iso}>
+                                {c.country} ({c.code})
                             </option>
                         ))}
                     </select>
-                    <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
                         <ChevronDown size={14} />
                     </div>
                 </div>
@@ -174,11 +209,10 @@ export const PhoneInput = ({ label, value = '', onChange, defaultCountry, requir
                     <input
                         type="tel"
                         className={`w-full bg-gray-100 dark:bg-gray-800 border-2 border-gray-200 dark:border-transparent focus:bg-white dark:focus:bg-gray-700 focus:border-black dark:focus:border-white rounded-2xl px-5 py-4 font-bold text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 outline-none transition-all ${icon ? 'pl-10' : ''}`}
-                        placeholder={selectedCode === '+1' ? "(555) 555-5555" : "123 456 7890"}
+                        placeholder={selectedIso === 'US' ? "(555) 555-5555" : "Phone Number"}
                         value={phoneNumber}
                         onChange={e => handleNumberChange(e.target.value)}
                         required={required}
-                        maxLength={selectedCode === '+1' ? 14 : 20} // (XXX) XXX-XXXX is 14 chars
                     />
                 </div>
             </div>

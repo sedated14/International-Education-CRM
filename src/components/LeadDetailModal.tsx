@@ -476,11 +476,13 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                             <DetailItem
                                                 icon={<Activity />}
                                                 label="Phone"
+                                                className="col-span-full"
                                                 value={<PhoneInput value={editProfile.phoneNumber} onChange={v => updateProfileField('phoneNumber', v)} defaultCountry={editProfile.nationality || editProfile.residence} />}
                                             />
                                             <DetailItem
                                                 icon={<MessageCircle />}
                                                 label="WhatsApp"
+                                                className="col-span-full"
                                                 value={<PhoneInput value={editProfile.whatsappNumber} onChange={v => updateProfileField('whatsappNumber', v)} defaultCountry={editProfile.nationality || editProfile.residence} icon={<MessageCircle size={14} />} />}
                                             />
                                         </>
@@ -1333,8 +1335,8 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
     );
 };
 
-const DetailItem = ({ icon, label, value }: { icon: React.ReactNode, label: string, value: React.ReactNode }) => (
-    <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-2xl border border-gray-100 dark:border-gray-700 flex items-center gap-3 min-h-[60px]">
+const DetailItem = ({ icon, label, value, className = "" }: { icon: React.ReactNode, label: string, value: React.ReactNode, className?: string }) => (
+    <div className={`bg-gray-50 dark:bg-gray-800 p-3 rounded-2xl border border-gray-100 dark:border-gray-700 flex items-center gap-3 min-h-[60px] ${className}`}>
         <div className="text-gray-400 [&>svg]:w-5 [&>svg]:h-5 shrink-0">{icon}</div>
         <div className="min-w-0 flex-1">
             <p className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase truncate">{label}</p>
