@@ -138,7 +138,20 @@ export default function ApexCRM() {
                       </span>
                     </div>
                     <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1">{lead.type === 'Student' ? lead.studentName : lead.agentName}</h3>
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-1">{lead.title}</p>
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-1">
+                      {lead.type === 'Student' ? `${lead.status}: Student - ${lead.country}` : lead.title}
+                    </p>
+
+                    {lead.type === 'Student' && lead.agencyProfile && (
+                      <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 px-2 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 w-full mb-3">
+                        <span className="text-gray-400 font-extrabold text-[8px] uppercase tracking-wider shrink-0">SO:</span>
+                        <div className="flex flex-wrap items-center gap-1 font-bold">
+                          <span className="text-gray-900 dark:text-gray-200">{lead.agencyProfile.name}</span>
+                          <span className="text-gray-300 dark:text-gray-600">•</span>
+                          <span className="text-gray-500 dark:text-gray-400 font-medium">{lead.agencyProfile.country}</span>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Note Snippet (Always Visible) */}
                     <div className={`mb-3 bg-gray-50 dark:bg-gray-800/30 p-2 rounded-lg border min-h-[50px] flex flex-col justify-between ${lead.notes && lead.notes.length > 0 ? 'border-yellow-500/50' : 'border-gray-100 dark:border-gray-800 items-center justify-center'}`}>
@@ -188,11 +201,7 @@ export default function ApexCRM() {
                           )
                         })}
                       </div>
-                    ) : (
-                      <button className={`w-full py-2 rounded-lg text-xs font-bold transition-colors ${lead.type === 'Student' ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:hover:bg-emerald-900/30' : 'bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/30'}`}>
-                        Mark Complete
-                      </button>
-                    )}
+                    ) : null}
                   </div>
                 )
               })}
@@ -232,7 +241,20 @@ export default function ApexCRM() {
                     </span>
                   </div>
                   <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1">{lead.type === 'Student' ? lead.studentName : lead.agentName}</h3>
-                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-1">{lead.title}</p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-1">
+                    {lead.type === 'Student' ? `${lead.status}: Student - ${lead.country}` : lead.title}
+                  </p>
+
+                  {lead.type === 'Student' && lead.agencyProfile && (
+                    <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 px-2 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 w-full mb-3">
+                      <span className="text-gray-400 font-extrabold text-[8px] uppercase tracking-wider shrink-0">SO:</span>
+                      <div className="flex flex-wrap items-center gap-1 font-bold">
+                        <span className="text-gray-900 dark:text-gray-200">{lead.agencyProfile.name}</span>
+                        <span className="text-gray-300 dark:text-gray-600">•</span>
+                        <span className="text-gray-500 dark:text-gray-400 font-medium">{lead.agencyProfile.country}</span>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Note Snippet (Always Visible) */}
                   <div className={`mb-3 bg-gray-50 dark:bg-gray-800/30 p-2 rounded-lg border min-h-[50px] flex flex-col justify-between ${lead.notes && lead.notes.length > 0 ? 'border-yellow-500/50' : 'border-gray-100 dark:border-gray-800 items-center justify-center'}`}>
