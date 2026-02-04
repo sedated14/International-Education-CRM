@@ -305,7 +305,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                     {/* TOP METRICS: DATES (Moved & Refined) */}
                     <div className={`grid gap-3 mb-6 ${(['Prospective', 'Pending'].includes(lead.agencyProfile?.partnershipStatus || 'Prospective')) ? 'grid-cols-3' : 'grid-cols-2'}`}>
                         {/* Date Added */}
-                        <div className="bg-gray-50/80 dark:bg-gray-800/80 p-3 rounded-2xl border border-gray-100/60 dark:border-gray-700/60 h-full flex flex-col justify-center">
+                        <div className="bg-gray-50/80 dark:bg-gray-800/80 p-3 rounded-2xl border border-gray-100/60 dark:border-gray-700/60 h-full flex flex-col">
                             <p className="text-[9px] text-gray-400 dark:text-gray-500 font-black uppercase tracking-wider mb-1">Date Added</p>
                             <p className="font-black text-gray-800 dark:text-gray-200 text-xs">
                                 {new Date(lead.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric' })}
@@ -313,7 +313,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                         </div>
 
                         {/* Last Contacted */}
-                        <div className="bg-gray-50/80 dark:bg-gray-800/80 p-3 rounded-2xl border border-gray-100/60 dark:border-gray-700/60 h-full flex flex-col justify-center">
+                        <div className="bg-gray-50/80 dark:bg-gray-800/80 p-3 rounded-2xl border border-gray-100/60 dark:border-gray-700/60 h-full flex flex-col">
                             <p className="text-[9px] text-gray-400 dark:text-gray-500 font-black uppercase tracking-wider mb-1">Last Contacted</p>
                             {isEditing ? (
                                 <div className="flex gap-2">
@@ -345,7 +345,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
 
                         {/* Follow Up Due - Conditional Display */}
                         {(['Prospective', 'Pending'].includes(lead.agencyProfile?.partnershipStatus || 'Prospective')) && (
-                            <div className="bg-blue-50/50 dark:bg-blue-900/20 p-3 rounded-2xl border border-blue-100/60 dark:border-blue-800/40 relative group h-full flex flex-col justify-center">
+                            <div className="bg-blue-50/50 dark:bg-blue-900/20 p-3 rounded-2xl border border-blue-100/60 dark:border-blue-800/40 relative group h-full flex flex-col">
                                 <div className="flex justify-between items-center mb-1">
                                     <p className="text-[9px] text-blue-400 dark:text-blue-300 font-black uppercase tracking-wider">Follow Up</p>
                                     {!isEditing && <PenTool size={10} onClick={() => setIsEditing(true)} className="text-blue-300 dark:text-blue-400 opacity-0 group-hover:opacity-100 cursor-pointer" />}
