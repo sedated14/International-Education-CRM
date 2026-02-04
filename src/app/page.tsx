@@ -127,7 +127,9 @@ export default function ApexCRM() {
                 return (
                   <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)} className={`bg-white dark:bg-gray-900 p-4 rounded-[20px] border-4 shadow-sm hover:shadow-md cursor-pointer transition-all group mb-2 ${lead.type === 'Student' ? 'border-emerald-500 hover:border-emerald-600' : 'border-blue-500 hover:border-blue-600'}`}>
                     <div className="flex justify-between items-center mb-2">
-                      <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.type === 'Student' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' : 'bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'}`}>{lead.type}</span>
+                      <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.type === 'Student' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' : 'bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'}`}>
+                        {lead.type === 'Student' ? lead.status : 'Pending'}
+                      </span>
                       <span className={`text-[10px] font-bold ${lead.type === 'Student' ? 'text-emerald-600 dark:text-emerald-400' : 'text-blue-500 dark:text-blue-400'}`}>
                         {lead.followUpDate
                           ? new Date(lead.followUpDate).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric' })
@@ -137,6 +139,22 @@ export default function ApexCRM() {
                     </div>
                     <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1">{lead.type === 'Student' ? lead.studentName : lead.agentName}</h3>
                     <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-1">{lead.title}</p>
+
+                    {/* Note Snippet (Always Visible) */}
+                    <div className={`mb-3 bg-gray-50 dark:bg-gray-800/30 p-2 rounded-lg border min-h-[50px] flex flex-col justify-between ${lead.notes && lead.notes.length > 0 ? 'border-yellow-500/50' : 'border-gray-100 dark:border-gray-800 items-center justify-center'}`}>
+                      {lead.notes && lead.notes.length > 0 ? (
+                        <>
+                          <p className="text-[9px] text-gray-600 dark:text-gray-300 font-medium line-clamp-2 leading-snug italic w-full text-left">
+                            "{lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].content}"
+                          </p>
+                          <div className="text-[8px] text-yellow-600/60 dark:text-yellow-500/60 font-bold text-right w-full mt-1">
+                            {new Date(lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                          </div>
+                        </>
+                      ) : (
+                        <span className="text-[9px] text-gray-400 font-medium italic">No notes yet</span>
+                      )}
+                    </div>
 
                     {visibleChecklist && lead.type === 'Agent' ? (
                       <div className="flex flex-col gap-1.5 mt-2 bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg border border-gray-100 dark:border-gray-800">
@@ -203,7 +221,9 @@ export default function ApexCRM() {
               .map(lead => (
                 <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)} className={`bg-white dark:bg-gray-900 p-4 rounded-[20px] border-4 shadow-sm hover:shadow-md cursor-pointer transition-all group mb-2 ${lead.type === 'Student' ? 'border-emerald-500 hover:border-emerald-600' : 'border-blue-500 hover:border-blue-600'}`}>
                   <div className="flex justify-between items-center mb-2">
-                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.type === 'Student' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' : 'bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'}`}>{lead.type}</span>
+                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.type === 'Student' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' : 'bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'}`}>
+                      {lead.type === 'Student' ? lead.status : 'Pending'}
+                    </span>
                     <span className="text-[10px] font-bold text-red-500 dark:text-red-400">
                       {lead.followUpDate
                         ? new Date(lead.followUpDate).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric' })
@@ -213,6 +233,23 @@ export default function ApexCRM() {
                   </div>
                   <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1">{lead.type === 'Student' ? lead.studentName : lead.agentName}</h3>
                   <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-1">{lead.title}</p>
+
+                  {/* Note Snippet (Always Visible) */}
+                  <div className={`mb-3 bg-gray-50 dark:bg-gray-800/30 p-2 rounded-lg border min-h-[50px] flex flex-col justify-between ${lead.notes && lead.notes.length > 0 ? 'border-yellow-500/50' : 'border-gray-100 dark:border-gray-800 items-center justify-center'}`}>
+                    {lead.notes && lead.notes.length > 0 ? (
+                      <>
+                        <p className="text-[9px] text-gray-600 dark:text-gray-300 font-medium line-clamp-2 leading-snug italic w-full text-left">
+                          "{lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].content}"
+                        </p>
+                        <div className="text-[8px] text-yellow-600/60 dark:text-yellow-500/60 font-bold text-right w-full mt-1">
+                          {new Date(lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                        </div>
+                      </>
+                    ) : (
+                      <span className="text-[9px] text-gray-400 font-medium italic">No notes yet</span>
+                    )}
+                  </div>
+
                   <button className="w-full py-2 rounded-lg bg-red-50 text-red-600 text-xs font-bold hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 transition-colors">
                     Reschedule
                   </button>

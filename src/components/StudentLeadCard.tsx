@@ -98,20 +98,24 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
 
 
 
-                {/* Latest Note Snippet */}
-                {lead.notes && lead.notes.length > 0 && (
-                    <div className="mb-4 bg-white dark:bg-gray-800/50 p-3 rounded-xl border-2 border-yellow-500 min-h-[60px] flex flex-col justify-between">
-                        <div className="flex gap-2 items-start mb-1">
-                            <StickyNote size={12} className="text-yellow-500 mt-0.5 shrink-0" />
-                            <p className="text-[10px] text-gray-600 dark:text-gray-300 font-medium line-clamp-2 leading-snug italic">
-                                "{lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].content}"
-                            </p>
-                        </div>
-                        <div className="text-[9px] text-yellow-600/60 dark:text-yellow-500/60 font-bold text-right">
-                            {new Date(lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                        </div>
-                    </div>
-                )}
+                {/* Latest Note Snippet (Always Visible) */}
+                <div className={`mb-4 bg-white dark:bg-gray-800/50 p-3 rounded-xl border-2 min-h-[60px] flex flex-col justify-between ${lead.notes && lead.notes.length > 0 ? 'border-yellow-500' : 'border-gray-100 dark:border-gray-800 items-center justify-center'}`}>
+                    {lead.notes && lead.notes.length > 0 ? (
+                        <>
+                            <div className="flex gap-2 items-start mb-1 w-full">
+                                <StickyNote size={12} className="text-yellow-500 mt-0.5 shrink-0" />
+                                <p className="text-[10px] text-gray-600 dark:text-gray-300 font-medium line-clamp-2 leading-snug italic text-left">
+                                    "{lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].content}"
+                                </p>
+                            </div>
+                            <div className="text-[9px] text-yellow-600/60 dark:text-yellow-500/60 font-bold text-right w-full">
+                                {new Date(lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                            </div>
+                        </>
+                    ) : (
+                        <span className="text-[10px] text-gray-400 font-medium italic">No notes yet</span>
+                    )}
+                </div>
 
                 {/* DATE TRACKING */}
                 <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800 grid grid-cols-1 gap-2">
