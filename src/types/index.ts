@@ -83,6 +83,18 @@ export interface AgencyContact {
   notes?: string;    // NEW
 }
 
+export interface OnboardingChecklist {
+  agreementSent: boolean;
+  agreementSigned: boolean;
+  applicationAccountCreated: boolean;
+  schoolPriceListSent: boolean;
+  schoolProfilesSent: boolean;
+  addedMarketingList: boolean;
+  agentHandbookSent: boolean;
+  studentHandbookSent: boolean;
+  commissionRequestFormSent: boolean;
+}
+
 export interface Agency {
   id: number;
   name: string;
@@ -117,6 +129,7 @@ export interface Agency {
   duration?: string[]; // e.g. ["Short Term", "Academic Year"]
   targetCountries?: string[]; // e.g. ["USA", "Canada"]
   recruitingCountries?: string[]; // NEW: Countries recruited from
+  onboardingChecklist?: OnboardingChecklist; // NEW
 
   createdAt?: string; // NEW: ISO Date Added
   lastContactDate: string; // ISO

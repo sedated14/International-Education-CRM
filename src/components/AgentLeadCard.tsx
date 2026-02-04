@@ -2,6 +2,7 @@ import React from 'react';
 import { Lead } from '../types';
 import { Globe, MapPin, StickyNote, Calendar, Clock } from 'lucide-react';
 import Link from 'next/link';
+import { useLeads } from '../context/LeadContext';
 
 interface Props {
     lead: Lead;
@@ -10,9 +11,37 @@ interface Props {
 export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
     if (lead.type !== 'Agent') return null;
 
+    const { updateLead } = useLeads();
+
     const latestNote = lead.notes && lead.notes.length > 0
         ? lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0]
         : null;
+
+    const defaultChecklist = {
+        agreementSent: false,
+        agreementSigned: false,
+        applicationAccountCreated: false,
+        schoolPriceListSent: false,
+        schoolProfilesSent: false,
+        addedMarketingList: false,
+        agentHandbookSent: false,
+        studentHandbookSent: false,
+        commissionRequestFormSent: false
+    };
+
+    const toggleChecklist = (key: string) => {
+        if (!lead.agencyProfile) return;
+        const currentList = lead.agencyProfile.onboardingChecklist || defaultChecklist;
+        updateLead(lead.id, {
+            agencyProfile: {
+                ...lead.agencyProfile,
+                onboardingChecklist: {
+                    ...currentList,
+                    [key]: !currentList[key as keyof typeof currentList]
+                }
+            }
+        });
+    };
 
     return (
         <div className="bg-white dark:bg-gray-900 rounded-[24px] border-4 border-blue-500 shadow-sm hover:shadow-md cursor-pointer transition-all group h-full flex flex-col overflow-hidden">
@@ -69,6 +98,48 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
                 ) : (
                     <div className="mb-4 bg-white dark:bg-gray-800/50 p-3 rounded-xl border-2 border-gray-100 dark:border-gray-800 flex items-center justify-center min-h-[60px]">
                         <span className="text-[10px] text-gray-400 font-medium italic">No notes yet</span>
+                    </div>
+                )}
+
+                {/* Onboarding Checklist */}
+                {lead.agencyProfile && (
+                    <div className="mb-4 bg-white dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-800">
+                        <div className="flex items-center gap-2 mb-2 px-1">
+                            <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+                            <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Onboarding</h4>
+                        </div>
+                        <div className="grid grid-cols-1 gap-1.5 bg-gray-50 dark:bg-gray-800/80 p-2 rounded-lg">
+                            {[
+                                { key: 'agreementSent', label: 'Agreement Sent' },
+                                { key: 'agreementSigned', label: 'Agreement Signed' },
+                                { key: 'applicationAccountCreated', label: 'App Account Created' },
+                                { key: 'schoolPriceListSent', label: 'Price List Sent' },
+                                { key: 'schoolProfilesSent', label: 'Profiles Sent' },
+                                { key: 'addedMarketingList', label: 'Added to Marketing' },
+                                { key: 'agentHandbookSent', label: 'Agent Handbook' },
+                                { key: 'studentHandbookSent', label: 'Student Handbook' },
+                                { key: 'commissionRequestFormSent', label: 'Comm. Form Sent' }
+                            ].map(item => {
+                                const isChecked = lead.agencyProfile!.onboardingChecklist?.[item.key as keyof typeof lead.agencyProfile.onboardingChecklist] || false;
+                                return (
+                                    <div
+                                        key={item.key}
+                                        className="flex items-center gap-2 cursor-pointer group/check"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            toggleChecklist(item.key);
+                                        }}
+                                    >
+                                        <div className={`w-3 h-3 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-emerald-500 border-emerald-500' : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 group-hover/check:border-blue-400'}`}>
+                                            {isChecked && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
+                                        </div>
+                                        <span className={`text-[9px] font-bold transition-colors ${isChecked ? 'text-gray-700 dark:text-gray-200' : 'text-gray-400 dark:text-gray-500 group-hover/check:text-blue-500'}`}>
+                                            {item.label}
+                                        </span>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                 )}
 

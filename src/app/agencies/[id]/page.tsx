@@ -356,6 +356,61 @@ export default function AgencyProfilePage() {
                     {/* Sidebar Column */}
                     <div className="space-y-6">
 
+                        {/* Onboarding Checklist Sidebar */}
+                        <div className="bg-white dark:bg-gray-900 rounded-[32px] p-8 border border-gray-100 dark:border-gray-800 shadow-sm">
+                            <h2 className="text-xl font-black text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                                <div className="h-2 w-2 rounded-full bg-blue-500" />
+                                Onboarding
+                            </h2>
+                            <div className="space-y-3">
+                                {[
+                                    { key: 'agreementSent', label: 'Agreement Sent' },
+                                    { key: 'agreementSigned', label: 'Agreement Signed' },
+                                    { key: 'applicationAccountCreated', label: 'App Account Created' },
+                                    { key: 'schoolPriceListSent', label: 'School Price List Sent' },
+                                    { key: 'schoolProfilesSent', label: 'School Profiles Sent' },
+                                    { key: 'addedMarketingList', label: 'Added to Marketing List' },
+                                    { key: 'agentHandbookSent', label: 'Agent Handbook Sent' },
+                                    { key: 'studentHandbookSent', label: 'Student Handbook Sent' },
+                                    { key: 'commissionRequestFormSent', label: 'Comm. Request Form Sent' }
+                                ].map(item => {
+                                    const isChecked = agency.onboardingChecklist?.[item.key as keyof typeof agency.onboardingChecklist] || false;
+                                    return (
+                                        <div
+                                            key={item.key}
+                                            className="flex items-center gap-3 cursor-pointer group/check p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                                            onClick={() => updateLead(agency.id, {
+                                                agencyProfile: {
+                                                    ...agency,
+                                                    onboardingChecklist: {
+                                                        ...(agency.onboardingChecklist || {
+                                                            agreementSent: false,
+                                                            agreementSigned: false,
+                                                            applicationAccountCreated: false,
+                                                            schoolPriceListSent: false,
+                                                            schoolProfilesSent: false,
+                                                            addedMarketingList: false,
+                                                            agentHandbookSent: false,
+                                                            studentHandbookSent: false,
+                                                            commissionRequestFormSent: false
+                                                        }),
+                                                        [item.key]: !isChecked
+                                                    }
+                                                }
+                                            })}
+                                        >
+                                            <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${isChecked ? 'bg-blue-500 border-blue-500' : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 group-hover/check:border-blue-400'}`}>
+                                                {isChecked && <div className="w-2.5 h-2.5 bg-white rounded-sm" />}
+                                            </div>
+                                            <span className={`text-sm font-bold transition-colors ${isChecked ? 'text-gray-900 dark:text-gray-200' : 'text-gray-500 dark:text-gray-400 group-hover/check:text-blue-600'}`}>
+                                                {item.label}
+                                            </span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
                         {/* Cultural & General Notes - ONLY Render if exists */}
                         {(agency.generalNotes || agency.culturalNotes) && (
                             <div className="bg-white dark:bg-gray-900 rounded-[32px] p-8 border border-gray-100 dark:border-gray-800 shadow-sm">
