@@ -316,7 +316,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                         <div className="bg-gray-50/80 dark:bg-gray-800/80 p-3 rounded-2xl border border-gray-100/60 dark:border-gray-700/60 h-full flex flex-col">
                             <p className="text-[9px] text-gray-400 dark:text-gray-500 font-black uppercase tracking-wider mb-1">Last Contacted</p>
                             {isEditing ? (
-                                <div className="flex gap-2">
+                                <div className="flex flex-col gap-1.5">
                                     <input
                                         type="date"
                                         className="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 text-[10px] font-bold w-full dark:text-white"
@@ -324,7 +324,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                         onChange={e => updateDateTime('lastContacted', 'date', e.target.value)}
                                     />
                                     <select
-                                        className="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 text-[10px] font-bold dark:text-white"
+                                        className="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 text-[10px] font-bold w-full dark:text-white"
                                         value={formData.lastContacted ? new Date(formData.lastContacted).getHours() : new Date().getHours()}
                                         onChange={e => updateDateTime('lastContacted', 'hour', e.target.value)}
                                     >
@@ -351,7 +351,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                     {!isEditing && <PenTool size={10} onClick={() => setIsEditing(true)} className="text-blue-300 dark:text-blue-400 opacity-0 group-hover:opacity-100 cursor-pointer" />}
                                 </div>
                                 {isEditing ? (
-                                    <div className="flex gap-2">
+                                    <div className="flex flex-col gap-1.5">
                                         <input
                                             type="date"
                                             className="bg-white dark:bg-gray-700 border border-blue-200 dark:border-blue-700 rounded-lg px-2 py-1 text-[10px] font-bold text-blue-900 dark:text-blue-100 w-full"
@@ -359,7 +359,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                             onChange={e => updateDateTime('followUpDate', 'date', e.target.value)}
                                         />
                                         <select
-                                            className="bg-white dark:bg-gray-700 border border-blue-200 dark:border-blue-700 rounded-lg px-2 py-1 text-[10px] font-bold text-blue-900 dark:text-blue-100"
+                                            className="bg-white dark:bg-gray-700 border border-blue-200 dark:border-blue-700 rounded-lg px-2 py-1 text-[10px] font-bold text-blue-900 dark:text-blue-100 w-full"
                                             value={formData.followUpDate ? new Date(formData.followUpDate).getHours() : 9}
                                             onChange={e => updateDateTime('followUpDate', 'hour', e.target.value)}
                                         >
