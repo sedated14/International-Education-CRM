@@ -170,7 +170,7 @@ export default function ApexCRM() {
                     </div>
 
                     {visibleChecklist && lead.type === 'Agent' ? (
-                      <div className="flex flex-col gap-1.5 mt-2 bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg border border-gray-100 dark:border-gray-800">
+                      <div className="flex flex-col gap-1.5 mt-2 bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg border border-blue-500">
                         {visibleChecklist.map((item) => {
                           // @ts-ignore
                           const isChecked = lead.agencyProfile?.onboardingChecklist?.[item.key] || false;
@@ -227,56 +227,112 @@ export default function ApexCRM() {
                 const dateB = b.followUpDate ? new Date(b.followUpDate).getTime() : new Date(b.createdAt).getTime() + (72 * 60 * 60 * 1000);
                 return dateA - dateB; // Oldest first (most overdue)
               })
-              .map(lead => (
-                <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)} className={`bg-white dark:bg-gray-900 p-4 rounded-[20px] border-4 shadow-sm hover:shadow-md cursor-pointer transition-all group mb-2 ${lead.type === 'Student' ? 'border-emerald-500 hover:border-emerald-600' : 'border-blue-500 hover:border-blue-600'}`}>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.type === 'Student' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' : 'bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'}`}>
-                      {lead.type === 'Student' ? lead.status : 'Pending'}
-                    </span>
-                    <span className="text-[10px] font-bold text-red-500 dark:text-red-400">
-                      {lead.followUpDate
-                        ? new Date(lead.followUpDate).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric' })
-                        : 'Overdue (72h)'
-                      }
-                    </span>
-                  </div>
-                  <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1">{lead.type === 'Student' ? lead.studentName : lead.agentName}</h3>
-                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-1">
-                    {lead.type === 'Student' ? `${lead.status}: Student - ${lead.country}` : lead.title}
-                  </p>
+              .map(lead => {
+                // Smart Checklist Logic for Agent Leads (Same as Follow Up)
+                let visibleChecklist = null;
+                if (lead.type === 'Agent' && lead.agencyProfile) {
+                  const checklistItems = [
+                    { key: 'agreementSent', label: 'Agreement Sent' },
+                    { key: 'agreementSigned', label: 'Agreement Signed' },
+                    { key: 'applicationAccountCreated', label: 'App Account Created' },
+                    { key: 'schoolPriceListSent', label: 'Price List Sent' },
+                    { key: 'schoolProfilesSent', label: 'Profiles Sent' },
+                    { key: 'addedMarketingList', label: 'Added to Marketing' },
+                    { key: 'agentHandbookSent', label: 'Agent Handbook' },
+                    { key: 'studentHandbookSent', label: 'Student Handbook' },
+                    { key: 'commissionRequestFormSent', label: 'Comm. Form Sent' }
+                  ];
 
-                  {lead.type === 'Student' && lead.agencyProfile && (
-                    <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 px-2 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 w-full mb-3">
-                      <span className="text-gray-400 font-extrabold text-[8px] uppercase tracking-wider shrink-0">SO:</span>
-                      <div className="flex flex-wrap items-center gap-1 font-bold">
-                        <span className="text-gray-900 dark:text-gray-200">{lead.agencyProfile.name}</span>
-                        <span className="text-gray-300 dark:text-gray-600">•</span>
-                        <span className="text-gray-500 dark:text-gray-400 font-medium">{lead.agencyProfile.country}</span>
-                      </div>
+                  const checklist = lead.agencyProfile.onboardingChecklist || {};
+                  // @ts-ignore
+                  const lastCheckedIndex = checklistItems.findLastIndex(item => checklist[item.key]);
+
+                  let startIndex = lastCheckedIndex === -1 ? 0 : lastCheckedIndex;
+                  if (startIndex > checklistItems.length - 3) startIndex = Math.max(0, checklistItems.length - 3);
+                  visibleChecklist = checklistItems.slice(startIndex, startIndex + 3);
+                }
+
+                return (
+                  <div key={lead.id} onClick={() => setSelectedLeadId(lead.id)} className={`bg-white dark:bg-gray-900 p-4 rounded-[20px] border-4 shadow-sm hover:shadow-md cursor-pointer transition-all group mb-2 ${lead.type === 'Student' ? 'border-emerald-500 hover:border-emerald-600' : 'border-blue-500 hover:border-blue-600'}`}>
+                    <div className="flex justify-between items-center mb-2">
+                      <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded ${lead.type === 'Student' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' : 'bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'}`}>
+                        {lead.type === 'Student' ? lead.status : 'Pending'}
+                      </span>
+                      <span className="text-[10px] font-bold text-red-500 dark:text-red-400">
+                        {lead.followUpDate
+                          ? new Date(lead.followUpDate).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric' })
+                          : 'Overdue (72h)'
+                        }
+                      </span>
                     </div>
-                  )}
+                    <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1">{lead.type === 'Student' ? lead.studentName : lead.agentName}</h3>
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-1">
+                      {lead.type === 'Student' ? `${lead.status}: Student - ${lead.country}` : lead.title}
+                    </p>
 
-                  {/* Note Snippet (Always Visible) */}
-                  <div className={`mb-3 bg-gray-50 dark:bg-gray-800/30 p-2 rounded-lg border min-h-[50px] flex flex-col justify-between ${lead.notes && lead.notes.length > 0 ? 'border-yellow-500/50' : 'border-gray-100 dark:border-gray-800 items-center justify-center'}`}>
-                    {lead.notes && lead.notes.length > 0 ? (
-                      <>
-                        <p className="text-[9px] text-gray-600 dark:text-gray-300 font-medium line-clamp-2 leading-snug italic w-full text-left">
-                          "{lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].content}"
-                        </p>
-                        <div className="text-[8px] text-yellow-600/60 dark:text-yellow-500/60 font-bold text-right w-full mt-1">
-                          {new Date(lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                    {lead.type === 'Student' && lead.agencyProfile && (
+                      <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 px-2 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 w-full mb-3">
+                        <span className="text-gray-400 font-extrabold text-[8px] uppercase tracking-wider shrink-0">SO:</span>
+                        <div className="flex flex-wrap items-center gap-1 font-bold">
+                          <span className="text-gray-900 dark:text-gray-200">{lead.agencyProfile.name}</span>
+                          <span className="text-gray-300 dark:text-gray-600">•</span>
+                          <span className="text-gray-500 dark:text-gray-400 font-medium">{lead.agencyProfile.country}</span>
                         </div>
-                      </>
-                    ) : (
-                      <span className="text-[9px] text-gray-400 font-medium italic">No notes yet</span>
+                      </div>
                     )}
-                  </div>
 
-                  <button className="w-full py-2 rounded-lg bg-red-50 text-red-600 text-xs font-bold hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 transition-colors">
-                    Reschedule
-                  </button>
-                </div>
-              ))}
+                    {/* Note Snippet (Always Visible) */}
+                    <div className={`mb-3 bg-gray-50 dark:bg-gray-800/30 p-2 rounded-lg border min-h-[50px] flex flex-col justify-between ${lead.notes && lead.notes.length > 0 ? 'border-yellow-500/50' : 'border-gray-100 dark:border-gray-800 items-center justify-center'}`}>
+                      {lead.notes && lead.notes.length > 0 ? (
+                        <>
+                          <p className="text-[9px] text-gray-600 dark:text-gray-300 font-medium line-clamp-2 leading-snug italic w-full text-left">
+                            "{lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].content}"
+                          </p>
+                          <div className="text-[8px] text-yellow-600/60 dark:text-yellow-500/60 font-bold text-right w-full mt-1">
+                            {new Date(lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                          </div>
+                        </>
+                      ) : (
+                        <span className="text-[9px] text-gray-400 font-medium italic">No notes yet</span>
+                      )}
+                    </div>
+
+                    {visibleChecklist && lead.type === 'Agent' ? (
+                      <div className="flex flex-col gap-1.5 mt-2 bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg border border-blue-500">
+                        {visibleChecklist.map((item) => {
+                          // @ts-ignore
+                          const isChecked = lead.agencyProfile?.onboardingChecklist?.[item.key] || false;
+                          return (
+                            <div
+                              key={item.key}
+                              className="flex items-center gap-2"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (!lead.agencyProfile) return;
+                                const currentList = lead.agencyProfile.onboardingChecklist || ({} as any);
+                                updateLead(lead.id, {
+                                  agencyProfile: {
+                                    ...lead.agencyProfile,
+                                    onboardingChecklist: {
+                                      ...currentList,
+                                      [item.key]: !isChecked
+                                    }
+                                  }
+                                });
+                              }}
+                            >
+                              <div className={`w-3 h-3 rounded border flex items-center justify-center ${isChecked ? 'bg-blue-500 border-blue-500' : 'bg-white border-gray-300 dark:border-gray-600'}`}>
+                                {isChecked && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
+                              </div>
+                              <span className={`text-[10px] font-bold ${isChecked ? 'text-gray-900 dark:text-gray-200' : 'text-gray-400'}`}>{item.label}</span>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    ) : null}
+                  </div>
+                )
+              })
           </LeadColumn>
 
         </div>

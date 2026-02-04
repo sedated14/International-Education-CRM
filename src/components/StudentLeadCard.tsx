@@ -118,7 +118,7 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
                 </div>
 
                 {/* DATE TRACKING */}
-                <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800 grid grid-cols-1 gap-2">
+                <div className="mt-4 pt-4 border-t border-emerald-500 grid grid-cols-1 gap-2">
                     <div className="flex justify-between items-center text-[10px]">
                         <span className="text-gray-400 font-bold uppercase tracking-wider">Received</span>
                         <span className="font-bold text-gray-500 dark:text-gray-400">{new Date(lead.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric' })}</span>

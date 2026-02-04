@@ -85,7 +85,7 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
 
                 {/* Onboarding Checklist */}
                 {lead.agencyProfile && (
-                    <div className="mb-4 bg-white dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-800">
+                    <div className="mb-4 bg-white dark:bg-gray-800/50 p-3 rounded-xl border-2 border-blue-500">
                         <div className="flex items-center gap-2 mb-2 px-1">
                             <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />
                             <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Onboarding</h4>
