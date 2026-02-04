@@ -117,8 +117,11 @@ export default function ApexCRM() {
 
                   const checklist = lead.agencyProfile.onboardingChecklist || {};
 
-                  // Filter for only unselected items
-                  const unselectedItems = checklistItems.filter(item => !checklist[item.key as keyof typeof checklist]);
+                  // Filter for only unselected items (explicitly check against true)
+                  const unselectedItems = checklistItems.filter(item => {
+                    const val = checklist[item.key as keyof typeof checklist];
+                    return val !== true;
+                  });
 
                   // Show top 3 unselected
                   visibleChecklist = unselectedItems.slice(0, 3);
@@ -251,8 +254,11 @@ export default function ApexCRM() {
 
                   const checklist = lead.agencyProfile.onboardingChecklist || {};
 
-                  // Filter for only unselected items
-                  const unselectedItems = checklistItems.filter(item => !checklist[item.key as keyof typeof checklist]);
+                  // Filter for only unselected items (explicitly check against true)
+                  const unselectedItems = checklistItems.filter(item => {
+                    const val = checklist[item.key as keyof typeof checklist];
+                    return val !== true;
+                  });
 
                   // Show top 3 unselected
                   visibleChecklist = unselectedItems.slice(0, 3);
