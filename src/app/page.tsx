@@ -117,14 +117,19 @@ export default function ApexCRM() {
 
                   const checklist = lead.agencyProfile.onboardingChecklist || {};
 
-                  // Filter for only unselected items (explicitly check against true)
-                  const unselectedItems = checklistItems.filter(item => {
-                    const val = checklist[item.key as keyof typeof checklist];
-                    return val !== true;
-                  });
+                  // @ts-ignore
+                  const unselected = checklistItems.filter(item => checklist[item.key] !== true);
+                  // @ts-ignore
+                  const selected = checklistItems.filter(item => checklist[item.key] === true);
 
-                  // Show top 3 unselected
-                  visibleChecklist = unselectedItems.slice(0, 3);
+                  // Logic: Show unselected first. If < 3, fill with selected.
+                  visibleChecklist = [...unselected, ...selected].slice(0, 3);
+
+                  // Flag for "All Items Completed" message
+                  if (unselected.length === 0 && checklistItems.length > 0) {
+                    // @ts-ignore
+                    lead.allOnboardingCompleted = true; // Hack to pass this to render without refactoring 'map' return type too much
+                  }
                 }
 
                 return (
@@ -180,6 +185,13 @@ export default function ApexCRM() {
 
                     {visibleChecklist && visibleChecklist.length > 0 && lead.type === 'Agent' ? (
                       <div className="flex flex-col gap-1.5 mt-2 bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg border border-blue-500">
+                        {/* @ts-ignore */}
+                        {lead.allOnboardingCompleted && (
+                          <div className="flex items-center gap-1.5 pb-1.5 mb-1 border-b border-gray-200 dark:border-gray-700">
+                            <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                            <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">All Items Completed</span>
+                          </div>
+                        )}
                         {visibleChecklist.map((item) => {
                           // @ts-ignore
                           const isChecked = lead.agencyProfile?.onboardingChecklist?.[item.key] || false;
@@ -254,14 +266,19 @@ export default function ApexCRM() {
 
                   const checklist = lead.agencyProfile.onboardingChecklist || {};
 
-                  // Filter for only unselected items (explicitly check against true)
-                  const unselectedItems = checklistItems.filter(item => {
-                    const val = checklist[item.key as keyof typeof checklist];
-                    return val !== true;
-                  });
+                  // @ts-ignore
+                  const unselected = checklistItems.filter(item => checklist[item.key] !== true);
+                  // @ts-ignore
+                  const selected = checklistItems.filter(item => checklist[item.key] === true);
 
-                  // Show top 3 unselected
-                  visibleChecklist = unselectedItems.slice(0, 3);
+                  // Logic: Show unselected first. If < 3, fill with selected.
+                  visibleChecklist = [...unselected, ...selected].slice(0, 3);
+
+                  // Flag for "All Items Completed" message
+                  if (unselected.length === 0 && checklistItems.length > 0) {
+                    // @ts-ignore
+                    lead.allOnboardingCompleted = true;
+                  }
                 }
 
                 return (
@@ -317,6 +334,13 @@ export default function ApexCRM() {
 
                     {visibleChecklist && visibleChecklist.length > 0 && lead.type === 'Agent' ? (
                       <div className="flex flex-col gap-1.5 mt-2 bg-gray-50 dark:bg-gray-800/50 p-2 rounded-lg border border-blue-500">
+                        {/* @ts-ignore */}
+                        {lead.allOnboardingCompleted && (
+                          <div className="flex items-center gap-1.5 pb-1.5 mb-1 border-b border-gray-200 dark:border-gray-700">
+                            <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                            <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">All Items Completed</span>
+                          </div>
+                        )}
                         {visibleChecklist.map((item) => {
                           // @ts-ignore
                           const isChecked = lead.agencyProfile?.onboardingChecklist?.[item.key] || false;
