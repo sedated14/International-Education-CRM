@@ -108,22 +108,6 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
                                     !lead.agencyProfile!.onboardingChecklist?.[item.key as keyof typeof lead.agencyProfile.onboardingChecklist]
                                 );
 
-                                // Logic: If even 1 is unchecked, show WHOLE list (checked and unchecked).
-                                // If all checked, show "All Tasks Complete".
-
-                                if (unselectedItems.length === 0) {
-                                    return (
-                                        <div className="flex items-center gap-2 justify-center py-2">
-                                            <div className="w-4 h-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
-                                                <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                            </div>
-                                            <span className="text-[10px] font-bold text-emerald-600">All Tasks Complete</span>
-                                        </div>
-                                    );
-                                }
-
                                 // Show ALL items (checklistOrder)
                                 return checklistOrder.map(item => {
                                     const isChecked = lead.agencyProfile!.onboardingChecklist?.[item.key as keyof typeof lead.agencyProfile.onboardingChecklist] || false;
