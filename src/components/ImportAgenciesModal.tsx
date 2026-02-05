@@ -1,10 +1,10 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Upload, FileSpreadsheet, ArrowRight, Check, AlertCircle, Database } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { useLeads } from '../context/LeadContext';
 import { Agency } from '../types';
 import { COUNTRIES } from '../data/countries';
+import { getTimezoneForLocation } from '../utils/timezoneUtils';
 
 interface Props {
     onClose: () => void;
@@ -13,9 +13,11 @@ interface Props {
 // Map logical names to data keys
 const CRM_FIELDS = [
     { key: 'agencyName', label: 'Agency Name', required: true },
+    { key: 'status', label: 'Status' },
     { key: 'country', label: 'Country' },
     { key: 'region', label: 'Region/Continent' },
     { key: 'city', label: 'City' },
+    { key: 'language', label: 'Language' },
     { key: 'contactFirstName', label: 'Contact First Name' },
     { key: 'contactLastName', label: 'Contact Last Name' },
     { key: 'nickname', label: 'Nickname' },
@@ -75,10 +77,12 @@ export const ImportAgenciesModal: React.FC<Props> = ({ onClose }) => {
                     const lower = h.toLowerCase().replace(/[^a-z0-9]/g, '');
 
                     if (lower.includes('agencyname') || lower === 'company') initialMap[h] = 'agencyName';
-                    else if (lower.includes('website') || lower.includes('web')) initialMap[h] = 'website';
+                    else if (lower === 'status' || lower === 'state') initialMap[h] = 'status';
+                    else if (lower.includes('website') || lower.includes('web') || lower === 'url') initialMap[h] = 'website';
                     else if (lower === 'city') initialMap[h] = 'city';
                     else if (lower === 'country') initialMap[h] = 'country';
                     else if (lower.includes('region') || lower.includes('continent')) initialMap[h] = 'region';
+                    else if (lower.includes('language') || lower === 'lang') initialMap[h] = 'language';
 
                     // Contact 1
                     else if (lower.includes('contactfirstname')) initialMap[h] = 'contactFirstName';
@@ -196,6 +200,28 @@ export const ImportAgenciesModal: React.FC<Props> = ({ onClose }) => {
                 });
             }
 
+            // Determine Status
+            let finalStatus = globalStatus;
+            if (mappedData.status) {
+                const s = String(mappedData.status).toLowerCase().trim();
+                // Map common terms to CRM values
+                if (s === 'active') finalStatus = 'Active';
+                else if (s === 'inactive') finalStatus = 'Inactive';
+                else if (s === 'pending') finalStatus = 'Pending';
+                else if (s === 'do not contact' || s === 'dnc' || s === 'blocked') finalStatus = 'Do Not Contact';
+                else if (s === 'prospective') finalStatus = 'Prospective';
+                else if (s === 'new') finalStatus = 'Prospective'; // Default matches
+            }
+
+            // Determine Timezone
+            let finalTimezone = mappedData.timezone || '';
+            if (!finalTimezone && mappedData.country) {
+                finalTimezone = getTimezoneForLocation(mappedData.country, mappedData.city);
+            }
+
+            // Determine Language (Conditional)
+            let finalLanguage = mappedData.language || '';
+
             // Initialize or Merge
             if (!groupedLeads[normalizedName]) {
                 groupedLeads[normalizedName] = {
@@ -211,10 +237,10 @@ export const ImportAgenciesModal: React.FC<Props> = ({ onClose }) => {
                         city: mappedData.city || '',
                         region: mappedData.region || '',
                         address: mappedData.address || '',
-                        partnershipStatus: globalStatus,
+                        partnershipStatus: finalStatus,
                         commissionRate: '',
-                        timezone: '',
-                        language: 'English',
+                        timezone: finalTimezone,
+                        language: finalLanguage,
                         metAt: mappedData.metAt || '',
                         keyContacts: [] // Will fill below
                     }
