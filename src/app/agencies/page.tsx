@@ -381,7 +381,7 @@ export default function AgenciesPage() {
                     </div>
                     {/* Scrollable Table Area */}
                     <div className="flex-1 overflow-auto px-8 pb-8 min-h-0 custom-scrollbar">
-                        <div className="bg-white dark:bg-gray-900 rounded-[32px] shadow-sm border border-gray-100 dark:border-gray-800">
+                        <div className="bg-white dark:bg-gray-900 rounded-[32px] shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden min-w-full inline-block align-middle">
                             <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="bg-gray-50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800 text-xs uppercase tracking-wider text-gray-400 font-bold cursor-pointer select-none sticky top-0 z-10 backdrop-blur-md bg-opacity-90">
