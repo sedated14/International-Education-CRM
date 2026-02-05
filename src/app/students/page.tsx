@@ -389,17 +389,22 @@ export default function StudentsPage() {
                                         </td>
                                         <td className="px-6 py-5 text-right">
                                             {student.agencyId ? (
-                                                <>
-                                                    <div className="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md inline-block">
-                                                        Agency
-                                                    </div>
-                                                    <div className="text-xs mt-1 font-bold text-blue-600 dark:text-blue-400">
+                                                <div className="flex flex-col items-end">
+                                                    <div className="text-sm font-bold text-blue-600 dark:text-blue-400">
                                                         {student.agencyName}
                                                     </div>
-                                                </>
+                                                    <div className="text-[10px] uppercase font-bold text-gray-400">
+                                                        Agency
+                                                    </div>
+                                                </div>
                                             ) : (
-                                                <div className="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md inline-block">
-                                                    Independent
+                                                <div className="flex flex-col items-end">
+                                                    <div className="text-sm font-bold text-gray-900 dark:text-white">
+                                                        Independent
+                                                    </div>
+                                                    <div className="text-[10px] uppercase font-bold text-gray-400">
+                                                        Source
+                                                    </div>
                                                 </div>
                                             )}
                                         </td>
