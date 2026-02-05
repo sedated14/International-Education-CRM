@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Navigation } from '../../../components/Navigation';
 import { Agency } from '../../../types';
 import { useLeads } from '../../../context/LeadContext';
-import { ArrowLeft, User, Phone, Mail, MapPin, Globe, Calendar, DollarSign, Award, BookOpen, MessageCircle, GraduationCap, Eye, ChevronRight } from 'lucide-react';
+import { ArrowLeft, User, Phone, Mail, MapPin, Globe, Calendar, DollarSign, Award, BookOpen, MessageCircle, GraduationCap, Eye, ChevronRight, Send } from 'lucide-react';
 import Link from 'next/link';
 import { LeadDetailModal } from '../../../components/LeadDetailModal';
 
@@ -37,6 +37,24 @@ export default function AgencyProfilePage() {
     // State for Quick View
     const [selectedStudentId, setSelectedStudentId] = useState<string | number | null>(null);
     const selectedStudent = leads.find(l => l.id === selectedStudentId) || null;
+
+    // Quick Note State
+    const [quickNote, setQuickNote] = useState('');
+
+    const handleAddNote = () => {
+        if (!quickNote.trim() || !agency) return;
+
+        const newNote = {
+            id: Date.now().toString(),
+            content: quickNote,
+            timestamp: new Date().toISOString()
+        };
+
+        const updatedNotes = [...(foundLead?.notes || []), newNote];
+
+        updateLead(agency.id, { notes: updatedNotes });
+        setQuickNote('');
+    };
 
     // Helper to calculate time
     const getTime = (zone: string) => {
@@ -251,6 +269,26 @@ export default function AgencyProfilePage() {
                                             <MessageCircle size={14} className="text-yellow-500" />
                                             Notes & History
                                         </h3>
+
+                                        {/* Quick Add Note Input */}
+                                        <div className="mb-6 bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700">
+                                            <textarea
+                                                value={quickNote}
+                                                onChange={(e) => setQuickNote(e.target.value)}
+                                                placeholder="Type a new note here..."
+                                                className="w-full bg-transparent border-0 outline-none text-sm font-medium text-gray-900 dark:text-white placeholder:text-gray-400 min-h-[60px] resize-none mb-2"
+                                            />
+                                            <div className="flex justify-end">
+                                                <button
+                                                    onClick={handleAddNote}
+                                                    disabled={!quickNote.trim()}
+                                                    className="bg-black dark:bg-white text-white dark:text-black px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                                >
+                                                    <Send size={12} /> Add Note
+                                                </button>
+                                            </div>
+                                        </div>
+
                                         <div className="space-y-4">
                                             {foundLead?.notes && foundLead.notes.length > 0 ? (
                                                 <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto custom-scrollbar pr-2">
