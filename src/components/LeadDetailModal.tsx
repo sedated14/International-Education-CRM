@@ -736,35 +736,39 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                     }));
                                                 }}
                                             />
-                                            <PhoneInput
-                                                label="Phone"
-                                                value={formData.agencyProfile?.keyContacts?.[0]?.phone || ''}
-                                                onChange={v => {
-                                                    const contacts = [...(formData.agencyProfile?.keyContacts || [])];
-                                                    if (!contacts[0]) contacts[0] = {};
-                                                    contacts[0].phone = v;
-                                                    setFormData((prev: any) => ({
-                                                        ...prev,
-                                                        agencyProfile: { ...prev.agencyProfile, keyContacts: contacts }
-                                                    }));
-                                                }}
-                                                defaultCountry={lead?.agencyProfile?.country}
-                                            />
-                                            <PhoneInput
-                                                label="WhatsApp"
-                                                icon={<MessageCircle size={16} />}
-                                                value={formData.agencyProfile?.keyContacts?.[0]?.whatsapp || ''}
-                                                onChange={v => {
-                                                    const contacts = [...(formData.agencyProfile?.keyContacts || [])];
-                                                    if (!contacts[0]) contacts[0] = {};
-                                                    contacts[0].whatsapp = v;
-                                                    setFormData((prev: any) => ({
-                                                        ...prev,
-                                                        agencyProfile: { ...prev.agencyProfile, keyContacts: contacts }
-                                                    }));
-                                                }}
-                                                defaultCountry={lead?.agencyProfile?.country}
-                                            />
+                                            <div className="col-span-2">
+                                                <PhoneInput
+                                                    label="Phone"
+                                                    value={formData.agencyProfile?.keyContacts?.[0]?.phone || ''}
+                                                    onChange={v => {
+                                                        const contacts = [...(formData.agencyProfile?.keyContacts || [])];
+                                                        if (!contacts[0]) contacts[0] = {};
+                                                        contacts[0].phone = v;
+                                                        setFormData((prev: any) => ({
+                                                            ...prev,
+                                                            agencyProfile: { ...prev.agencyProfile, keyContacts: contacts }
+                                                        }));
+                                                    }}
+                                                    defaultCountry={lead?.agencyProfile?.country}
+                                                />
+                                            </div>
+                                            <div className="col-span-2">
+                                                <PhoneInput
+                                                    label="WhatsApp"
+                                                    icon={<MessageCircle size={16} />}
+                                                    value={formData.agencyProfile?.keyContacts?.[0]?.whatsapp || ''}
+                                                    onChange={v => {
+                                                        const contacts = [...(formData.agencyProfile?.keyContacts || [])];
+                                                        if (!contacts[0]) contacts[0] = {};
+                                                        contacts[0].whatsapp = v;
+                                                        setFormData((prev: any) => ({
+                                                            ...prev,
+                                                            agencyProfile: { ...prev.agencyProfile, keyContacts: contacts }
+                                                        }));
+                                                    }}
+                                                    defaultCountry={lead?.agencyProfile?.country}
+                                                />
+                                            </div>
                                             <Input
                                                 label="Skype"
                                                 value={formData.agencyProfile?.keyContacts?.[0]?.skype}

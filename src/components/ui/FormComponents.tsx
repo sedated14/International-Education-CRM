@@ -62,7 +62,14 @@ export interface PhoneInputProps {
     icon?: React.ReactNode;
 }
 
-import { AsYouType, CountryCode, validatePhoneNumberLength, parsePhoneNumber } from 'libphonenumber-js';
+import {
+    AsYouType,
+    CountryCode,
+    validatePhoneNumberLength,
+    parsePhoneNumber,
+    getExampleNumber
+} from 'libphonenumber-js';
+import examples from 'libphonenumber-js/examples.mobile.json';
 
 // ... Imports ...
 
@@ -159,33 +166,19 @@ export const PhoneInput = ({ label, value = '', onChange, defaultCountry, requir
             return;
         }
 
-        // 2. Check Strict Validity Transition
-        // We only strictly block if we were VALID and now we are INVALID
-        // AND we are adding characters.
-
-        let wasValid = false;
-        let isValid = false;
-
-        try {
-            if (currentDigits.length > 3) {
-                const parsedOld = parsePhoneNumber(currentDigits, selectedIso);
-                wasValid = parsedOld && parsedOld.isValid();
+        // 2. Strict "Max Length" Enforcement based on Standard National Mobile Number
+        // We fetch an example number for the country (e.g. AU: 0412 345 678 -> 10 digits, HK: 5123 4567 -> 8 digits)
+        // and strictly block any input longer than that. This solves the issue where
+        // libphonenumber-js is too permissive for some countries (returning "matches potential valid" for 11+ digits in AU/HK).
+        const example = getExampleNumber(selectedIso, examples);
+        if (example) {
+            const exampleLength = example.formatNational().replace(/[^0-9]/g, '').length;
+            if (digits.length > exampleLength) {
+                return;
             }
-        } catch (e) { wasValid = false; }
-
-        try {
-            if (digits.length > 3) {
-                const parsedNew = parsePhoneNumber(digits, selectedIso);
-                isValid = parsedNew && parsedNew.isValid();
-            }
-        } catch (e) { isValid = false; }
-
-        if (wasValid && !isValid) {
-            // Block transition from Valid -> Invalid
-            return;
         }
 
-        // 3. Fallback: Block "Too Long" based on library metadata
+        // 3. Fallback: Block "Too Long" based on library metadata (for countries where example might fail?)
         const validationResult = validatePhoneNumberLength(digits, selectedIso);
         if (validationResult === 'TOO_LONG') {
             return;
