@@ -62,7 +62,7 @@ export interface PhoneInputProps {
     icon?: React.ReactNode;
 }
 
-import { AsYouType, CountryCode, validatePhoneNumberLength } from 'libphonenumber-js';
+import { AsYouType, CountryCode, validatePhoneNumberLength, parsePhoneNumber } from 'libphonenumber-js';
 
 // ... Imports ...
 
@@ -145,50 +145,55 @@ export const PhoneInput = ({ label, value = '', onChange, defaultCountry, requir
     };
 
     const handleNumberChange = (input: string) => {
-        // Input is the raw typing in the field
-
-        // Strip non-digit chars to check raw length validity against the country
         const digits = input.replace(/[^0-9]/g, '');
+        const currentDigits = phoneNumber.replace(/[^0-9]/g, '');
 
-        // If we have digits, check length. 
-        // We need to be careful: validatePhoneNumberLength expects the full number *including* country code if we don't pass country, 
-        // OR the national number if we pass country? 
-        // Actually validatePhoneNumberLength(number, country) docs say: "checks if the phone number length is valid for this country"
-        // It is best to pass the full text (formatted or not) but AsYouType is robust.
-
-        // Let's rely on AsYouType to produce a formatted string, then check if it's "Too Long"
-        const asYouType = new AsYouType(selectedIso);
-        const formatted = asYouType.input(digits);
-
-        // Check validity of the POTENTIAL new number
-        // We use the digits to construct a number object or just check length
-        // validatePhoneNumberLength returns 'TOO_LONG' if it exceeds possible length
-
-        const validationResult = validatePhoneNumberLength(digits, selectedIso);
-
-        // If it's TOO_LONG, we should probably BLOCK the input, BUT:
-        // Case: User is deleting digits. We must always allow getting SHORTER.
-        // So we compare with current state? 
-        // Or simpler: We calculate the validation of the *new* input.
-
-        // If we are adding chars and it becomes TOO_LONG -> Block.
-        // If we are removing chars -> Allow.
-
-        // Problem: 'input' from onChange is the *new* value. 
-        // If it's shorter than previous 'phoneNumber', allow it.
-        if (input.length < phoneNumber.length) {
+        // 1. Allow deletion/shortening always
+        if (input.length < phoneNumber.length || digits.length < currentDigits.length) {
+            const asYouType = new AsYouType(selectedIso);
+            const formatted = asYouType.input(digits);
             setPhoneNumber(formatted);
-            // Update parent
+
             const match = COUNTRY_PHONE_CODES.find(c => c.iso === selectedIso);
             if (match) onChange(`${match.code} ${formatted}`);
             return;
         }
 
-        if (validationResult === 'TOO_LONG') {
-            // Block update (don't set state)
+        // 2. Check Strict Validity Transition
+        // We only strictly block if we were VALID and now we are INVALID
+        // AND we are adding characters.
+
+        let wasValid = false;
+        let isValid = false;
+
+        try {
+            if (currentDigits.length > 3) {
+                const parsedOld = parsePhoneNumber(currentDigits, selectedIso);
+                wasValid = parsedOld && parsedOld.isValid();
+            }
+        } catch (e) { wasValid = false; }
+
+        try {
+            if (digits.length > 3) {
+                const parsedNew = parsePhoneNumber(digits, selectedIso);
+                isValid = parsedNew && parsedNew.isValid();
+            }
+        } catch (e) { isValid = false; }
+
+        if (wasValid && !isValid) {
+            // Block transition from Valid -> Invalid
             return;
         }
 
+        // 3. Fallback: Block "Too Long" based on library metadata
+        const validationResult = validatePhoneNumberLength(digits, selectedIso);
+        if (validationResult === 'TOO_LONG') {
+            return;
+        }
+
+        // 4. Update
+        const asYouType = new AsYouType(selectedIso);
+        const formatted = asYouType.input(digits);
         setPhoneNumber(formatted);
 
         const match = COUNTRY_PHONE_CODES.find(c => c.iso === selectedIso);
