@@ -79,6 +79,7 @@ export const AgentLeadModal: React.FC<Props> = ({ onClose }) => {
                         isSubmitting={isSubmitting}
                         submitLabel="Create Lead"
                         cancelHref="#" // Override link behavior
+                        renderFooter={true}
                     />
                 </div>
             </div>

@@ -166,12 +166,12 @@ export default function AgencyProfilePage() {
 
                                 {/* Information Grid - Only show present fields */}
                                 <div className="grid grid-cols-2 gap-x-6 gap-y-8">
-                                    {agency.city && agency.country && (
+                                    {(agency.city || agency.country) && (
                                         <div>
                                             <h3 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1">Location</h3>
                                             <p className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
                                                 <MapPin size={16} className="text-gray-400 dark:text-gray-500" />
-                                                {agency.city}, {agency.country}
+                                                {agency.city}{agency.city && agency.country ? ', ' : ''}{agency.country}
                                             </p>
                                         </div>
                                     )}

@@ -60,20 +60,7 @@ export default function AddAgencyPage() {
                     <div className="flex-1" />
 
                     <div className="flex gap-4">
-                        <Link href="/agencies">
-                            <button className="px-6 py-3 rounded-xl font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                                Cancel
-                            </button>
-                        </Link>
-                        <button
-                            form="agency-form"
-                            type="submit"
-                            disabled={isSubmitting}
-                            className="px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-xl font-bold hover:bg-gray-900 dark:hover:bg-gray-200 transition-colors shadow-lg hover:shadow-xl flex items-center gap-2"
-                        >
-                            <Save size={18} />
-                            {isSubmitting ? 'Saving...' : 'Save Agency'}
-                        </button>
+                        {/* Actions moved to bottom of form */}
                     </div>
                 </header>
 
@@ -81,6 +68,7 @@ export default function AddAgencyPage() {
                     <AgencyForm
                         onSubmit={handleSubmit}
                         isSubmitting={isSubmitting}
+                        renderFooter={true}
                     />
                 </div>
 

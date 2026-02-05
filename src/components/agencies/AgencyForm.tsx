@@ -12,9 +12,10 @@ interface AgencyFormProps {
     isSubmitting: boolean;
     submitLabel?: string;
     cancelHref?: string;
+    renderFooter?: boolean;
 }
 
-export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 'Save Agency', cancelHref = '/agencies' }: AgencyFormProps) => {
+export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 'Save Agency', cancelHref = '/agencies', renderFooter = false }: AgencyFormProps) => {
 
     // Initial Form State
     const [formData, setFormData] = useState<Partial<Agency> & {
@@ -447,6 +448,41 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
                     </div>
                 </section>
             </div>
-        </form>
+
+
+            {/* OPTIONAL FOOTER */}
+            {
+                renderFooter && (
+                    <div className="fixed bottom-0 left-0 right-0 p-4 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 z-40 flex justify-end gap-4 shadow-xl-up animate-in slide-in-from-bottom-5">
+                        {cancelHref ? (
+                            <Link href={cancelHref}>
+                                <button
+                                    type="button"
+                                    className="px-6 py-3 rounded-xl font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                            </Link>
+                        ) : (
+                            <button
+                                type="button"
+                                onClick={() => { }} // Default cancel action if no href? Or just don't render? Using href for now.
+                                className="px-6 py-3 rounded-xl font-bold text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                            >
+                                Cancel
+                            </button>
+                        )}
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="px-8 py-3 bg-black dark:bg-white text-white dark:text-black rounded-xl font-bold hover:bg-gray-900 dark:hover:bg-gray-200 transition-colors shadow-lg hover:shadow-xl flex items-center gap-2"
+                        >
+                            <Save size={18} />
+                            {isSubmitting ? 'Saving...' : submitLabel}
+                        </button>
+                    </div>
+                )
+            }
+        </form >
     );
 };
