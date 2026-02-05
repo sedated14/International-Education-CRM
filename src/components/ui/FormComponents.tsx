@@ -62,7 +62,7 @@ export interface PhoneInputProps {
     icon?: React.ReactNode;
 }
 
-import { AsYouType, CountryCode, getCountryCallingCode } from 'libphonenumber-js';
+import { AsYouType, CountryCode, validatePhoneNumberLength } from 'libphonenumber-js';
 
 // ... Imports ...
 
@@ -146,27 +146,49 @@ export const PhoneInput = ({ label, value = '', onChange, defaultCountry, requir
 
     const handleNumberChange = (input: string) => {
         // Input is the raw typing in the field
-        // We want to format AS YOU TYPE based on selectedIso
+
+        // Strip non-digit chars to check raw length validity against the country
+        const digits = input.replace(/[^0-9]/g, '');
+
+        // If we have digits, check length. 
+        // We need to be careful: validatePhoneNumberLength expects the full number *including* country code if we don't pass country, 
+        // OR the national number if we pass country? 
+        // Actually validatePhoneNumberLength(number, country) docs say: "checks if the phone number length is valid for this country"
+        // It is best to pass the full text (formatted or not) but AsYouType is robust.
+
+        // Let's rely on AsYouType to produce a formatted string, then check if it's "Too Long"
         const asYouType = new AsYouType(selectedIso);
+        const formatted = asYouType.input(digits);
 
-        // AsYouType expects the characters.
-        // We typically clear formatting and re-feed?
-        // Actually asYouType.input() takes new chars.
-        // But for a controlled input where user might delete, standard practice:
-        // Feed the raw digits + input?
+        // Check validity of the POTENTIAL new number
+        // We use the digits to construct a number object or just check length
+        // validatePhoneNumberLength returns 'TOO_LONG' if it exceeds possible length
 
-        // Easiest: extract digits, feed to AsYouType.
-        // Note: this prevents typing punctuation manually if the library doesn't add it.
-        // But libphonenumber-js handles this well.
+        const validationResult = validatePhoneNumberLength(digits, selectedIso);
 
-        // NOTE: if user types "(", we might want to respect it? 
-        // Strict formatting: strip to digits, re-format.
-        // This forces the library's format.
+        // If it's TOO_LONG, we should probably BLOCK the input, BUT:
+        // Case: User is deleting digits. We must always allow getting SHORTER.
+        // So we compare with current state? 
+        // Or simpler: We calculate the validation of the *new* input.
 
-        let digits = input.replace(/[^0-9]/g, ''); // simplistic strip
-        // However, AsYouType input might want '+' if it was international? No, we have separate code.
+        // If we are adding chars and it becomes TOO_LONG -> Block.
+        // If we are removing chars -> Allow.
 
-        const formatted = new AsYouType(selectedIso).input(digits);
+        // Problem: 'input' from onChange is the *new* value. 
+        // If it's shorter than previous 'phoneNumber', allow it.
+        if (input.length < phoneNumber.length) {
+            setPhoneNumber(formatted);
+            // Update parent
+            const match = COUNTRY_PHONE_CODES.find(c => c.iso === selectedIso);
+            if (match) onChange(`${match.code} ${formatted}`);
+            return;
+        }
+
+        if (validationResult === 'TOO_LONG') {
+            // Block update (don't set state)
+            return;
+        }
+
         setPhoneNumber(formatted);
 
         const match = COUNTRY_PHONE_CODES.find(c => c.iso === selectedIso);
