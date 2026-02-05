@@ -71,7 +71,7 @@ export const StudentProfileView = ({ lead }: Props) => {
                                     <Globe size={16} /> {lead.agencyProfile.name}
                                 </p>
                             ) : (
-                                <p className="font-bold text-gray-900 dark:text-white">{lead.source}</p>
+                                <p className="font-bold text-gray-900 dark:text-white">Independent</p>
                             )}
                         </div>
                         <div>

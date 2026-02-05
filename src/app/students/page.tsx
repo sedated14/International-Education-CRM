@@ -23,7 +23,9 @@ export default function StudentsPage() {
             program: l.studentProfile?.desiredDestination?.join(', ') || 'Undecided',
             duration: l.studentProfile?.duration || 'Any',
             agencyId: l.studentProfile?.agencyId,
-            agencyName: l.studentProfile?.agencyId ? (leads || []).find(agent => String(agent.id) === String(l.studentProfile?.agencyId))?.agentName : null,
+            agencyName: l.studentProfile?.agencyId
+                ? (leads || []).find(agent => String(agent.id) === String(l.studentProfile?.agencyId))?.agentName
+                : 'Independent', // Default to Independent for sorting/display
         }));
 
     // 2. State
@@ -329,8 +331,8 @@ export default function StudentsPage() {
                                     <th className="px-6 py-5 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" onClick={() => handleSort('program')}>
                                         Program Interest {sortConfig?.key === 'program' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
                                     </th>
-                                    <th className="px-6 py-5 text-right hover:text-gray-600 dark:hover:text-gray-300 transition-colors" onClick={() => handleSort('source')}>
-                                        Source / Agency {sortConfig?.key === 'source' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                                    <th className="px-6 py-5 text-right hover:text-gray-600 dark:hover:text-gray-300 transition-colors" onClick={() => handleSort('agencyName')}>
+                                        Source / Agency {sortConfig?.key === 'agencyName' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
                                     </th>
                                     <th className="px-6 py-5 text-right hover:text-gray-600 dark:hover:text-gray-300 transition-colors" onClick={() => handleSort('createdAt')}>
                                         Created {sortConfig?.key === 'createdAt' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
@@ -386,12 +388,18 @@ export default function StudentsPage() {
                                             <div className="text-xs text-gray-400">{student.duration}</div>
                                         </td>
                                         <td className="px-6 py-5 text-right">
-                                            <div className="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md inline-block">
-                                                {student.source}
-                                            </div>
-                                            {student.agencyName && (
-                                                <div className="text-xs mt-1 font-bold text-blue-600 dark:text-blue-400">
-                                                    via {student.agencyName}
+                                            {student.agencyId ? (
+                                                <>
+                                                    <div className="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md inline-block">
+                                                        Agency
+                                                    </div>
+                                                    <div className="text-xs mt-1 font-bold text-blue-600 dark:text-blue-400">
+                                                        {student.agencyName}
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <div className="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md inline-block">
+                                                    Independent
                                                 </div>
                                             )}
                                         </td>
