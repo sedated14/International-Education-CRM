@@ -107,6 +107,67 @@ export default function DuplicateReviewPage() {
         }
     };
 
+    const handleReplaceContact = async (duplicate: DuplicateItem, existingId: string) => {
+        if (!existingMatch) return;
+        if (!confirm("Are you sure you want to REPLACE the current primary contact with this new one? The old contact details will be overwritten.")) return;
+
+        try {
+            const newPrimary = duplicate.agencyProfile.keyContacts[0];
+            const currentContacts = existingMatch.agencyProfile?.keyContacts || [];
+
+            // Replace index 0, keep others
+            const updatedContacts = [newPrimary, ...currentContacts.slice(1)];
+
+            await updateLead(existingId, {
+                agencyProfile: {
+                    ...existingMatch.agencyProfile,
+                    keyContacts: updatedContacts
+                } as any
+            });
+
+            await deleteDoc(doc(db, 'import_duplicates', duplicate.id));
+            setSelectedId(null);
+        } catch (e) {
+            console.error("Error replacing contact:", e);
+        }
+    };
+
+    const handleMergeContact = async (duplicate: DuplicateItem, existingId: string) => {
+        if (!existingMatch) return;
+
+        try {
+            const importedContact = duplicate.agencyProfile.keyContacts[0];
+            const currentPrimary = existingMatch.agencyProfile?.keyContacts?.[0] || {};
+            const otherContacts = existingMatch.agencyProfile?.keyContacts?.slice(1) || [];
+
+            // Merge logic: Imported fields overwrite existing ONLY if imported has value
+            // Actually, usually "Merge" implies "Update with new info". 
+            // Let's merge: start with existing, overwrite with ANY non-empty imported field.
+
+            const mergedContact = { ...currentPrimary };
+            Object.keys(importedContact).forEach(key => {
+                const val = importedContact[key];
+                if (val && typeof val === 'string' && val.trim() !== '') {
+                    mergedContact[key] = val;
+                }
+            });
+
+            const updatedContacts = [mergedContact, ...otherContacts];
+
+            await updateLead(existingId, {
+                agencyProfile: {
+                    ...existingMatch.agencyProfile,
+                    keyContacts: updatedContacts
+                } as any
+            });
+
+            await deleteDoc(doc(db, 'import_duplicates', duplicate.id));
+            setSelectedId(null);
+        } catch (e) {
+            console.error("Error merging contact:", e);
+        }
+    };
+
     const handleAddColleague = async (duplicate: DuplicateItem, existingId: string) => {
         if (!existingMatch) return;
 
@@ -333,12 +394,28 @@ export default function DuplicateReviewPage() {
                                         </button>
 
                                         {selectedDuplicate.duplicateReason === 'Potential Colleague' ? (
-                                            <button
-                                                onClick={() => existingMatch && handleAddColleague(selectedDuplicate, String(existingMatch.id))}
-                                                className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700 shadow-md transition-all text-sm"
-                                            >
-                                                <Plus size={16} /> Add as Contact
-                                            </button>
+                                            <>
+                                                <button
+                                                    onClick={() => existingMatch && handleAddColleague(selectedDuplicate, String(existingMatch.id))}
+                                                    className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 shadow-md transition-all text-xs"
+                                                >
+                                                    <Plus size={16} /> Add Secondary
+                                                </button>
+                                                <button
+                                                    onClick={() => existingMatch && handleMergeContact(selectedDuplicate, String(existingMatch.id))}
+                                                    className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-indigo-700 shadow-md transition-all text-xs"
+                                                    title="Merge imported details into current primary contact"
+                                                >
+                                                    <RefreshCw size={16} /> Merge Info
+                                                </button>
+                                                <button
+                                                    onClick={() => existingMatch && handleReplaceContact(selectedDuplicate, String(existingMatch.id))}
+                                                    className="flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-orange-700 shadow-md transition-all text-xs"
+                                                    title="Replace current primary contact with this one"
+                                                >
+                                                    <User size={16} /> Replace Contact
+                                                </button>
+                                            </>
                                         ) : (
                                             <>
                                                 <button
