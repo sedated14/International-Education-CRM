@@ -245,8 +245,28 @@ export default function AgencyProfilePage() {
                                     )}
 
                                     {/* Student Stats */}
-                                    <div className="col-span-2 pt-4 border-t border-gray-100 dark:border-gray-800">
-                                        <StudentStatsCard total={agency.historicalSends} />
+                                    {/* Notes & History (Moved Here) */}
+                                    <div className="col-span-2 pt-6 border-t border-gray-100 dark:border-gray-800">
+                                        <h3 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                                            <MessageCircle size={14} className="text-yellow-500" />
+                                            Notes & History
+                                        </h3>
+                                        <div className="space-y-4">
+                                            {foundLead?.notes && foundLead.notes.length > 0 ? (
+                                                <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto custom-scrollbar pr-2">
+                                                    {[...foundLead.notes].sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).map((note: any) => (
+                                                        <div key={note.id} className="bg-yellow-50/50 dark:bg-yellow-900/10 p-3 rounded-xl border border-yellow-100 dark:border-yellow-900/20 text-sm">
+                                                            <p className="text-gray-700 dark:text-gray-300 font-medium leading-relaxed whitespace-pre-wrap">{note.content}</p>
+                                                            <p className="text-[10px] text-gray-400 dark:text-gray-500 font-bold text-right mt-2 flex justify-end items-center gap-1">
+                                                                {new Date(note.timestamp).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                                            </p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <p className="text-gray-400 italic text-sm">No history notes available.</p>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
 
@@ -308,27 +328,43 @@ export default function AgencyProfilePage() {
                         </div>
 
                         {/* Notes & History (Moved to Main) */}
-                        <div className="bg-white dark:bg-gray-900 rounded-[32px] p-8 border border-gray-100 dark:border-gray-800 shadow-sm">
+                        {/* Linked Students Section (Moved to Main) */}
+                        <div className="bg-white dark:bg-gray-900 rounded-[32px] p-8 border border-gray-100 dark:border-gray-800 shadow-sm relative overflow-hidden">
                             <h2 className="text-xl font-black text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                                <MessageCircle size={20} className="text-yellow-500" />
-                                Notes & History
+                                <GraduationCap size={20} className="text-black dark:text-white" />
+                                Linked Students ({linkedStudents.length})
                             </h2>
-                            <div className="space-y-4">
-                                {foundLead?.notes && foundLead.notes.length > 0 ? (
-                                    <div className="flex flex-col gap-3 max-h-[500px] overflow-y-auto custom-scrollbar pr-2">
-                                        {[...foundLead.notes].sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).map((note: any) => (
-                                            <div key={note.id} className="bg-yellow-50/50 dark:bg-yellow-900/10 p-3 rounded-xl border border-yellow-100 dark:border-yellow-900/20 text-sm">
-                                                <p className="text-gray-700 dark:text-gray-300 font-medium leading-relaxed whitespace-pre-wrap">{note.content}</p>
-                                                <p className="text-[10px] text-gray-400 dark:text-gray-500 font-bold text-right mt-2 flex justify-end items-center gap-1">
-                                                    {new Date(note.timestamp).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                                                </p>
+
+                            {linkedStudents.length > 0 ? (
+                                <div className="grid grid-cols-1 gap-4">
+                                    {linkedStudents.map(student => (
+                                        <div key={student.id} className="flex items-center justify-between p-4 rounded-2xl border border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800 hover:bg-white dark:hover:bg-gray-700/80 hover:shadow-md transition-all group">
+                                            <div className="flex items-center gap-4">
+                                                <div className="bg-amber-100 dark:bg-amber-900/40 p-2 rounded-xl text-amber-600 dark:text-amber-400">
+                                                    <User size={20} />
+                                                </div>
+                                                <div className="overflow-hidden">
+                                                    <Link href={`/students/${student.id}`} className="hover:underline">
+                                                        <h3 className="font-bold text-base text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors truncate">
+                                                            {student.studentName}
+                                                        </h3>
+                                                    </Link>
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400 font-medium truncate mt-0.5">
+                                                        {student.status}
+                                                    </p>
+                                                </div>
                                             </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <p className="text-gray-400 italic text-sm">No history notes available.</p>
-                                )}
-                            </div>
+                                            <Link href={`/students/${student.id}`}>
+                                                <button className="p-2 text-gray-300 dark:text-gray-600 hover:text-black dark:hover:text-white transition-colors">
+                                                    <ChevronRight size={20} />
+                                                </button>
+                                            </Link>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="text-center py-8 text-gray-400 italic text-sm">No students linked to this agency.</div>
+                            )}
                         </div>
 
                     </div>
@@ -536,41 +572,10 @@ export default function AgencyProfilePage() {
                             </div>
                         </div>
 
-                        {/* Linked Students Section (Moved to Sidebar) */}
-                        <div className="bg-white dark:bg-gray-900 rounded-[32px] p-8 border border-gray-100 dark:border-gray-800 shadow-sm relative overflow-hidden">
-                            <h2 className="text-xl font-black text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                                <GraduationCap size={20} className="text-black dark:text-white" />
-                                Linked Students ({linkedStudents.length})
-                            </h2>
-
-                            {linkedStudents.length > 0 ? (
-                                <div className="grid grid-cols-1 gap-4">
-                                    {linkedStudents.map(student => (
-                                        <div key={student.id} className="flex items-center justify-between p-3 rounded-2xl border border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800 hover:bg-white dark:hover:bg-gray-700/80 hover:shadow-md transition-all group">
-                                            <div className="flex items-center gap-3">
-                                                <div className="bg-amber-100 dark:bg-amber-900/40 p-1.5 rounded-lg text-amber-600 dark:text-amber-400">
-                                                    <User size={16} />
-                                                </div>
-                                                <div className="overflow-hidden">
-                                                    <h3 className="font-bold text-sm text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors truncate">{student.studentName}</h3>
-                                                    <p className="text-[10px] text-gray-500 dark:text-gray-400 font-medium truncate">
-                                                        {student.status}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <Link href={`/students/${student.id}`}>
-                                                <button className="p-1.5 text-gray-300 dark:text-gray-600 hover:text-black dark:hover:text-white transition-colors">
-                                                    <ChevronRight size={16} />
-                                                </button>
-                                            </Link>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="text-center py-8 text-gray-400 italic text-xs">No students.</div>
-                            )}
+                        {/* Student Stats (Moved to Sidebar) */}
+                        <div className="pt-2">
+                            <StudentStatsCard total={agency.historicalSends} />
                         </div>
-
                     </div>
                 </div>
 
