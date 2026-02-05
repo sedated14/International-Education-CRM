@@ -103,8 +103,11 @@ export const PhoneInput = ({ label, value = '', onChange, defaultCountry, requir
 
                 // If the user hasn't interacted, we trust the value.
                 if (match.iso) {
-                    if (match.code === '+1' && selectedIso === 'CA') {
-                        // Keep Canada if already selected?
+                    const currentCountry = COUNTRY_PHONE_CODES.find(c => c.iso === selectedIso);
+                    if (currentCountry && currentCountry.code === match.code) {
+                        // If the detected code matches the currently selected country's code,
+                        // do NOT update the ISO. This prevents switching US -> CA (both +1)
+                        // or UK -> Jersey (both +44) when the user has explicitly selected one.
                     } else {
                         setSelectedIso(match.iso as CountryCode);
                     }
