@@ -294,6 +294,19 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                     </div>
                 </div>
                 <div className="flex gap-2">
+                    {/* Header Save Button */}
+                    {isEditing && (
+                        <button
+                            type={isStudent ? "submit" : "button"}
+                            form={isStudent ? "student-form" : undefined}
+                            onClick={isStudent ? undefined : handleSave}
+                            className="p-2 rounded-full bg-black dark:bg-white text-white dark:text-black hover:opacity-80 transition-all shadow-md mr-1"
+                            title="Save Changes"
+                        >
+                            <Save size={20} />
+                        </button>
+                    )}
+
                     <button
                         onClick={() => setIsEditing(!isEditing)}
                         className={`p-2 rounded-full transition-colors ${isEditing ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400' : 'hover:bg-black/5 dark:hover:bg-white/10 text-gray-400'}`}
