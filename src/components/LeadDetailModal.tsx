@@ -294,17 +294,7 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                     </div>
                 </div>
                 <div className="flex gap-2">
-                    {/* Header Save Button */}
-                    {isEditing && (
-                        <button
-                            type="submit"
-                            form={isStudent ? "student-form" : undefined}
-                            onClick={isStudent ? undefined : handleSave}
-                            className="px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-xl font-bold text-xs shadow-lg hover:opacity-80 transition-all flex items-center gap-2"
-                        >
-                            <Save size={16} /> Save Changes
-                        </button>
-                    )}
+
 
 
                     <button
@@ -1171,14 +1161,18 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                 </div >
                 <div className="p-6 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 flex justify-end gap-3 rounded-b-[32px]">
                     <button onClick={onClose} className="px-6 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">Close</button>
-                    {isEditing ? (
-                        !isStudent ? (
-                            <button onClick={handleSave} className="px-6 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 hover:shadow-lg transition-all flex items-center gap-2">
-                                <Save size={18} />
-                                Save Changes
-                            </button>
-                        ) : null
-                    ) : (
+                    {isEditing && (
+                        <button
+                            type={isStudent ? "submit" : "button"}
+                            form={isStudent ? "student-form" : undefined}
+                            onClick={isStudent ? undefined : handleSave}
+                            className="px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-xl font-bold hover:shadow-lg transition-all flex items-center gap-2"
+                        >
+                            <Save size={18} />
+                            Save Changes
+                        </button>
+                    )}
+                    {!isEditing && (
                         <button onClick={() => setIsEditing(true)} className="px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-xl font-bold hover:shadow-lg transition-all">Edit Lead</button>
                     )}
                 </div>

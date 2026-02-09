@@ -20,7 +20,7 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
                     {lead.status}
                 </span>
 
-                <div className="col-span-2 flex items-center gap-1.5 text-[11px] text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 px-2 py-1.5 rounded-lg border-2 border-blue-500 w-full backdrop-blur-sm shadow-sm">
+                <div className="col-span-2 flex items-center gap-1.5 text-[11px] text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 px-2 py-1.5 rounded-lg border-2 border-emerald-500/20 w-full backdrop-blur-sm shadow-sm">
                     <span className="text-gray-400 font-extrabold text-[9px] uppercase tracking-wider shrink-0">SO:</span>
                     <div className="flex items-center gap-1 font-bold min-w-0 flex-1">
                         <span className="text-gray-900 dark:text-gray-200 truncate">
@@ -28,8 +28,9 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
                         </span>
                         {lead.agencyProfile && lead.agencyProfile.name && (
                             <>
-                                <MapPin size={10} className="text-gray-400 shrink-0 ml-1" />
+                                <span className="text-gray-300 dark:text-gray-600">•</span>
                                 <span className="text-gray-500 dark:text-gray-400 font-medium truncate">{lead.agencyProfile.country}</span>
+                                <MapPin size={10} className="text-gray-400 shrink-0 ml-0.5" />
                             </>
                         )}
                     </div>
