@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Navigation } from '../../../components/Navigation';
 import { Agency } from '../../../types';
 import { useLeads } from '../../../context/LeadContext';
-import { ArrowLeft, User, Phone, Mail, MapPin, Globe, Calendar, DollarSign, Award, BookOpen, MessageCircle, GraduationCap, Eye, ChevronRight, Send } from 'lucide-react';
+import { ArrowLeft, User, Phone, Mail, MapPin, Globe, Calendar, DollarSign, Award, BookOpen, MessageCircle, GraduationCap, Eye, ChevronRight, Send, Check } from 'lucide-react';
 import Link from 'next/link';
 import { LeadDetailModal } from '../../../components/LeadDetailModal';
 
@@ -429,37 +429,79 @@ export default function AgencyProfilePage() {
                                     { key: 'commissionRequestFormSent', label: 'Comm. Request Form Sent' }
                                 ].map(item => {
                                     const isChecked = agency.onboardingChecklist?.[item.key as keyof typeof agency.onboardingChecklist] || false;
+                                    const isMarketingParent = item.key === 'addedMarketingList';
+
                                     return (
-                                        <div
-                                            key={item.key}
-                                            className="flex items-center gap-3 cursor-pointer group/check p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                                            onClick={() => updateLead(agency.id, {
-                                                agencyProfile: {
-                                                    ...agency,
-                                                    onboardingChecklist: {
-                                                        ...(agency.onboardingChecklist || {
-                                                            agreementSent: false,
-                                                            agreementSigned: false,
-                                                            applicationAccountCreated: false,
-                                                            schoolPriceListSent: false,
-                                                            schoolProfilesSent: false,
-                                                            addedMarketingList: false,
-                                                            agentHandbookSent: false,
-                                                            studentHandbookSent: false,
-                                                            commissionRequestFormSent: false
-                                                        }),
-                                                        [item.key]: !isChecked
+                                        <React.Fragment key={item.key}>
+                                            <div
+                                                className="flex items-center gap-3 cursor-pointer group/check p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                                                onClick={() => updateLead(agency.id, {
+                                                    agencyProfile: {
+                                                        ...agency,
+                                                        onboardingChecklist: {
+                                                            ...(agency.onboardingChecklist || {
+                                                                agreementSent: false,
+                                                                agreementSigned: false,
+                                                                applicationAccountCreated: false,
+                                                                schoolPriceListSent: false,
+                                                                schoolProfilesSent: false,
+                                                                addedMarketingList: false,
+                                                                marketingSubscribed: false,
+                                                                marketingUnsubscribed: false,
+                                                                agentHandbookSent: false,
+                                                                studentHandbookSent: false,
+                                                                commissionRequestFormSent: false
+                                                            }),
+                                                            [item.key]: !isChecked
+                                                        }
                                                     }
-                                                }
-                                            })}
-                                        >
-                                            <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${isChecked ? 'bg-blue-500 border-blue-500' : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 group-hover/check:border-blue-400'}`}>
-                                                {isChecked && <div className="w-2.5 h-2.5 bg-white rounded-sm" />}
+                                                })}
+                                            >
+                                                <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${isChecked ? 'bg-green-100 border-green-500' : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 group-hover/check:border-green-400'}`}>
+                                                    {isChecked && <Check size={14} className="text-green-600 stroke-[3]" />}
+                                                </div>
+                                                <span className={`text-sm font-bold transition-colors ${isChecked ? 'text-gray-900 dark:text-gray-200' : 'text-gray-500 dark:text-gray-400 group-hover/check:text-green-600'}`}>
+                                                    {item.label}
+                                                </span>
                                             </div>
-                                            <span className={`text-sm font-bold transition-colors ${isChecked ? 'text-gray-900 dark:text-gray-200' : 'text-gray-500 dark:text-gray-400 group-hover/check:text-blue-600'}`}>
-                                                {item.label}
-                                            </span>
-                                        </div>
+
+                                            {/* Marketing Sub-Section - Conditional on Checked */}
+                                            {isMarketingParent && isChecked && (
+                                                <div className="pl-10 grid grid-cols-1 gap-2 mt-1 mb-2 animate-in fade-in slide-in-from-top-1">
+                                                    {[
+                                                        { key: 'marketingSubscribed', label: 'Subscribed' },
+                                                        { key: 'marketingUnsubscribed', label: 'Unsubscribed' }
+                                                    ].map(subItem => {
+                                                        const isSubChecked = agency.onboardingChecklist?.[subItem.key as keyof typeof agency.onboardingChecklist] || false;
+
+                                                        return (
+                                                            <div
+                                                                key={subItem.key}
+                                                                className="flex items-center gap-2 cursor-pointer group/subcheck p-1"
+                                                                onClick={() => {
+                                                                    const newSubValue = !isSubChecked;
+                                                                    // Update logic
+                                                                    const currentList = agency.onboardingChecklist || ({} as any);
+                                                                    updateLead(agency.id, {
+                                                                        agencyProfile: {
+                                                                            ...agency,
+                                                                            onboardingChecklist: { ...currentList, [subItem.key]: newSubValue }
+                                                                        }
+                                                                    });
+                                                                }}
+                                                            >
+                                                                <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${isSubChecked ? 'bg-green-100 border-green-500' : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 group-hover/subcheck:border-green-400'}`}>
+                                                                    {isSubChecked && <Check size={12} className="text-green-600 stroke-[3]" />}
+                                                                </div>
+                                                                <span className={`text-[11px] font-medium ${isSubChecked ? 'text-gray-800 dark:text-gray-200' : 'text-gray-400'}`}>
+                                                                    {subItem.label}
+                                                                </span>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            )}
+                                        </React.Fragment>
                                     );
                                 })}
                             </div>
