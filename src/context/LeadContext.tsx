@@ -35,7 +35,8 @@ export function LeadProvider({ children }: { children: React.ReactNode }) {
                     const enhancedProfile = {
                         ...lead.agencyProfile,
                         name: lead.agencyProfile.name || lead.agentName || 'Unknown Agency',
-                        agencyCode: lead.agencyCode || lead.agencyProfile.agencyCode
+                        agencyCode: lead.agencyCode || lead.agencyProfile.agencyCode,
+                        country: lead.agencyProfile.country || lead.country || '' // Backfill country from lead if missing
                     };
 
                     // Map by both top-level ID and agencyProfile.id to be safe
