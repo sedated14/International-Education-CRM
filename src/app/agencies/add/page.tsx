@@ -32,7 +32,10 @@ export default function AddAgencyPage() {
                 agentName: newAgency.name,
                 country: newAgency.country,
                 status: 'Qualified', // Default status for existing agents? or 'Inquiry'?
-                agencyProfile: newAgency, // Embedding the detailed profile
+                agencyProfile: {
+                    ...newAgency,
+                    name: newAgency.name // Ensure name is explicit
+                },
                 createdAt: new Date().toISOString(),
                 // Basic Lead fields that might be required
                 studentName: 'N/A', // Required by Lead type?

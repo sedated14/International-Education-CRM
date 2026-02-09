@@ -142,7 +142,10 @@ export const StudentForm = ({ lead, onSubmit, onDelete, isModal = false, isSubmi
 
             // Snapshot the Agency Profile for robust display (Cards, Profile View)
             // This ensures it shows up immediately and persists even if context hydration fails
-            agencyProfile: selectedAgencyLead?.agencyProfile,
+            agencyProfile: selectedAgencyLead?.agencyProfile ? {
+                ...selectedAgencyLead.agencyProfile,
+                name: selectedAgencyLead.agencyProfile.name || selectedAgencyLead.agentName || formData.linkedAgencyName
+            } : undefined,
 
             studentProfile: {
                 ...((lead?.studentProfile) || {}),

@@ -268,6 +268,7 @@ export const ImportAgenciesModal: React.FC<Props> = ({ onClose }) => {
                     // We should add `agencyCode` when we push to `addLead`.
                     createdAt: new Date().toISOString(),
                     agencyProfile: {
+                        name: agencyName, // Ensure name is saved in profile
                         website: mappedData.website || '',
                         city: mappedData.city || '',
                         region: mappedData.region || '',

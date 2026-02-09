@@ -31,10 +31,17 @@ export function LeadProvider({ children }: { children: React.ReactNode }) {
             const agencyMap = new Map<string | number, any>();
             leadsData.forEach(lead => {
                 if (lead.type === 'Agent' && lead.agencyProfile) {
+                    // Ensure name is present in the profile (fallback to agentName)
+                    const enhancedProfile = {
+                        ...lead.agencyProfile,
+                        name: lead.agencyProfile.name || lead.agentName || 'Unknown Agency',
+                        agencyCode: lead.agencyCode || lead.agencyProfile.agencyCode
+                    };
+
                     // Map by both top-level ID and agencyProfile.id to be safe
-                    agencyMap.set(lead.id, lead.agencyProfile);
+                    agencyMap.set(lead.id, enhancedProfile);
                     if (lead.agencyProfile.id) {
-                        agencyMap.set(lead.agencyProfile.id, lead.agencyProfile);
+                        agencyMap.set(lead.agencyProfile.id, enhancedProfile);
                     }
                 }
             });
