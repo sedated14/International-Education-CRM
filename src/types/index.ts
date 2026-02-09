@@ -9,11 +9,20 @@ export interface StudentProfile {
   phoneNumber?: string;    // NEW
   whatsappNumber?: string; // NEW
   email?: string;          // NEW: Student Email
+
+  // Name Split
+  firstName?: string;
+  middleName?: string;
+  lastName?: string;
+
   currentSchool?: string;
   currentGrade?: string;
   gradeApplyingTo?: string;
+
+  // Graduation Logic
   seekingGraduation?: boolean; // NEW: For 12th grade applicants
   graduatedInHomeCountry?: boolean; // NEW: For 12th grade current students
+
   duration?: 'Short Term' | 'Semester (Aug)' | 'Semester (Jan)' | 'Academic Year' | 'Calendar Year';
   gpa?: string;
   desiredSchool?: string;
@@ -23,6 +32,8 @@ export interface StudentProfile {
     Canada?: string;
     Online?: string;
   };
+
+  // Health & Interest
   allergies?: string[];
   medicalInfo?: string;
   dietaryRestrictions?: string[];
@@ -30,10 +41,14 @@ export interface StudentProfile {
   sports?: string[];
   favoriteSubject?: string;
   personality?: string;
+
   englishLevel: 'Low' | 'Intermediate' | 'Advanced';
   budget?: string;
   essay?: string;
-  preferredCommunication?: ('Email' | 'Phone' | 'Text')[]; // Changed to array
+
+  // Communication
+  preferredCommunication?: ('Email' | 'Phone' | 'Text')[];
+
   otherInfo?: string;
   agencyId?: string | number; // NEW: Link to Agency Lead ID
 }
