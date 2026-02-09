@@ -212,6 +212,21 @@ export const AgencyForm = ({ initialData, onSubmit, isSubmitting, submitLabel = 
                         <Building2 className="text-blue-500" /> Agency Details
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Agency ID - Only Editable in Edit Mode */}
+                        {initialData && (
+                            <div className="md:col-span-2">
+                                <Input
+                                    label="Agency ID"
+                                    value={formData.agencyCode || ''}
+                                    onChange={v => setFormData({ ...formData, agencyCode: v })}
+                                    placeholder="e.g. 0001-Age-US-NA"
+                                />
+                                <p className="text-[10px] text-gray-400 mt-1 font-medium">
+                                    Custom ID format. Auto-generated if left blank on creation.
+                                </p>
+                            </div>
+                        )}
+
                         <Input label="Agency Name" value={formData.name} onChange={v => setFormData({ ...formData, name: v })} required />
 
                         {/* Country moved to 2nd position */}

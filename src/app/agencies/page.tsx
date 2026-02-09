@@ -137,36 +137,7 @@ export default function AgenciesPage() {
         }
     };
 
-    const handleRegenerateIDs = async () => {
-        if (!confirm("This will regenerate IDs for ALL agencies based on their Date Added. This ensures consecutive numbering (0001, 0002...). Continue?")) return;
 
-        try {
-            // Sort by createdAt ASC
-            const sortedLeads = [...leads]
-                .filter(l => l.type === 'Agent')
-                .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-
-            let updatedCount = 0;
-            for (let i = 0; i < sortedLeads.length; i++) {
-                const lead = sortedLeads[i];
-                const newCode = generateAgencyCode(
-                    i + 1,
-                    lead.agentName || lead.agencyProfile?.name || 'Unknown',
-                    lead.country,
-                    lead.agencyProfile?.region || 'Unknown'
-                );
-
-                if (lead.agencyCode !== newCode) {
-                    await updateLead(lead.id, { agencyCode: newCode });
-                    updatedCount++;
-                }
-            }
-            alert(`Successfully updated IDs for ${updatedCount} agencies.`);
-        } catch (e) {
-            console.error("Error regenerating IDs:", e);
-            alert("Failed to regenerate IDs.");
-        }
-    };
 
     const handleExportCSV = () => {
         const headers = [
@@ -259,16 +230,7 @@ export default function AgenciesPage() {
                             <Download size={16} />
                             Export CSV
                         </button>
-                        <button
-                            onClick={handleRegenerateIDs}
-                            className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all text-sm"
-                            title="Regenerate Agency IDs based on Date Added"
-                        >
-                            <div className="flex items-center gap-1">
-                                <span className="text-xs">🆔</span>
-                                <span>Fix IDs</span>
-                            </div>
-                        </button>
+
                         <Link href="/agencies/add">
                             <button className="flex items-center gap-2 px-5 py-2.5 bg-black dark:bg-white text-white dark:text-black font-bold rounded-xl hover:bg-gray-900 dark:hover:bg-gray-200 shadow-lg hover:shadow-xl transition-all text-sm">
                                 <Plus size={16} />
