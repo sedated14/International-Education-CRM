@@ -152,25 +152,26 @@ export default function ApexCRM() {
                     {lead.type === 'Student' ? lead.studentName : (lead.agentName || lead.title)}
                   </h3>
 
-                  {/* Subtitle / Context Line */}
-                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-1 flex items-center gap-1">
-                    {lead.type === 'Student' ? (
-                      <>
-                        <span className="font-bold text-emerald-600 dark:text-emerald-400">{lead.status}</span>
-                        <span>•</span>
-                        <span>Student</span>
-                        <span>•</span>
-                        <span>{lead.country}</span>
-                      </>
-                    ) : (
-                      <div className="flex items-center gap-1.5">
-                        <MapPin size={10} className="shrink-0" />
-                        <span className="font-bold">{lead.country || lead.agencyProfile?.country || 'Unknown Location'}</span>
-                      </div>
-                    )}
-                  </p>
+                  {/* Agency Location Subtitle */}
+                  {lead.type === 'Agent' && (
+                    <div className="flex items-center gap-1.5 mb-3 text-xs text-gray-500 dark:text-gray-400">
+                      <MapPin size={12} className="shrink-0" />
+                      <span className="font-bold truncate">{lead.country || lead.agencyProfile?.country || 'Unknown Location'}</span>
+                    </div>
+                  )}
 
-                  {/* Student Specific SO Section - MOVED ABOVE NOTES */}
+                  {/* Student Subtitle */}
+                  {lead.type === 'Student' && (
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-1 flex items-center gap-1">
+                      <span className="font-bold text-emerald-600 dark:text-emerald-400">{lead.status}</span>
+                      <span>•</span>
+                      <span>Student</span>
+                      <span>•</span>
+                      <span>{lead.country}</span>
+                    </p>
+                  )}
+
+                  {/* Student "SO" Section - Agency Info */}
                   {lead.type === 'Student' && (
                     <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 px-2 py-1.5 rounded-lg border-2 border-emerald-500/20 w-full mb-3">
                       <span className="text-gray-400 font-extrabold text-[8px] uppercase tracking-wider shrink-0">SO:</span>
@@ -181,8 +182,8 @@ export default function ApexCRM() {
                         {lead.agencyProfile && lead.agencyProfile.name && (
                           <>
                             <span className="text-gray-300 dark:text-gray-600">•</span>
-                            <span className="text-gray-500 dark:text-gray-400 font-medium truncate">{lead.agencyProfile.country}</span>
                             <MapPin size={10} className="text-gray-400 shrink-0 ml-0.5" />
+                            <span className="text-gray-500 dark:text-gray-400 font-medium truncate ml-1">{lead.agencyProfile.country}</span>
                           </>
                         )}
                       </div>
@@ -290,10 +291,47 @@ export default function ApexCRM() {
                       }
                     </span>
                   </div>
-                  <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1">{lead.type === 'Student' ? lead.studentName : lead.agentName}</h3>
-                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-1">
-                    {lead.type === 'Student' ? `${lead.status}: Student - ${lead.country}` : lead.title}
-                  </p>
+                  <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-1">
+                    {lead.type === 'Student' ? lead.studentName : (lead.agentName || lead.title)}
+                  </h3>
+
+                  {/* Agency Location Subtitle */}
+                  {lead.type === 'Agent' && (
+                    <div className="flex items-center gap-1.5 mb-3 text-xs text-gray-500 dark:text-gray-400">
+                      <MapPin size={12} className="shrink-0" />
+                      <span className="font-bold truncate">{lead.country || lead.agencyProfile?.country || 'Unknown Location'}</span>
+                    </div>
+                  )}
+
+                  {/* Student Subtitle */}
+                  {lead.type === 'Student' && (
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 line-clamp-1 flex items-center gap-1">
+                      <span className="font-bold text-emerald-600 dark:text-emerald-400">{lead.status}</span>
+                      <span>•</span>
+                      <span>Student</span>
+                      <span>•</span>
+                      <span>{lead.country}</span>
+                    </p>
+                  )}
+
+                  {/* Student Specific SO Section */}
+                  {lead.type === 'Student' && (
+                    <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 px-2 py-1.5 rounded-lg border-2 border-emerald-500/20 w-full mb-3">
+                      <span className="text-gray-400 font-extrabold text-[8px] uppercase tracking-wider shrink-0">SO:</span>
+                      <div className="flex items-center gap-1 font-bold min-w-0 flex-1">
+                        <span className="truncate text-gray-900 dark:text-gray-200">
+                          {lead.agencyProfile && lead.agencyProfile.name ? lead.agencyProfile.name : 'Independent'}
+                        </span>
+                        {lead.agencyProfile && lead.agencyProfile.name && (
+                          <>
+                            <span className="text-gray-300 dark:text-gray-600">•</span>
+                            <MapPin size={10} className="text-gray-400 shrink-0 ml-0.5" />
+                            <span className="text-gray-500 dark:text-gray-400 font-medium truncate ml-1">{lead.agencyProfile.country}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Note Snippet (Always Visible) - Simplified for Space */}
                   {lead.notes && lead.notes.length > 0 && (
@@ -301,32 +339,6 @@ export default function ApexCRM() {
                       <p className="text-[9px] text-gray-600 dark:text-gray-300 font-medium line-clamp-1 italic">
                         "{lead.notes.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0].content}"
                       </p>
-                    </div>
-                  )}
-
-                  {/* Student Specific Footer: Agency & Country */}
-                  {lead.type === 'Student' && (
-                    <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 px-2 py-1.5 rounded-lg border-2 border-emerald-500/20 w-full mb-1">
-                      <span className="text-gray-400 font-extrabold text-[8px] uppercase tracking-wider shrink-0">SO:</span>
-                      <div className="flex items-center gap-1 font-bold min-w-0 flex-1">
-                        <span className="truncate text-gray-900 dark:text-gray-200">
-                          {lead.agencyProfile && lead.agencyProfile.name ? lead.agencyProfile.name : 'Independent'}
-                        </span>
-                        {lead.agencyProfile && lead.agencyProfile.country && (
-                          <>
-                            <MapPin size={10} className="text-gray-400 shrink-0 ml-1" />
-                            <span className="text-gray-500 dark:text-gray-400 font-medium truncate">{lead.agencyProfile.country}</span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Agency Specific Footer: Location */}
-                  {lead.type === 'Agent' && (
-                    <div className="flex items-center gap-2 text-xs text-gray-500 mb-1">
-                      <MapPin size={12} />
-                      <span className="font-bold">{lead.country || lead.agencyProfile?.country || 'Unknown Location'}</span>
                     </div>
                   )}
 

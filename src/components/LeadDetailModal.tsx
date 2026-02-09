@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Lead } from '../types';
 import { useLeads } from '../context/LeadContext';
-import { X, Globe, Mail, Phone, MessageCircle, MapPin, Building, Users, User, FileText, Calendar, Clock, DollarSign, Award, BookOpen, GraduationCap, Languages, AlignLeft, Edit2, Save, Send, Check, PenTool, StickyNote, Briefcase } from 'lucide-react';
+import { X, MapPin, Calendar, Clock, ArrowRight, Upload, FileText, CheckCircle, AlertCircle, Trash2, Edit2, Save, ExternalLink, Plus, Filter, Search, ChevronDown, ChevronUp, MoreHorizontal, Mail, Phone, MessageCircle, User, Briefcase, Globe, Building, Check, Layers, Users, Languages, PenTool, StickyNote } from 'lucide-react';
 import Link from 'next/link';
 import { COUNTRIES } from '../data/countries';
 import { CheckboxGroup, CountrySelector, Input, Select, PhoneInput, SearchableSelect } from './ui/FormComponents';
@@ -659,16 +659,16 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                             </span>
                                                         </div>
 
-                                                        {/* Marketing Sub-Section */}
-                                                        {isMarketingParent && (
-                                                            <div className="col-span-1 sm:col-span-2 pl-8 grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1 mb-2">
+                                                        {/* Marketing Sub-Section - Conditional on Checked */}
+                                                        {isMarketingParent && isChecked && (
+                                                            <div className="col-span-1 sm:col-span-2 pl-8 grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1 mb-2 animate-in fade-in slide-in-from-top-1">
                                                                 {[
                                                                     { key: 'marketingSubscribed', label: 'Subscribed' },
                                                                     { key: 'marketingUnsubscribed', label: 'Unsubscribed' }
                                                                 ].map(subItem => {
                                                                     const isSubChecked = isEditing
-                                                                        ? formData.agencyProfile?.onboardingChecklist?.[subItem.key] || false
-                                                                        : lead.agencyProfile?.onboardingChecklist?.[subItem.key as any] || false;
+                                                                        ? formData.agencyProfile?.onboardingChecklist?.[subItem.key as keyof typeof formData.agencyProfile.onboardingChecklist] || false
+                                                                        : lead.agencyProfile?.onboardingChecklist?.[subItem.key as keyof typeof lead.agencyProfile.onboardingChecklist] || false;
 
                                                                     return (
                                                                         <div

@@ -29,8 +29,8 @@ export const StudentLeadCard: React.FC<Props> = ({ lead }) => {
                         {lead.agencyProfile && lead.agencyProfile.name && (
                             <>
                                 <span className="text-gray-300 dark:text-gray-600">•</span>
-                                <span className="text-gray-500 dark:text-gray-400 font-medium truncate">{lead.agencyProfile.country}</span>
                                 <MapPin size={10} className="text-gray-400 shrink-0 ml-0.5" />
+                                <span className="text-gray-500 dark:text-gray-400 font-medium truncate ml-1">{lead.agencyProfile.country}</span>
                             </>
                         )}
                     </div>

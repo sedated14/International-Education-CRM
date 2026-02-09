@@ -482,8 +482,8 @@ export default function AgenciesPage() {
                                                 />
                                             </td>
                                             <td className="px-6 py-5">
-                                                <span className="font-mono text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
-                                                    {agency.agencyCode || '-'}
+                                                <span className="font-mono text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800 px-2.5 py-1 rounded-lg">
+                                                    {agency.agencyCode || `#${agency.id}`}
                                                 </span>
                                             </td>
                                             <td className="px-2 py-5">
