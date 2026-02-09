@@ -5,6 +5,7 @@ import { useLeads } from '../context/LeadContext';
 import { Agency } from '../types';
 import { COUNTRIES } from '../data/countries';
 import { getTimezoneForLocation } from '../utils/timezoneUtils';
+import { generateAgencyCode } from '../utils/formatters';
 
 interface Props {
     onClose: () => void;
@@ -257,6 +258,14 @@ export const ImportAgenciesModal: React.FC<Props> = ({ onClose }) => {
                     country: mappedData.country || 'Unknown',
                     status: 'Inquiry',
                     source: 'CSV',
+                    // We can't generate the final index here because we might skip some.
+                    // But duplicates are rare. We'll generate it just before adding, or here?
+                    // If we generate here, and skip later, the index might have gaps?
+                    // Gaps are fine. But we need a running count.
+                    // Let's rely on the success count?
+                    // No, `leads` is static. We need `leads.length + successCount + 1`.
+                    // But we iterate `fileData`. `groupedLeads` is the intermediate.
+                    // We should add `agencyCode` when we push to `addLead`.
                     createdAt: new Date().toISOString(),
                     agencyProfile: {
                         website: mappedData.website || '',
@@ -445,7 +454,18 @@ export const ImportAgenciesModal: React.FC<Props> = ({ onClose }) => {
                 }
             } else {
                 // Unique - Add to Leads
-                addLead(newLead);
+                // Generate ID
+                const currentAgentCount = leads.filter(l => l.type === 'Agent').length;
+                const nextIndex = currentAgentCount + successCount + 1; // +1 for 1-based, +successCount for this batch
+
+                const code = generateAgencyCode(
+                    nextIndex,
+                    newLead.agentName,
+                    newLead.country,
+                    newLead.agencyProfile.region || 'Unknown'
+                );
+
+                addLead({ ...newLead, agencyCode: code });
                 successCount++;
 
                 // Add new emails to set to avoid duplicates *within* later groups (unlikely if grouped by name, but good practice)

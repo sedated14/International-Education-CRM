@@ -5,33 +5,42 @@ import { Agency } from '../../types';
 import { Search, Filter, Download, Plus, Globe, MapPin, User, ChevronRight, Trash2, X, Calendar, CheckSquare, FileSpreadsheet } from 'lucide-react';
 import Link from 'next/link';
 import { ImportAgenciesModal } from '../../components/ImportAgenciesModal';
-
 import { useLeads } from '../../context/LeadContext';
+import { generateAgencyCode } from '../../utils/formatters';
 
 export default function AgenciesPage() {
-    const { leads } = useLeads();
+    const { leads, updateLead, deleteLead } = useLeads();
     // Map Leads to Agency format for this view
     const agencies = leads
         .filter(l => l.type === 'Agent')
-        .map(l => ({
-            ...l.agencyProfile,
-            id: l.id,
-            name: l.agentName, // Use Lead name as canonical
-            country: l.country, // Use Lead country as canonical
-            // Ensure other required fields exist if missing
-            keyContacts: l.agencyProfile?.keyContacts || [],
-            historicalSends: l.agencyProfile?.historicalSends || 0,
-            partnershipStatus: l.agencyProfile?.partnershipStatus || 'Prospective',
-            lastContactDate: l.lastContacted || l.createdAt,
-            createdAt: l.createdAt, // Map distinct creation date
-            studentCount: leads.filter(student => student.type === 'Student' && String(student.studentProfile?.agencyId) === String(l.id)).length
-        } as Agency & { studentCount: number }));
+        .map(l => {
+            const checklist = l.agencyProfile?.onboardingChecklist;
+            let marketingStatus = 'Not Added';
+            if (checklist?.marketingSubscribed) marketingStatus = 'Subscribed';
+            else if (checklist?.marketingUnsubscribed) marketingStatus = 'Unsubscribed';
+
+            return {
+                ...l.agencyProfile,
+                id: l.id,
+                agencyCode: l.agencyCode,
+                name: l.agentName, // Use Lead name as canonical
+                country: l.country, // Use Lead country as canonical
+                type: l.type, // FIX: Ensure type is passed
+                marketingStatus, // NEW: Derived status
+                // Ensure other required fields exist if missing
+                keyContacts: l.agencyProfile?.keyContacts || [],
+                historicalSends: l.agencyProfile?.historicalSends || 0,
+                partnershipStatus: l.agencyProfile?.partnershipStatus || 'Prospective',
+                lastContactDate: l.lastContacted || l.createdAt,
+                createdAt: l.createdAt, // Map distinct creation date
+                studentCount: leads.filter(student => student.type === 'Student' && String(student.studentProfile?.agencyId) === String(l.id)).length
+            } as Agency & { studentCount: number, marketingStatus: string };
+        });
 
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState<'All' | 'Active' | 'Pending' | 'Prospective' | 'Inactive' | 'Do Not Contact'>('All');
     const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-    const { deleteLead } = useLeads();
 
     // Advanced Filters State
     const [showFilters, setShowFilters] = useState(false);
@@ -119,13 +128,6 @@ export default function AgenciesPage() {
         if (!confirm(`Are you sure you want to delete ${selectedIds.size} agencies? This action cannot be undone.`)) return;
 
         const idsToDelete = Array.from(selectedIds);
-
-        // Optimistic update handled by context usually, but we need to wait
-        // Assuming deleteLead takes ID.
-        // We'll process them in parallel or batch? deleteLead in context likely deletes one docs.
-        // Firestore batch delete would be better but context might not expose it. 
-        // We will loop for now.
-
         try {
             await Promise.all(idsToDelete.map(id => deleteLead(id)));
             setSelectedIds(new Set());
@@ -135,9 +137,40 @@ export default function AgenciesPage() {
         }
     };
 
+    const handleRegenerateIDs = async () => {
+        if (!confirm("This will regenerate IDs for ALL agencies based on their Date Added. This ensures consecutive numbering (0001, 0002...). Continue?")) return;
+
+        try {
+            // Sort by createdAt ASC
+            const sortedLeads = [...leads]
+                .filter(l => l.type === 'Agent')
+                .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+
+            let updatedCount = 0;
+            for (let i = 0; i < sortedLeads.length; i++) {
+                const lead = sortedLeads[i];
+                const newCode = generateAgencyCode(
+                    i + 1,
+                    lead.agentName || lead.agencyProfile?.name || 'Unknown',
+                    lead.country,
+                    lead.agencyProfile?.region || 'Unknown'
+                );
+
+                if (lead.agencyCode !== newCode) {
+                    await updateLead(lead.id, { agencyCode: newCode });
+                    updatedCount++;
+                }
+            }
+            alert(`Successfully updated IDs for ${updatedCount} agencies.`);
+        } catch (e) {
+            console.error("Error regenerating IDs:", e);
+            alert("Failed to regenerate IDs.");
+        }
+    };
+
     const handleExportCSV = () => {
         const headers = [
-            'ID', 'Name', 'Region', 'Country', 'City', 'Address', 'Type', 'Status',
+            'Agency ID', 'Name', 'Region', 'Country', 'City', 'Address', 'Type', 'Status', 'Marketing List',
             'Commission', 'Sends', 'Last Contact', 'Date Added', 'Met At',
             'Primary Contact Name', 'Nickname', 'Role', 'Email', 'Phone', 'WhatsApp', 'Skype', 'Pref Comm',
             'Secondary Contact Name', 'Role', 'Email', 'WhatsApp'
@@ -149,14 +182,15 @@ export default function AgenciesPage() {
                 const p = a.keyContacts[0] || {} as any;
                 const s = a.secondaryContact || {} as any;
                 return [
-                    a.id,
+                    `"${a.agencyCode || a.id}"`, // Use new Code
                     `"${a.name}"`,
                     `"${a.region || ''}"`,
                     `"${a.country}"`,
                     `"${a.city}"`,
                     `"${a.address || ''}"`,
-                    `"${a.type}"`,
+                    `"${a.type || 'Agent'}"`, // Fix: Ensure 'Agent'
                     a.partnershipStatus,
+                    `"${a.marketingStatus}"`, // New
                     a.commissionRate || '',
                     a.historicalSends,
                     a.lastContactDate,
@@ -224,6 +258,16 @@ export default function AgenciesPage() {
                         >
                             <Download size={16} />
                             Export CSV
+                        </button>
+                        <button
+                            onClick={handleRegenerateIDs}
+                            className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all text-sm"
+                            title="Regenerate Agency IDs based on Date Added"
+                        >
+                            <div className="flex items-center gap-1">
+                                <span className="text-xs">🆔</span>
+                                <span>Fix IDs</span>
+                            </div>
                         </button>
                         <Link href="/agencies/add">
                             <button className="flex items-center gap-2 px-5 py-2.5 bg-black dark:bg-white text-white dark:text-black font-bold rounded-xl hover:bg-gray-900 dark:hover:bg-gray-200 shadow-lg hover:shadow-xl transition-all text-sm">
@@ -393,14 +437,23 @@ export default function AgenciesPage() {
                                                 className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
                                             />
                                         </th>
+                                        <th className="px-6 py-5 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                                            ID
+                                        </th>
                                         <th className="px-2 py-5 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" onClick={() => handleSort('name')}>
                                             Agency Name {sortConfig?.key === 'name' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                                        </th>
+                                        <th className="px-6 py-5 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" onClick={() => handleSort('region')}>
+                                            Region {sortConfig?.key === 'region' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
                                         </th>
                                         <th className="px-6 py-5 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" onClick={() => handleSort('location')}>
                                             Location {sortConfig?.key === 'location' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
                                         </th>
                                         <th className="px-6 py-5 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" onClick={() => handleSort('partnershipStatus')}>
                                             Status {sortConfig?.key === 'partnershipStatus' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                                        </th>
+                                        <th className="px-6 py-5 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                                            Marketing
                                         </th>
                                         <th className="px-6 py-5 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" onClick={() => handleSort('keyContactName')}>
                                             Key Contact {sortConfig?.key === 'keyContactName' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
@@ -428,11 +481,19 @@ export default function AgenciesPage() {
                                                     className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
                                                 />
                                             </td>
+                                            <td className="px-6 py-5">
+                                                <span className="font-mono text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                                                    {agency.agencyCode || '-'}
+                                                </span>
+                                            </td>
                                             <td className="px-2 py-5">
                                                 <Link href={`/agencies/${agency.id}`}>
                                                     <div className="font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">{agency.name}</div>
                                                 </Link>
                                                 <div className="text-xs text-gray-400 font-medium">{agency.type}</div>
+                                            </td>
+                                            <td className="px-6 py-5 text-sm text-gray-600 dark:text-gray-300">
+                                                {agency.region || '-'}
                                             </td>
                                             <td className="px-6 py-5">
                                                 <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300 font-medium text-sm">
@@ -442,6 +503,14 @@ export default function AgenciesPage() {
                                             </td>
                                             <td className="px-6 py-5">
                                                 <StatusBadge status={agency.partnershipStatus} />
+                                            </td>
+                                            <td className="px-6 py-5">
+                                                <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wide border ${agency.marketingStatus === 'Subscribed' ? 'bg-green-50 text-green-600 border-green-100 dark:bg-green-900/20 dark:border-green-800' :
+                                                    agency.marketingStatus === 'Unsubscribed' ? 'bg-red-50 text-red-600 border-red-100 dark:bg-red-900/20 dark:border-red-800' :
+                                                        'bg-gray-50 text-gray-400 border-gray-100 dark:bg-gray-800 dark:border-gray-700'
+                                                    }`}>
+                                                    {agency.marketingStatus}
+                                                </span>
                                             </td>
                                             <td className="px-6 py-5">
                                                 <div className="flex items-center gap-3">

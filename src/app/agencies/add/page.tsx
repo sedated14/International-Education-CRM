@@ -7,20 +7,28 @@ import { useLeads } from '../../../context/LeadContext';
 import { ArrowLeft, Save } from 'lucide-react';
 import Link from 'next/link';
 
+import { generateAgencyCode } from '../../../utils/formatters';
+
 export default function AddAgencyPage() {
     const router = useRouter();
-    const { addLead } = useLeads(); // Use Context
+    const { leads, addLead } = useLeads(); // Use Context
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = async (newAgency: any) => {
         setIsSubmitting(true);
         try {
-            // Transform form data to match Lead structure if necessary, 
-            // or if addLead accepts the raw agency form, ensuring it has type='Agent'.
-            // The AgencyForm likely returns an Agency object. We need to wrap it.
+            // Generate Agency Code
+            const currentAgentCount = leads.filter(l => l.type === 'Agent').length;
+            const code = generateAgencyCode(
+                currentAgentCount + 1,
+                newAgency.name,
+                newAgency.country,
+                newAgency.region || 'Unknown'
+            );
 
             await addLead({
                 type: 'Agent',
+                agencyCode: code,
                 agentName: newAgency.name,
                 country: newAgency.country,
                 status: 'Qualified', // Default status for existing agents? or 'Inquiry'?

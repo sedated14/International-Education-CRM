@@ -58,6 +58,7 @@ export interface Lead {
   title: string;
   type: LeadType;
   source: 'Manual' | 'Gmail' | 'CSV' | 'Form';
+  agencyCode?: string; // Custom Display ID
   createdAt: string; // ISO String for precise sorting
   lastContacted?: string; // ISO String
   followUpDate?: string; // ISO String
@@ -114,6 +115,7 @@ export interface OnboardingChecklist {
 
 export interface Agency {
   id: number;
+  agencyCode?: string; // NEW: Custom ID (e.g. 0001-Acm-US-NA)
   name: string;
   region: string; // NEW
   type: string;
