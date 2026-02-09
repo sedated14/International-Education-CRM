@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navigation } from '../../components/Navigation';
 import { Agency } from '../../types';
-import { Search, Filter, Download, Plus, Globe, MapPin, User, ChevronRight, Trash2, X, Calendar, CheckSquare, FileSpreadsheet } from 'lucide-react';
+import { Search, Filter, Download, Plus, Globe, MapPin, User, ChevronRight, Trash2, X, Calendar, CheckSquare, FileSpreadsheet, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import { ImportAgenciesModal } from '../../components/ImportAgenciesModal';
 import { useLeads } from '../../context/LeadContext';
@@ -190,7 +190,7 @@ export default function AgenciesPage() {
                     `"${a.address || ''}"`,
                     `"${a.type || 'Agent'}"`, // Fix: Ensure 'Agent'
                     a.partnershipStatus,
-                    `"${a.agencyProfile?.onboardingChecklist?.addedMarketingList ? (a.agencyProfile.onboardingChecklist.marketingSubscribed ? 'Subscribed' : (a.agencyProfile.onboardingChecklist.marketingUnsubscribed ? 'Unsubscribed' : 'Added')) : 'Not Added'}"`,
+                    `"${a.onboardingChecklist?.addedMarketingList ? (a.onboardingChecklist.marketingSubscribed ? 'Subscribed' : (a.onboardingChecklist.marketingUnsubscribed ? 'Unsubscribed' : 'Added')) : 'Not Added'}"`,
                     a.commissionRate || '',
                     a.historicalSends,
                     a.lastContactDate,
@@ -504,19 +504,25 @@ export default function AgenciesPage() {
                                             <td className="px-6 py-5">
                                                 <StatusBadge status={agency.partnershipStatus} />
                                             </td>
+                                            <td className="px-6 py-5 text-center">
+                                                {agency.onboardingChecklist?.addedMarketingList ? (
+                                                    <div className="inline-flex items-center justify-center w-6 h-6 bg-green-100 rounded-full border border-green-200">
+                                                        <CheckCircle2 size={14} className="text-green-600" />
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-gray-300">-</span>
+                                                )}
+                                            </td>
                                             <td className="px-6 py-5">
                                                 {(() => {
-                                                    const cl = agency.agencyProfile?.onboardingChecklist || {};
-                                                    if (cl.addedMarketingList) {
-                                                        if (cl.marketingSubscribed) {
-                                                            return <span className="px-2 py-1 bg-green-50 text-green-700 rounded text-xs font-bold border border-green-100">Subscribed</span>;
-                                                        }
-                                                        if (cl.marketingUnsubscribed) {
-                                                            return <span className="px-2 py-1 bg-red-50 text-red-700 rounded text-xs font-bold border border-red-100">Unsubscribed</span>;
-                                                        }
-                                                        return <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs font-bold border border-blue-100">Added</span>;
+                                                    const cl = (agency.onboardingChecklist || {}) as any;
+                                                    if (cl.marketingSubscribed) {
+                                                        return <span className="text-xs font-bold text-green-600 dark:text-green-400">Subscribed</span>;
                                                     }
-                                                    return <span className="text-gray-400 text-xs italic">Not Added</span>;
+                                                    if (cl.marketingUnsubscribed) {
+                                                        return <span className="text-xs font-bold text-red-600 dark:text-red-400">Unsubscribed</span>;
+                                                    }
+                                                    return <span className="text-gray-300">-</span>;
                                                 })()}
                                             </td>
                                             <td className="px-6 py-5">

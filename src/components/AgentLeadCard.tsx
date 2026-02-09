@@ -1,6 +1,6 @@
 import React from 'react';
 import { Lead } from '../types';
-import { MapPin, StickyNote, Calendar, Clock, Edit2 } from 'lucide-react';
+import { MapPin, StickyNote, Calendar, Clock, Edit2, X } from 'lucide-react';
 import Link from 'next/link';
 import { useLeads } from '../context/LeadContext';
 
@@ -26,7 +26,9 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
         addedMarketingList: false,
         agentHandbookSent: false,
         studentHandbookSent: false,
-        commissionRequestFormSent: false
+        commissionRequestFormSent: false,
+        marketingSubscribed: false,
+        marketingUnsubscribed: false
     };
 
     const toggleChecklist = (key: string) => {
@@ -86,7 +88,6 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
                     </div>
                 )}
 
-                {/* Onboarding Checklist */}
                 {lead.agencyProfile && (
                     <div className="mb-4 bg-white dark:bg-gray-800/50 p-3 rounded-xl border-2 border-blue-500">
                         <div className="flex items-center gap-2 mb-2 px-1">
@@ -107,29 +108,86 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
                                     { key: 'commissionRequestFormSent', label: 'Comm. Form Sent' }
                                 ];
 
-                                const unselectedItems = checklistOrder.filter(item =>
-                                    !lead.agencyProfile!.onboardingChecklist?.[item.key as keyof typeof lead.agencyProfile.onboardingChecklist]
-                                );
-
-                                // Show ALL items (checklistOrder)
                                 return checklistOrder.map(item => {
                                     const isChecked = lead.agencyProfile!.onboardingChecklist?.[item.key as keyof typeof lead.agencyProfile.onboardingChecklist] || false;
+                                    const isMarketingParent = item.key === 'addedMarketingList';
+
                                     return (
-                                        <div
-                                            key={item.key}
-                                            className="flex items-center gap-2 cursor-pointer group/check"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                toggleChecklist(item.key);
-                                            }}
-                                        >
-                                            <div className={`w-3 h-3 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-emerald-500 border-emerald-500' : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 group-hover/check:border-blue-400'}`}>
-                                                {isChecked && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
+                                        <React.Fragment key={item.key}>
+                                            <div
+                                                className="flex items-center gap-2 cursor-pointer group/check"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    toggleChecklist(item.key);
+                                                }}
+                                            >
+                                                <div className={`w-3 h-3 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-emerald-500 border-emerald-500' : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 group-hover/check:border-blue-400'}`}>
+                                                    {isChecked && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
+                                                </div>
+                                                <span className={`text-[9px] font-bold transition-colors ${isChecked ? 'text-gray-700 dark:text-gray-200' : 'text-gray-400 dark:text-gray-500 group-hover/check:text-blue-500'}`}>
+                                                    {item.label}
+                                                </span>
                                             </div>
-                                            <span className={`text-[9px] font-bold transition-colors ${isChecked ? 'text-gray-700 dark:text-gray-200' : 'text-gray-400 dark:text-gray-500 group-hover/check:text-blue-500'}`}>
-                                                {item.label}
-                                            </span>
-                                        </div>
+
+                                            {/* Marketing Sub-Section - Exclusive Selection */}
+                                            {isMarketingParent && isChecked && (
+                                                <div className="pl-5 grid grid-cols-1 gap-1 mt-1 mb-1 animate-in fade-in slide-in-from-top-1">
+                                                    {[
+                                                        { key: 'marketingSubscribed', label: 'Subscribed', type: 'positive' },
+                                                        { key: 'marketingUnsubscribed', label: 'Unsubscribed', type: 'negative' }
+                                                    ].map(subItem => {
+                                                        const isSubChecked = lead.agencyProfile!.onboardingChecklist?.[subItem.key as keyof typeof lead.agencyProfile.onboardingChecklist] || false;
+
+                                                        return (
+                                                            <div
+                                                                key={subItem.key}
+                                                                className="flex items-center gap-2 cursor-pointer group/subcheck"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    // Exclusive Toggle Logic
+                                                                    const currentList = lead.agencyProfile?.onboardingChecklist || {};
+                                                                    const isCurrentlyChecked = currentList[subItem.key as keyof typeof currentList];
+
+                                                                    const updatePayload: any = {
+                                                                        [subItem.key]: !isCurrentlyChecked
+                                                                    };
+
+                                                                    // If we are selecting this one (it was false), deselect the others
+                                                                    if (!isCurrentlyChecked) {
+                                                                        if (subItem.key === 'marketingSubscribed') updatePayload['marketingUnsubscribed'] = false;
+                                                                        if (subItem.key === 'marketingUnsubscribed') updatePayload['marketingSubscribed'] = false;
+                                                                    }
+
+                                                                    updateLead(lead.id, {
+                                                                        agencyProfile: {
+                                                                            ...lead.agencyProfile!,
+                                                                            onboardingChecklist: { ...currentList, ...updatePayload }
+                                                                        }
+                                                                    });
+                                                                }}
+                                                            >
+                                                                <div className={`w-3 h-3 rounded border flex items-center justify-center transition-all ${isSubChecked
+                                                                    ? (subItem.type === 'negative' ? 'bg-red-100 border-red-500' : 'bg-emerald-100 border-emerald-500')
+                                                                    : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 group-hover/subcheck:border-gray-400'
+                                                                    }`}>
+                                                                    {isSubChecked && (
+                                                                        subItem.type === 'negative'
+                                                                            ? <X size={8} className="text-red-500 stroke-[4]" />
+                                                                            : <div className="w-1.5 h-1.5 bg-emerald-600 rounded-sm" />
+                                                                    )}
+                                                                </div>
+                                                                <span className={`text-[9px] font-bold ${isSubChecked
+                                                                    ? (subItem.type === 'negative' ? 'text-red-600' : 'text-emerald-700 dark:text-emerald-300')
+                                                                    : 'text-gray-400'
+                                                                    }`}>
+                                                                    {subItem.label}
+                                                                </span>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            )}
+                                        </React.Fragment>
                                     );
                                 });
                             })()}

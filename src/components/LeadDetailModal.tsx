@@ -663,8 +663,8 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                         {isMarketingParent && isChecked && (
                                                             <div className="col-span-1 sm:col-span-2 pl-8 grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1 mb-2 animate-in fade-in slide-in-from-top-1">
                                                                 {[
-                                                                    { key: 'marketingSubscribed', label: 'Subscribed' },
-                                                                    { key: 'marketingUnsubscribed', label: 'Unsubscribed' }
+                                                                    { key: 'marketingSubscribed', label: 'Subscribed', type: 'positive' },
+                                                                    { key: 'marketingUnsubscribed', label: 'Unsubscribed', type: 'negative' }
                                                                 ].map(subItem => {
                                                                     const isSubChecked = isEditing
                                                                         ? formData.agencyProfile?.onboardingChecklist?.[subItem.key as keyof typeof formData.agencyProfile.onboardingChecklist] || false
@@ -675,19 +675,24 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                                             key={subItem.key}
                                                                             className="flex items-center gap-2 cursor-pointer group/subcheck p-1"
                                                                             onClick={() => {
-                                                                                // Logic: Can be subscribed OR unsubscribed, or neither. Both true is weird but allowed by data model (maybe user wants to know history).
-                                                                                // Let's just toggle.
-                                                                                const newSubValue = !isSubChecked;
+                                                                                // Exclusive Toggle Logic
+                                                                                const isCurrentlyChecked = isSubChecked;
+                                                                                const updatePayload: any = {
+                                                                                    [subItem.key]: !isCurrentlyChecked
+                                                                                };
+
+                                                                                if (!isCurrentlyChecked) {
+                                                                                    if (subItem.key === 'marketingSubscribed') updatePayload['marketingUnsubscribed'] = false;
+                                                                                    if (subItem.key === 'marketingUnsubscribed') updatePayload['marketingSubscribed'] = false;
+                                                                                }
+
                                                                                 if (isEditing) {
                                                                                     const current = formData.agencyProfile?.onboardingChecklist || {};
                                                                                     setFormData((prev: any) => ({
                                                                                         ...prev,
                                                                                         agencyProfile: {
                                                                                             ...prev.agencyProfile,
-                                                                                            onboardingChecklist: {
-                                                                                                ...current,
-                                                                                                [subItem.key]: newSubValue
-                                                                                            }
+                                                                                            onboardingChecklist: { ...current, ...updatePayload }
                                                                                         }
                                                                                     }));
                                                                                 } else {
@@ -696,19 +701,26 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                                                     updateLead(lead.id, {
                                                                                         agencyProfile: {
                                                                                             ...lead.agencyProfile,
-                                                                                            onboardingChecklist: {
-                                                                                                ...currentList,
-                                                                                                [subItem.key]: newSubValue
-                                                                                            }
+                                                                                            onboardingChecklist: { ...currentList, ...updatePayload }
                                                                                         }
                                                                                     });
                                                                                 }
                                                                             }}
                                                                         >
-                                                                            <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${isSubChecked ? 'bg-green-100 border-green-500' : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 group-hover/subcheck:border-green-400'}`}>
-                                                                                {isSubChecked && <Check size={12} className="text-green-600 stroke-[3]" />}
+                                                                            <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${isSubChecked
+                                                                                    ? (subItem.type === 'negative' ? 'bg-red-100 border-red-500' : 'bg-green-100 border-green-500')
+                                                                                    : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 group-hover/subcheck:border-gray-400'
+                                                                                }`}>
+                                                                                {isSubChecked && (
+                                                                                    subItem.type === 'negative'
+                                                                                        ? <X size={12} className="text-red-500 stroke-[3]" />
+                                                                                        : <Check size={12} className="text-green-600 stroke-[3]" />
+                                                                                )}
                                                                             </div>
-                                                                            <span className={`text-[11px] font-medium ${isSubChecked ? 'text-gray-800 dark:text-gray-200' : 'text-gray-400'}`}>
+                                                                            <span className={`text-[11px] font-medium ${isSubChecked
+                                                                                    ? (subItem.type === 'negative' ? 'text-red-700 dark:text-red-400' : 'text-gray-800 dark:text-gray-200')
+                                                                                    : 'text-gray-400'
+                                                                                }`}>
                                                                                 {subItem.label}
                                                                             </span>
                                                                         </div>

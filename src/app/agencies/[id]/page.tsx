@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Navigation } from '../../../components/Navigation';
 import { Agency } from '../../../types';
 import { useLeads } from '../../../context/LeadContext';
-import { ArrowLeft, User, Phone, Mail, MapPin, Globe, Calendar, DollarSign, Award, BookOpen, MessageCircle, GraduationCap, Eye, ChevronRight, Send, Check } from 'lucide-react';
+import { ArrowLeft, User, Phone, Mail, MapPin, Globe, Calendar, DollarSign, Award, BookOpen, MessageCircle, GraduationCap, Eye, ChevronRight, Send, Check, X } from 'lucide-react';
 import Link from 'next/link';
 import { LeadDetailModal } from '../../../components/LeadDetailModal';
 
