@@ -130,10 +130,20 @@ export const StudentForm = ({ lead, onSubmit, onDelete, isModal = false, isSubmi
         // Construct Full Name
         const fullName = [formData.firstName, formData.middleName, formData.lastName].filter(Boolean).join(' ');
 
+        // Find the selected Agency Lead to extract ID and Profile
+        const selectedAgencyLead = formData.linkedAgencyName
+            ? agencies.find(a => a.agentName === formData.linkedAgencyName)
+            : undefined;
+
         // Transform back to Profile Object
         const submissionData = {
             studentName: fullName, // Top level
             country: formData.residence || formData.nationality || (lead?.country || 'Unknown'), // Top level
+
+            // Snapshot the Agency Profile for robust display (Cards, Profile View)
+            // This ensures it shows up immediately and persists even if context hydration fails
+            agencyProfile: selectedAgencyLead?.agencyProfile,
+
             studentProfile: {
                 ...((lead?.studentProfile) || {}),
                 firstName: formData.firstName,
@@ -173,9 +183,8 @@ export const StudentForm = ({ lead, onSubmit, onDelete, isModal = false, isSubmi
                 preferredCommunication: formData.preferredCommunication,
                 otherInfo: formData.otherInfo,
 
-                agencyId: formData.linkedAgencyName
-                    ? agencies.find(a => a.agentName === formData.linkedAgencyName)?.id
-                    : undefined
+                // Link ID for Context Hydration (if needed for updates)
+                agencyId: selectedAgencyLead?.id
             }
         };
 
@@ -451,8 +460,8 @@ export const StudentForm = ({ lead, onSubmit, onDelete, isModal = false, isSubmi
                                         });
                                     }}
                                     className={`flex items-center gap-3 px-5 py-3 rounded-xl border-2 transition-all ${formData.preferredCommunication.includes(method)
-                                            ? 'border-gray-900 dark:border-gray-100 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100'
-                                            : 'border-transparent bg-gray-200/50 dark:bg-gray-700/50 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                        ? 'border-gray-900 dark:border-gray-100 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100'
+                                        : 'border-transparent bg-gray-200/50 dark:bg-gray-700/50 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
                                         }`}
                                 >
                                     {formData.preferredCommunication.includes(method) ? <CheckCircle2 size={18} /> : <div className="w-[18px]" />}
