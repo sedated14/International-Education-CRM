@@ -49,10 +49,10 @@ export const AgentLeadCard: React.FC<Props> = ({ lead }) => {
             <div className="bg-white dark:bg-gray-900 p-5 border-b-2 border-blue-500 flex justify-between items-start">
                 <div className="flex flex-col">
                     <h3 className="font-bold text-gray-900 dark:text-white text-base leading-tight">{lead.agentName || lead.title}</h3>
-                    <div className="flex items-center gap-1.5 mt-1">
-                        <MapPin size={12} className="text-gray-400 shrink-0" />
-                        <span className="text-xs font-bold text-gray-500 dark:text-gray-400 truncate">
-                            {lead.agencyProfile?.city ? `${lead.agencyProfile.city}, ` : ''}{lead.country}
+                    <div className="flex items-center gap-1.5 mt-1 text-xs font-bold text-gray-500 dark:text-gray-400">
+                        <MapPin size={12} className="shrink-0" />
+                        <span className="truncate">
+                            {lead.country}
                         </span>
                     </div>
                 </div>
