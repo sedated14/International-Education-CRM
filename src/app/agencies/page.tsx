@@ -453,7 +453,10 @@ export default function AgenciesPage() {
                                             Status {sortConfig?.key === 'partnershipStatus' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
                                         </th>
                                         <th className="px-6 py-5 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
-                                            Marketing
+                                            Marketing List
+                                        </th>
+                                        <th className="px-6 py-5 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                                            Marketing Status
                                         </th>
                                         <th className="px-6 py-5 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" onClick={() => handleSort('keyContactName')}>
                                             Key Contact {sortConfig?.key === 'keyContactName' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
