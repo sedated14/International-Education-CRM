@@ -190,7 +190,7 @@ export default function AgenciesPage() {
                     `"${a.address || ''}"`,
                     `"${a.type || 'Agent'}"`, // Fix: Ensure 'Agent'
                     a.partnershipStatus,
-                    `"${a.marketingStatus}"`, // New
+                    `"${a.agencyProfile?.onboardingChecklist?.addedMarketingList ? (a.agencyProfile.onboardingChecklist.marketingSubscribed ? 'Subscribed' : (a.agencyProfile.onboardingChecklist.marketingUnsubscribed ? 'Unsubscribed' : 'Added')) : 'Not Added'}"`,
                     a.commissionRate || '',
                     a.historicalSends,
                     a.lastContactDate,
@@ -505,12 +505,19 @@ export default function AgenciesPage() {
                                                 <StatusBadge status={agency.partnershipStatus} />
                                             </td>
                                             <td className="px-6 py-5">
-                                                <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wide border ${agency.marketingStatus === 'Subscribed' ? 'bg-green-50 text-green-600 border-green-100 dark:bg-green-900/20 dark:border-green-800' :
-                                                    agency.marketingStatus === 'Unsubscribed' ? 'bg-red-50 text-red-600 border-red-100 dark:bg-red-900/20 dark:border-red-800' :
-                                                        'bg-gray-50 text-gray-400 border-gray-100 dark:bg-gray-800 dark:border-gray-700'
-                                                    }`}>
-                                                    {agency.marketingStatus}
-                                                </span>
+                                                {(() => {
+                                                    const cl = agency.agencyProfile?.onboardingChecklist || {};
+                                                    if (cl.addedMarketingList) {
+                                                        if (cl.marketingSubscribed) {
+                                                            return <span className="px-2 py-1 bg-green-50 text-green-700 rounded text-xs font-bold border border-green-100">Subscribed</span>;
+                                                        }
+                                                        if (cl.marketingUnsubscribed) {
+                                                            return <span className="px-2 py-1 bg-red-50 text-red-700 rounded text-xs font-bold border border-red-100">Unsubscribed</span>;
+                                                        }
+                                                        return <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs font-bold border border-blue-100">Added</span>;
+                                                    }
+                                                    return <span className="text-gray-400 text-xs italic">Not Added</span>;
+                                                })()}
                                             </td>
                                             <td className="px-6 py-5">
                                                 <div className="flex items-center gap-3">

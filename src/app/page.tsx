@@ -8,7 +8,7 @@ import { AgentLeadCard } from '../components/AgentLeadCard';
 import { LeadDetailModal } from '../components/LeadDetailModal';
 import { NewLeadMenu } from '../components/NewLeadMenu';
 import { Lead } from '../types';
-import { Briefcase, GraduationCap, AlertCircle, Clock, Edit2, MapPin } from 'lucide-react';
+import { Briefcase, GraduationCap, AlertCircle, Clock, Edit2, MapPin, Check } from 'lucide-react';
 
 export default function ApexCRM() {
 
@@ -229,8 +229,8 @@ export default function ApexCRM() {
                               });
                             }}
                           >
-                            <div className={`w-3 h-3 rounded border flex items-center justify-center ${isChecked ? 'bg-blue-500 border-blue-500' : 'bg-white border-gray-300 dark:border-gray-600'}`}>
-                              {isChecked && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
+                            <div className={`w-3 h-3 rounded flex items-center justify-center border transition-all ${isChecked ? 'bg-green-100 border-green-500' : 'bg-white border-gray-300 dark:border-gray-600'}`}>
+                              {isChecked && <Check size={10} className="text-green-600 stroke-[3]" />}
                             </div>
                             <span className={`text-[10px] font-bold ${isChecked ? 'text-gray-900 dark:text-gray-200' : 'text-gray-400'}`}>{item.label}</span>
                           </div>
@@ -322,7 +322,7 @@ export default function ApexCRM() {
                         <span className="truncate text-gray-900 dark:text-gray-200">
                           {lead.agencyProfile && lead.agencyProfile.name ? lead.agencyProfile.name : 'Independent'}
                         </span>
-                        {lead.agencyProfile && lead.agencyProfile.name && (
+                        {lead.agencyProfile && lead.agencyProfile.name && lead.agencyProfile.country && (
                           <>
                             <span className="text-gray-300 dark:text-gray-600">•</span>
                             <MapPin size={10} className="text-gray-400 shrink-0 ml-0.5" />
@@ -359,8 +359,8 @@ export default function ApexCRM() {
                             key={item.key}
                             className="flex items-center gap-2 cursor-auto" // cursor-auto to prevent tile click if needed, but onClick propagates
                           >
-                            <div className={`w-3 h-3 rounded border flex items-center justify-center ${isChecked ? 'bg-blue-500 border-blue-500' : 'bg-white border-gray-300 dark:border-gray-600'}`}>
-                              {isChecked && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
+                            <div className={`w-3 h-3 rounded flex items-center justify-center border transition-all ${isChecked ? 'bg-green-100 border-green-500' : 'bg-white border-gray-300 dark:border-gray-600'}`}>
+                              {isChecked && <Check size={10} className="text-green-600 stroke-[3]" />}
                             </div>
                             <span className={`text-[10px] font-bold ${isChecked ? 'text-gray-900 dark:text-gray-200' : 'text-gray-400'}`}>{item.label}</span>
                           </div>
