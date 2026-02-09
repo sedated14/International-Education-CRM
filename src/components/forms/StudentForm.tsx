@@ -200,16 +200,18 @@ export const StudentForm = ({ lead, onSubmit, onDelete, isModal = false, isSubmi
 
     return (
         <form id="student-form" onSubmit={handleSubmit} className="space-y-8 text-left">
-            {/* Top Save Button (Mobile/Quick Access) */}
-            <div className="flex justify-end mb-4">
-                <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="px-6 py-2 bg-black dark:bg-white text-white dark:text-black rounded-xl font-bold text-sm shadow-md hover:opacity-80 transition-all flex items-center gap-2"
-                >
-                    {isSubmitting ? 'Saving...' : <><Save size={16} /> Save</>}
-                </button>
-            </div>
+            {/* Top Save Button (Mobile/Quick Access) - Hide in Modal if using header button */}
+            {!isModal && (
+                <div className="flex justify-end mb-4">
+                    <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="px-6 py-2 bg-black dark:bg-white text-white dark:text-black rounded-xl font-bold text-sm shadow-md hover:opacity-80 transition-all flex items-center gap-2"
+                    >
+                        {isSubmitting ? 'Saving...' : <><Save size={16} /> Save</>}
+                    </button>
+                </div>
+            )}
 
             {/* Section - About You */}
             <section className={sectionClass}>

@@ -297,15 +297,15 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                     {/* Header Save Button */}
                     {isEditing && (
                         <button
-                            type={isStudent ? "submit" : "button"}
+                            type="submit"
                             form={isStudent ? "student-form" : undefined}
                             onClick={isStudent ? undefined : handleSave}
-                            className="p-2 rounded-full bg-black dark:bg-white text-white dark:text-black hover:opacity-80 transition-all shadow-md mr-1"
-                            title="Save Changes"
+                            className="px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-xl font-bold text-xs shadow-lg hover:opacity-80 transition-all flex items-center gap-2"
                         >
-                            <Save size={20} />
+                            <Save size={16} /> Save Changes
                         </button>
                     )}
+
 
                     <button
                         onClick={() => setIsEditing(!isEditing)}
