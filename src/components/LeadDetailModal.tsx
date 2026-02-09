@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Lead } from '../types';
 import { useLeads } from '../context/LeadContext';
-import { X, User, Calendar, Languages, GraduationCap, School as SchoolIcon, Activity, Smile, BookOpen, Briefcase, PenTool, MapPin, Save, Edit2, StickyNote, Clock, MessageCircle } from 'lucide-react';
+import { X, Globe, Mail, Phone, MessageCircle, MapPin, Building, Users, User, FileText, Calendar, Clock, DollarSign, Award, BookOpen, GraduationCap, Languages, AlignLeft, Edit2, Save, Send, Check, PenTool, StickyNote, Briefcase } from 'lucide-react';
 import Link from 'next/link';
 import { COUNTRIES } from '../data/countries';
 import { CheckboxGroup, CountrySelector, Input, Select, PhoneInput, SearchableSelect } from './ui/FormComponents';
@@ -611,59 +611,122 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                                 { key: 'agreementSent', label: 'Agreement Sent' },
                                                 { key: 'agreementSigned', label: 'Agreement Signed' },
                                                 { key: 'applicationAccountCreated', label: 'App Account Created' },
-                                                { key: 'schoolPriceListSent', label: 'Price List Sent' },
-                                                { key: 'schoolProfilesSent', label: 'Profiles Sent' },
-                                                { key: 'addedMarketingList', label: 'Added to Marketing' },
-                                                { key: 'agentHandbookSent', label: 'Agent Handbook' },
-                                                { key: 'studentHandbookSent', label: 'Student Handbook' },
-                                                { key: 'commissionRequestFormSent', label: 'Comm. Form Sent' }
+                                                { key: 'schoolPriceListSent', label: 'School Price List Sent' },
+                                                { key: 'schoolProfilesSent', label: 'School Profiles Sent' },
+                                                { key: 'addedMarketingList', label: 'Added to Marketing List' },
+                                                // Sub-items for Marketing List will be handled logically below
+                                                { key: 'agentHandbookSent', label: 'Agent Handbook Sent' },
+                                                { key: 'studentHandbookSent', label: 'Student Handbook Sent' },
+                                                { key: 'commissionRequestFormSent', label: 'Comm. Request Form Sent' }
                                             ].map(item => {
                                                 // Determine checked state based on mode
                                                 const isChecked = isEditing
                                                     ? formData.agencyProfile?.onboardingChecklist?.[item.key] || false
                                                     : lead.agencyProfile?.onboardingChecklist?.[item.key as keyof typeof lead.agencyProfile.onboardingChecklist] || false;
 
+                                                const isMarketingParent = item.key === 'addedMarketingList';
+
                                                 return (
-                                                    <div
-                                                        key={item.key}
-                                                        className="flex items-center gap-2 cursor-pointer group/check"
-                                                        onClick={() => {
-                                                            if (isEditing) {
-                                                                // Edit Mode: Update local formData
-                                                                const current = formData.agencyProfile?.onboardingChecklist || {};
-                                                                setFormData((prev: any) => ({
-                                                                    ...prev,
-                                                                    agencyProfile: {
-                                                                        ...prev.agencyProfile,
-                                                                        onboardingChecklist: {
-                                                                            ...current,
-                                                                            [item.key]: !isChecked
+                                                    <React.Fragment key={item.key}>
+                                                        <div
+                                                            className="flex items-center gap-3 cursor-pointer group/check p-2 hover:bg-white dark:hover:bg-gray-700/50 rounded-lg transition-colors"
+                                                            onClick={() => {
+                                                                const newValue = !isChecked;
+                                                                if (isEditing) {
+                                                                    // Edit Mode: Update local formData
+                                                                    const current = formData.agencyProfile?.onboardingChecklist || {};
+                                                                    setFormData((prev: any) => ({
+                                                                        ...prev,
+                                                                        agencyProfile: {
+                                                                            ...prev.agencyProfile,
+                                                                            onboardingChecklist: {
+                                                                                ...current,
+                                                                                [item.key]: newValue
+                                                                            }
                                                                         }
-                                                                    }
-                                                                }));
-                                                            } else {
-                                                                // View Mode: Update DIRECTLY (Real-time)
-                                                                if (!lead.agencyProfile) return;
-                                                                const currentList = lead.agencyProfile.onboardingChecklist || ({} as any);
-                                                                updateLead(lead.id, {
-                                                                    agencyProfile: {
-                                                                        ...lead.agencyProfile,
-                                                                        onboardingChecklist: {
-                                                                            ...currentList,
-                                                                            [item.key]: !isChecked
+                                                                    }));
+                                                                } else {
+                                                                    // View Mode: Update DIRECTLY (Real-time)
+                                                                    if (!lead.agencyProfile) return;
+                                                                    const currentList = lead.agencyProfile.onboardingChecklist || ({} as any);
+                                                                    updateLead(lead.id, {
+                                                                        agencyProfile: {
+                                                                            ...lead.agencyProfile,
+                                                                            onboardingChecklist: {
+                                                                                ...currentList,
+                                                                                [item.key]: newValue
+                                                                            }
                                                                         }
-                                                                    }
-                                                                });
-                                                            }
-                                                        }}
-                                                    >
-                                                        <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-blue-500 border-blue-500' : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 group-hover/check:border-blue-400'}`}>
-                                                            {isChecked && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
+                                                                    });
+                                                                }
+                                                            }}
+                                                        >
+                                                            <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${isChecked ? 'bg-green-100 border-green-500' : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 group-hover/check:border-green-400'}`}>
+                                                                {isChecked && <Check size={14} className="text-green-600 stroke-[3]" />}
+                                                            </div>
+                                                            <span className={`text-xs font-bold ${isChecked ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}`}>
+                                                                {item.label}
+                                                            </span>
                                                         </div>
-                                                        <span className={`text-[10px] font-bold ${isChecked ? 'text-gray-700 dark:text-gray-200' : 'text-gray-400 dark:text-gray-500'}`}>
-                                                            {item.label}
-                                                        </span>
-                                                    </div>
+
+                                                        {/* Marketing Sub-Section */}
+                                                        {isMarketingParent && (
+                                                            <div className="col-span-1 sm:col-span-2 pl-8 grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1 mb-2">
+                                                                {[
+                                                                    { key: 'marketingSubscribed', label: 'Subscribed' },
+                                                                    { key: 'marketingUnsubscribed', label: 'Unsubscribed' }
+                                                                ].map(subItem => {
+                                                                    const isSubChecked = isEditing
+                                                                        ? formData.agencyProfile?.onboardingChecklist?.[subItem.key] || false
+                                                                        : lead.agencyProfile?.onboardingChecklist?.[subItem.key as any] || false;
+
+                                                                    return (
+                                                                        <div
+                                                                            key={subItem.key}
+                                                                            className="flex items-center gap-2 cursor-pointer group/subcheck p-1"
+                                                                            onClick={() => {
+                                                                                // Logic: Can be subscribed OR unsubscribed, or neither. Both true is weird but allowed by data model (maybe user wants to know history).
+                                                                                // Let's just toggle.
+                                                                                const newSubValue = !isSubChecked;
+                                                                                if (isEditing) {
+                                                                                    const current = formData.agencyProfile?.onboardingChecklist || {};
+                                                                                    setFormData((prev: any) => ({
+                                                                                        ...prev,
+                                                                                        agencyProfile: {
+                                                                                            ...prev.agencyProfile,
+                                                                                            onboardingChecklist: {
+                                                                                                ...current,
+                                                                                                [subItem.key]: newSubValue
+                                                                                            }
+                                                                                        }
+                                                                                    }));
+                                                                                } else {
+                                                                                    if (!lead.agencyProfile) return;
+                                                                                    const currentList = lead.agencyProfile.onboardingChecklist || ({} as any);
+                                                                                    updateLead(lead.id, {
+                                                                                        agencyProfile: {
+                                                                                            ...lead.agencyProfile,
+                                                                                            onboardingChecklist: {
+                                                                                                ...currentList,
+                                                                                                [subItem.key]: newSubValue
+                                                                                            }
+                                                                                        }
+                                                                                    });
+                                                                                }
+                                                                            }}
+                                                                        >
+                                                                            <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${isSubChecked ? 'bg-green-100 border-green-500' : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 group-hover/subcheck:border-green-400'}`}>
+                                                                                {isSubChecked && <Check size={12} className="text-green-600 stroke-[3]" />}
+                                                                            </div>
+                                                                            <span className={`text-[11px] font-medium ${isSubChecked ? 'text-gray-800 dark:text-gray-200' : 'text-gray-400'}`}>
+                                                                                {subItem.label}
+                                                                            </span>
+                                                                        </div>
+                                                                    );
+                                                                })}
+                                                            </div>
+                                                        )}
+                                                    </React.Fragment>
                                                 );
                                             })}
                                         </div>
@@ -1099,7 +1162,8 @@ export const LeadDetailModal: React.FC<Props> = ({ lead, onClose }) => {
                                 </div>
                             )}
                         </div>
-                    )}
+                    )
+                    }
 
                     {/* ACTIVITY & SCHEDULING (SHARED, EDITABLE) */}
 

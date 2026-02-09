@@ -105,6 +105,8 @@ export interface OnboardingChecklist {
   schoolPriceListSent: boolean;
   schoolProfilesSent: boolean;
   addedMarketingList: boolean;
+  marketingSubscribed: boolean;   // NEW
+  marketingUnsubscribed: boolean; // NEW
   agentHandbookSent: boolean;
   studentHandbookSent: boolean;
   commissionRequestFormSent: boolean;

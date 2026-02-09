@@ -38,6 +38,19 @@ const CRM_FIELDS = [
     { key: 'secWhatsapp', label: 'Secondary Contact WhatsApp' },
 
     { key: 'website', label: 'Website' },
+
+    // Onboarding Checklist
+    { key: 'agreementSent', label: 'Agreement Sent (Yes/No)' },
+    { key: 'agreementSigned', label: 'Agreement Signed (Yes/No)' },
+    { key: 'applicationAccountCreated', label: 'App Account Created (Yes/No)' },
+    { key: 'schoolPriceListSent', label: 'Price List Sent (Yes/No)' },
+    { key: 'schoolProfilesSent', label: 'Profiles Sent (Yes/No)' },
+    { key: 'addedMarketingList', label: 'Added to Marketing List (Yes/No)' },
+    { key: 'marketingSubscribed', label: 'Marketing: Subscribed (Yes/No)' },
+    { key: 'marketingUnsubscribed', label: 'Marketing: Unsubscribed (Yes/No)' },
+    { key: 'agentHandbookSent', label: 'Agent Handbook Sent (Yes/No)' },
+    { key: 'studentHandbookSent', label: 'Student Handbook Sent (Yes/No)' },
+    { key: 'commissionRequestFormSent', label: 'Comm. Form Sent (Yes/No)' },
 ];
 
 export const ImportAgenciesModal: React.FC<Props> = ({ onClose }) => {
@@ -105,6 +118,19 @@ export const ImportAgenciesModal: React.FC<Props> = ({ onClose }) => {
                     else if (lower.includes('secondary') && lower.includes('position')) initialMap[h] = 'secPosition';
                     else if (lower.includes('secondary') && lower.includes('email')) initialMap[h] = 'secEmail';
                     else if (lower.includes('secondary') && lower.includes('whatsapp')) initialMap[h] = 'secWhatsapp';
+
+                    // Checklist Auto-Mapping
+                    else if (lower.includes('agreement') && lower.includes('sent')) initialMap[h] = 'agreementSent';
+                    else if (lower.includes('agreement') && lower.includes('signed')) initialMap[h] = 'agreementSigned';
+                    else if (lower.includes('app') && lower.includes('account')) initialMap[h] = 'applicationAccountCreated';
+                    else if (lower.includes('price') && lower.includes('list')) initialMap[h] = 'schoolPriceListSent';
+                    else if (lower.includes('profiles') && lower.includes('sent')) initialMap[h] = 'schoolProfilesSent';
+                    else if (lower.includes('added') && lower.includes('marketing')) initialMap[h] = 'addedMarketingList';
+                    else if (lower.includes('sub') && lower.includes('scribed') && !lower.includes('un')) initialMap[h] = 'marketingSubscribed';
+                    else if (lower.includes('unsub')) initialMap[h] = 'marketingUnsubscribed';
+                    else if (lower.includes('agent') && lower.includes('handbook')) initialMap[h] = 'agentHandbookSent';
+                    else if (lower.includes('student') && lower.includes('handbook')) initialMap[h] = 'studentHandbookSent';
+                    else if (lower.includes('comm') && lower.includes('form')) initialMap[h] = 'commissionRequestFormSent';
                 });
                 setMapping(initialMap);
 
@@ -242,7 +268,22 @@ export const ImportAgenciesModal: React.FC<Props> = ({ onClose }) => {
                         timezone: finalTimezone,
                         language: finalLanguage,
                         metAt: mappedData.metAt || '',
-                        keyContacts: [] // Will fill below
+                        keyContacts: [], // Will fill below
+
+                        // Onboarding Checklist
+                        onboardingChecklist: {
+                            agreementSent: String(mappedData.agreementSent || '').toLowerCase() === 'yes',
+                            agreementSigned: String(mappedData.agreementSigned || '').toLowerCase() === 'yes',
+                            applicationAccountCreated: String(mappedData.applicationAccountCreated || '').toLowerCase() === 'yes',
+                            schoolPriceListSent: String(mappedData.schoolPriceListSent || '').toLowerCase() === 'yes',
+                            schoolProfilesSent: String(mappedData.schoolProfilesSent || '').toLowerCase() === 'yes',
+                            addedMarketingList: String(mappedData.addedMarketingList || '').toLowerCase() === 'yes',
+                            marketingSubscribed: String(mappedData.marketingSubscribed || '').toLowerCase() === 'yes',
+                            marketingUnsubscribed: String(mappedData.marketingUnsubscribed || '').toLowerCase() === 'yes',
+                            agentHandbookSent: String(mappedData.agentHandbookSent || '').toLowerCase() === 'yes',
+                            studentHandbookSent: String(mappedData.studentHandbookSent || '').toLowerCase() === 'yes',
+                            commissionRequestFormSent: String(mappedData.commissionRequestFormSent || '').toLowerCase() === 'yes',
+                        }
                     }
                 };
             }
