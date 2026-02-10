@@ -153,3 +153,31 @@ export interface Agency {
   createdAt?: string; // NEW: ISO Date Added
   lastContactDate: string; // ISO
 }
+
+export type FormFieldID =
+  | 'firstName' | 'middleName' | 'lastName' | 'dob' | 'gender'
+  | 'nationality' | 'residence' | 'studentEmail' | 'phoneNumber' | 'whatsappNumber'
+  | 'currentSchool' | 'currentGrade' | 'graduatedInHomeCountry' | 'gpa' | 'englishLevel'
+  | 'destinations' | 'targetGrades' | 'seekingGraduation'
+  | 'budget' | 'sports' | 'hobbies' | 'favoriteSubject' | 'personality'
+  | 'allergies' | 'medicalInfo' | 'dietaryRestrictions'
+  | 'essay' | 'otherInfo' | 'preferredCommunication';
+
+export interface FormConfig {
+  id: string; // Unique ID (e.g., generated UUID)
+  name: string; // "Website Main Lead Form"
+  notificationEmails: string[]; // ["admissions@school.com"]
+
+  // Customization
+  includedFields: FormFieldID[]; // Array of field IDs to SHOW. (e.g. ['firstName', 'email'])
+  // If not in list, it is HIDDEN.
+
+  // Design/Theme (Optional for now, could be expanded)
+  theme?: {
+    primaryColor?: string;
+    backgroundColor?: string;
+  };
+
+  createdAt: string;
+  updatedAt: string;
+}
