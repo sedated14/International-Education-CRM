@@ -125,11 +125,13 @@ export default function PublicStudentForm({ formId, includedFields, onSubmitSucc
                 setSubmitted(true);
                 if (onSubmitSuccess) onSubmitSuccess();
             } else {
-                alert('There was an error submitting the form. Please try again.');
+                const errorData = await res.json();
+                console.error("Submission Data:", JSON.stringify(submissionData, null, 2));
+                alert(`Error submitting form: ${errorData.error || 'Unknown error'}`);
             }
         } catch (error) {
             console.error(error);
-            alert('There was an error submitting the form. Please try again.');
+            alert(`Error submitting form: ${(error as Error).message}`);
         } finally {
             setSubmitting(false);
         }
@@ -252,8 +254,8 @@ export default function PublicStudentForm({ formId, includedFields, onSubmitSucc
                                     type="button"
                                     onClick={() => setFormData({ ...formData, seekingGraduation: true })}
                                     className={`flex-1 py-2 rounded-lg font-bold border transition-all ${formData.seekingGraduation
-                                            ? 'bg-green-100 border-green-200 text-green-700 dark:bg-green-900/30 dark:border-green-800 dark:text-green-400'
-                                            : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400'
+                                        ? 'bg-green-100 border-green-200 text-green-700 dark:bg-green-900/30 dark:border-green-800 dark:text-green-400'
+                                        : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400'
                                         }`}
                                 >
                                     Yes
@@ -262,8 +264,8 @@ export default function PublicStudentForm({ formId, includedFields, onSubmitSucc
                                     type="button"
                                     onClick={() => setFormData({ ...formData, seekingGraduation: false })}
                                     className={`flex-1 py-2 rounded-lg font-bold border transition-all ${!formData.seekingGraduation
-                                            ? 'bg-red-100 border-red-200 text-red-700 dark:bg-red-900/30 dark:border-red-800 dark:text-red-400'
-                                            : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400'
+                                        ? 'bg-red-100 border-red-200 text-red-700 dark:bg-red-900/30 dark:border-red-800 dark:text-red-400'
+                                        : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400'
                                         }`}
                                 >
                                     No
