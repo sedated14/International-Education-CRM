@@ -1,6 +1,6 @@
 // Native fetch is available in Node 18+
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'http://localhost:3000'; // Ensure this matches your running dev server port
 
 async function verify() {
     console.log('--- Starting Form Feature Verification ---');

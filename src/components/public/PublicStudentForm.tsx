@@ -74,7 +74,7 @@ export default function PublicStudentForm({ formId, includedFields, onSubmitSucc
 
     // Flattened State
     const [formData, setFormData] = useState<Record<string, any>>({
-        firstName: '', middleName: '', lastName: '',
+        firstName: '', middleName: '', lastName: '', age: '',
         dob: '', gender: '', nationality: '', residence: '',
         studentEmail: '', phoneNumber: '', whatsappNumber: '',
         currentSchool: '', currentGrade: '', graduatedInHomeCountry: false,
@@ -156,6 +156,7 @@ export default function PublicStudentForm({ formId, includedFields, onSubmitSucc
                         {isFieldVisible('firstName') && <PublicInput label="First Name" value={formData.firstName} onChange={v => setFormData({ ...formData, firstName: v })} required />}
                         {isFieldVisible('middleName') && <PublicInput label="Middle Name" value={formData.middleName} onChange={v => setFormData({ ...formData, middleName: v })} />}
                         {isFieldVisible('lastName') && <PublicInput label="Last Name" value={formData.lastName} onChange={v => setFormData({ ...formData, lastName: v })} required />}
+                        {isFieldVisible('age') && <PublicInput label="Age" type="number" value={formData.age} onChange={v => setFormData({ ...formData, age: v })} />}
                         {isFieldVisible('dob') && <PublicInput label="Date of Birth" type="date" value={formData.dob} onChange={v => setFormData({ ...formData, dob: v })} />}
                         {isFieldVisible('gender') && <PublicSelect label="Gender" options={['Male', 'Female']} value={formData.gender} onChange={v => setFormData({ ...formData, gender: v })} />}
                         {isFieldVisible('nationality') && <PublicSelect label="Nationality" options={COUNTRIES} value={formData.nationality} onChange={v => setFormData({ ...formData, nationality: v })} />}
@@ -216,8 +217,8 @@ export default function PublicStudentForm({ formId, includedFields, onSubmitSucc
                                             });
                                         }}
                                         className={`px-4 py-2 rounded-lg border text-sm font-medium transition-all ${(formData.destinations as string[]).includes(dest)
-                                                ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
-                                                : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700'
+                                            ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                                            : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700'
                                             }`}
                                     >
                                         {dest}
@@ -303,8 +304,8 @@ export default function PublicStudentForm({ formId, includedFields, onSubmitSucc
                                             });
                                         }}
                                         className={`px-4 py-2 rounded-lg border text-sm font-medium transition-all ${(formData.preferredCommunication as string[]).includes(method)
-                                                ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
-                                                : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700'
+                                            ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                                            : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700'
                                             }`}
                                     >
                                         {method}

@@ -12,6 +12,7 @@ const AVAILABLE_FIELDS: { id: FormFieldID; label: string; section: string }[] = 
     { id: 'firstName', label: 'First Name', section: 'About' },
     { id: 'middleName', label: 'Middle Name', section: 'About' },
     { id: 'lastName', label: 'Last Name', section: 'About' },
+    { id: 'age', label: 'Age', section: 'About' },
     { id: 'dob', label: 'Date of Birth', section: 'About' },
     { id: 'gender', label: 'Gender', section: 'About' },
     { id: 'nationality', label: 'Nationality', section: 'About' },
@@ -270,8 +271,8 @@ function FormBuilderContent() {
                                                 key={field.id}
                                                 onClick={() => toggleField(field.id)}
                                                 className={`flex items-center justify-between px-4 py-3 rounded-xl border transition-all text-left ${includedFields.includes(field.id)
-                                                        ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white shadow-md'
-                                                        : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                                                    ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white shadow-md'
+                                                    : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                                                     }`}
                                             >
                                                 <span className="font-medium text-sm">{field.label}</span>

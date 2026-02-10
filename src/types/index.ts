@@ -155,7 +155,7 @@ export interface Agency {
 }
 
 export type FormFieldID =
-  | 'firstName' | 'middleName' | 'lastName' | 'dob' | 'gender'
+  | 'firstName' | 'middleName' | 'lastName' | 'age' | 'dob' | 'gender'
   | 'nationality' | 'residence' | 'studentEmail' | 'phoneNumber' | 'whatsappNumber'
   | 'currentSchool' | 'currentGrade' | 'graduatedInHomeCountry' | 'gpa' | 'englishLevel'
   | 'destinations' | 'targetGrades' | 'seekingGraduation'

@@ -31,6 +31,7 @@ export const StudentForm = ({ lead, onSubmit, onDelete, isModal = false, isSubmi
         firstName: '',
         middleName: '',
         lastName: '',
+        age: '',
 
         dob: '',
         gender: '',
@@ -85,6 +86,7 @@ export const StudentForm = ({ lead, onSubmit, onDelete, isModal = false, isSubmi
                 firstName: fName,
                 middleName: profile.middleName || '',
                 lastName: lName,
+                age: profile.age?.toString() || '',
 
                 dob: profile.dob || '',
                 gender: profile.gender || '',
@@ -152,6 +154,7 @@ export const StudentForm = ({ lead, onSubmit, onDelete, isModal = false, isSubmi
                 firstName: formData.firstName,
                 middleName: formData.middleName,
                 lastName: formData.lastName,
+                age: formData.age ? Number(formData.age) : undefined,
 
                 dob: formData.dob,
                 gender: formData.gender,
@@ -226,6 +229,7 @@ export const StudentForm = ({ lead, onSubmit, onDelete, isModal = false, isSubmi
                     <Input label="Middle Name" value={formData.middleName} onChange={v => setFormData({ ...formData, middleName: v })} />
                     <Input label="Last Name" value={formData.lastName} onChange={v => setFormData({ ...formData, lastName: v })} />
 
+                    <Input label="Age" type="number" value={formData.age} onChange={v => setFormData({ ...formData, age: v })} />
                     <Input label="Date of Birth" type="date" value={formData.dob} onChange={v => setFormData({ ...formData, dob: v })} />
 
                     <Select label="Gender" options={["Male", "Female"]} value={formData.gender} onChange={v => setFormData({ ...formData, gender: v })} />
