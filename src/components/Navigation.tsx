@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
-import { Globe, Zap, GraduationCap, LayoutDashboard, ChevronRight, ChevronLeft, AlertCircle, Sun, Moon } from 'lucide-react';
+import { Globe, Zap, GraduationCap, LayoutDashboard, ChevronRight, ChevronLeft, AlertCircle, Sun, Moon, LayoutTemplate } from 'lucide-react';
 import { clsx } from 'clsx';
 
 export const Navigation = () => {
@@ -75,6 +75,16 @@ export const Navigation = () => {
                     isExpanded={isExpanded}
                     activeClass="bg-emerald-500 text-white shadow-md shadow-emerald-200 dark:shadow-none"
                     inactiveClass="bg-emerald-50 text-emerald-600 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:hover:bg-emerald-900/30"
+                />
+
+                <NavItem
+                    href="/settings/forms"
+                    active={pathname?.startsWith('/settings/forms')}
+                    icon={<LayoutTemplate size={20} />}
+                    label="Lead Forms"
+                    isExpanded={isExpanded}
+                    activeClass="bg-purple-600 text-white shadow-md shadow-purple-200 dark:shadow-none"
+                    inactiveClass="bg-purple-50 text-purple-600 hover:bg-purple-100 dark:bg-purple-900/20 dark:text-purple-400 dark:hover:bg-purple-900/30"
                 />
 
                 {duplicateCount > 0 && (
