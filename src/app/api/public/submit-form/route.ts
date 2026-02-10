@@ -58,7 +58,7 @@ export async function POST(request: Request) {
         if (apiKey && studentEmail) {
             try {
                 const resend = new Resend(apiKey);
-                await resend.emails.send({
+                const { error } = await resend.emails.send({
                     from: 'Apex CRM <onboarding@resend.dev>',
                     to: studentEmail,
                     subject: `Thank you for your inquiry: ${formConfig.name}`,
@@ -74,10 +74,16 @@ export async function POST(request: Request) {
                         </div>
                     `
                 });
-                console.log(`[Email Sent] Auto-reply sent to ${studentEmail}`);
-                emailResults.student.sent = true;
+
+                if (error) {
+                    console.error('[Email Error] Failed to send auto-reply:', error);
+                    emailResults.student.error = error.message;
+                } else {
+                    console.log(`[Email Sent] Auto-reply sent to ${studentEmail}`);
+                    emailResults.student.sent = true;
+                }
             } catch (emailError: any) {
-                console.error('[Email Error] Failed to send auto-reply:', emailError);
+                console.error('[Email Error] Exception sending auto-reply:', emailError);
                 emailResults.student.error = emailError.message || 'Unknown error';
             }
         } else if (!apiKey) {
@@ -89,7 +95,7 @@ export async function POST(request: Request) {
         if (apiKey && formConfig.notificationEmails && formConfig.notificationEmails.length > 0) {
             try {
                 const resend = new Resend(apiKey);
-                await resend.emails.send({
+                const { error } = await resend.emails.send({
                     from: 'Apex CRM <onboarding@resend.dev>',
                     to: formConfig.notificationEmails,
                     subject: `New Lead: ${leadData.studentProfile?.firstName} (${formConfig.name})`,
@@ -105,10 +111,16 @@ export async function POST(request: Request) {
                         </div>
                     `
                 });
-                console.log(`[Email Sent] Admin notification sent to ${formConfig.notificationEmails.join(', ')}`);
-                emailResults.admin.sent = true;
+
+                if (error) {
+                    console.error('[Email Error] Failed to send admin notification:', error);
+                    emailResults.admin.error = error.message;
+                } else {
+                    console.log(`[Email Sent] Admin notification sent to ${formConfig.notificationEmails.join(', ')}`);
+                    emailResults.admin.sent = true;
+                }
             } catch (emailError: any) {
-                console.error('[Email Error] Failed to send admin notification:', emailError);
+                console.error('[Email Error] Exception sending admin notification:', emailError);
                 emailResults.admin.error = emailError.message || 'Unknown error';
             }
         }
