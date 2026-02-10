@@ -1,67 +1,54 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { db } from '../../../lib/firebase'; // Ensure this points to your firebase config
+import { collection, getDocs, query, orderBy, addDoc } from 'firebase/firestore';
 import { Lead } from '../../../types';
-
-// Path to the JSON file acting as a database
-const dataFilePath = path.join(process.cwd(), 'src/data/leads.json');
-
-// Helper to read leads
-const readLeads = (): Lead[] => {
-    try {
-        const fileContents = fs.readFileSync(dataFilePath, 'utf8');
-        return JSON.parse(fileContents);
-    } catch (error) {
-        console.error('Error reading leads:', error);
-        return [];
-    }
-};
-
-// Helper to write leads
-const writeLeads = (leads: Lead[]) => {
-    try {
-        fs.writeFileSync(dataFilePath, JSON.stringify(leads, null, 2), 'utf8');
-    } catch (error) {
-        console.error('Error writing leads:', error);
-    }
-};
 
 // GET /api/leads
 export async function GET() {
-    const leads = readLeads();
-    return NextResponse.json(leads);
+    try {
+        const leadsRef = collection(db, 'leads');
+        // Sort by createdAt descending
+        const q = query(leadsRef, orderBy('createdAt', 'desc'));
+        const querySnapshot = await getDocs(q);
+
+        const leads = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        })) as Lead[];
+
+        return NextResponse.json(leads);
+    } catch (error) {
+        console.error('Error fetching leads from Firestore:', error);
+        return NextResponse.json({ error: 'Failed to fetch leads' }, { status: 500 });
+    }
 }
 
-// POST /api/leads
+// POST /api/leads (Internal/Manual creation)
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const leads = readLeads();
 
-        // Generate a new ID (simple max + 1)
-        const maxId = leads.reduce((max, lead) => {
-            const currentId = Number(lead.id);
-            return !isNaN(currentId) && currentId > max ? currentId : max;
-        }, 0);
-        const newLead: Lead = {
+        const newLeadBase = {
             ...body,
-            id: maxId + 1,
-            createdAt: new Date().toISOString(), // Ensure server-side timestamp
+            createdAt: new Date().toISOString(),
         };
 
-        // If it's a student lead from the form, ensure correct defaults
-        if (newLead.type === 'Student' && newLead.source === 'Form') {
-            newLead.title = `Inquiry: ${newLead.studentProfile?.currentGrade || 'Student'} - ${newLead.country}`;
-            newLead.status = 'Inquiry';
-            newLead.score = 5; // Default score for new inquiries
+        // If it's a student lead from the form, ensure correct defaults (though this route is mostly for internal use)
+        if (newLeadBase.type === 'Student' && newLeadBase.source === 'Form') {
+            newLeadBase.title = `Inquiry: ${newLeadBase.studentProfile?.currentGrade || 'Student'} - ${newLeadBase.country}`;
+            newLeadBase.status = 'Inquiry';
+            newLeadBase.score = 5;
         }
 
-        leads.unshift(newLead); // Add to beginning
-        writeLeads(leads);
+        const leadsRef = collection(db, 'leads');
+        const docRef = await addDoc(leadsRef, newLeadBase);
+
+        // Return with the generated ID
+        const newLead = { id: docRef.id, ...newLeadBase };
 
         return NextResponse.json(newLead, { status: 201 });
     } catch (error) {
-        console.error('Error processing lead:', error);
+        console.error('Error creating lead:', error);
         return NextResponse.json({ error: 'Failed to create lead' }, { status: 500 });
     }
 }
