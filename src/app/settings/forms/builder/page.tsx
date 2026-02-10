@@ -30,7 +30,7 @@ const AVAILABLE_FIELDS: { id: FormFieldID; label: string; section: string }[] = 
 
     // Destinations
     { id: 'destinations', label: 'Desired Destinations', section: 'Destinations' },
-    { id: 'targetGrades', label: 'Target Grades', section: 'Destinations' },
+    { id: 'targetGrades', label: 'Requested Grade', section: 'Destinations' },
     { id: 'seekingGraduation', label: 'Seeking Graduation', section: 'Destinations' },
 
     // Interests

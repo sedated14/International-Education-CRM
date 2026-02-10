@@ -79,7 +79,7 @@ export default function PublicStudentForm({ formId, includedFields, onSubmitSucc
         studentEmail: '', phoneNumber: '', whatsappNumber: '',
         currentSchool: '', currentGrade: '', graduatedInHomeCountry: false,
         gpa: '', englishLevel: '',
-        destinations: [], targetGrades: {}, seekingGraduation: false,
+        destinations: [], targetGrade: '', seekingGraduation: false, // Changed targetGrades to targetGrade
         sports: '', hobbies: '', favoriteSubject: '', personality: '', budget: '',
         allergies: '', medicalInfo: '', dietaryRestrictions: '',
         essay: '', otherInfo: '', preferredCommunication: []
@@ -92,6 +92,12 @@ export default function PublicStudentForm({ formId, includedFields, onSubmitSucc
         setSubmitting(true);
 
         try {
+            // Map single targetGrade to all selected destinations
+            const targetGradesMap = (formData.destinations as string[]).reduce((acc, dest) => ({
+                ...acc,
+                [dest]: formData.targetGrade
+            }), {} as Record<string, string>);
+
             const submissionData = {
                 formId,
                 leadData: {
@@ -99,6 +105,7 @@ export default function PublicStudentForm({ formId, includedFields, onSubmitSucc
                     country: formData.residence || formData.nationality || 'Unknown',
                     studentProfile: {
                         ...formData,
+                        targetGrades: targetGradesMap, // Include the mapped grades
                         // Fix array splits for text inputs
                         sports: formData.sports.split(',').map((s: string) => s.trim()).filter(Boolean),
                         hobbies: formData.hobbies.split(',').map((s: string) => s.trim()).filter(Boolean),
@@ -228,20 +235,40 @@ export default function PublicStudentForm({ formId, includedFields, onSubmitSucc
                         </div>
                     )}
 
-                    {isFieldVisible('targetGrades') && (formData.destinations as string[]).map(d => (
+                    {isFieldVisible('targetGrades') && (formData.destinations as string[]).length > 0 && (
                         <PublicSelect
-                            key={d}
-                            label={`Requested Grade for ${d}`}
+                            label={`Requested Grade for ${(formData.destinations as string[]).join(', ')}`}
                             options={GRADE_OPTIONS}
-                            value={formData.targetGrades?.[d] || ''}
-                            onChange={v => setFormData({ ...formData, targetGrades: { ...formData.targetGrades, [d]: v } })}
+                            value={formData.targetGrade}
+                            onChange={v => setFormData({ ...formData, targetGrade: v })}
                         />
-                    ))}
+                    )}
 
-                    {isFieldVisible('seekingGraduation') && (
-                        <div className="flex items-center gap-2">
-                            <input type="checkbox" checked={formData.seekingGraduation} onChange={e => setFormData({ ...formData, seekingGraduation: e.target.checked })} className="w-5 h-5 rounded border-gray-300" />
-                            <label className="text-sm font-bold text-gray-700 dark:text-gray-300">Are you seeking graduation?</label>
+                    {isFieldVisible('seekingGraduation') && formData.targetGrade === '12th' && (
+                        <div className="mb-4">
+                            <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Are you seeking graduation?</label>
+                            <div className="flex gap-4">
+                                <button
+                                    type="button"
+                                    onClick={() => setFormData({ ...formData, seekingGraduation: true })}
+                                    className={`flex-1 py-2 rounded-lg font-bold border transition-all ${formData.seekingGraduation
+                                            ? 'bg-green-100 border-green-200 text-green-700 dark:bg-green-900/30 dark:border-green-800 dark:text-green-400'
+                                            : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400'
+                                        }`}
+                                >
+                                    Yes
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setFormData({ ...formData, seekingGraduation: false })}
+                                    className={`flex-1 py-2 rounded-lg font-bold border transition-all ${!formData.seekingGraduation
+                                            ? 'bg-red-100 border-red-200 text-red-700 dark:bg-red-900/30 dark:border-red-800 dark:text-red-400'
+                                            : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400'
+                                        }`}
+                                >
+                                    No
+                                </button>
+                            </div>
                         </div>
                     )}
                 </section>

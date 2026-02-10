@@ -27,9 +27,17 @@ export default function ClientPublicFormPage({ formId }: { formId: string }) {
         fetchForm();
     }, [formId]);
 
+    useEffect(() => {
+        // Force transparent background for iframe embedding
+        document.body.style.background = 'transparent';
+        return () => {
+            document.body.style.background = '';
+        };
+    }, []);
+
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+            <div className="min-h-screen flex items-center justify-center">
                 <Loader2 className="animate-spin text-gray-400" size={32} />
             </div>
         );
@@ -37,7 +45,7 @@ export default function ClientPublicFormPage({ formId }: { formId: string }) {
 
     if (error || !formConfig) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
+            <div className="min-h-screen flex items-center justify-center p-4">
                 <div className="text-center text-red-500">
                     <AlertCircle size={48} className="mx-auto mb-4" />
                     <h1 className="text-2xl font-bold mb-2">Error</h1>
@@ -48,7 +56,7 @@ export default function ClientPublicFormPage({ formId }: { formId: string }) {
     }
 
     return (
-        <div className="min-h-screen bg-white dark:bg-gray-900 p-4 md:p-8">
+        <div className="min-h-screen p-4 md:p-8">
             <div className="max-w-2xl mx-auto">
                 <div className="mb-8 text-center">
                     <h1 className="text-3xl font-black text-gray-900 dark:text-white mb-2">{formConfig.name}</h1>
