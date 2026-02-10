@@ -122,6 +122,15 @@ export default function PublicStudentForm({ formId, includedFields, onSubmitSucc
             });
 
             if (res.ok) {
+                const data = await res.json();
+                const emailErrors = [];
+                if (data.emailResults?.student?.error) emailErrors.push(`Student Email: ${data.emailResults.student.error}`);
+                if (data.emailResults?.admin?.error) emailErrors.push(`Admin Email: ${data.emailResults.admin.error}`);
+
+                if (emailErrors.length > 0) {
+                    alert(`Form submitted, but some emails failed to send:\n${emailErrors.join('\n')}`);
+                }
+
                 setSubmitted(true);
                 if (onSubmitSuccess) onSubmitSuccess();
             } else {

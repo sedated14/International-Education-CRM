@@ -45,6 +45,12 @@ export async function POST(request: Request) {
         const docRef = await addDoc(leadsRef, newLeadBase);
         const newLeadId = docRef.id;
 
+        // Track email results
+        const emailResults = {
+            student: { sent: false, error: null as string | null },
+            admin: { sent: false, error: null as string | null }
+        };
+
         // 4. Send Confirmation Email (Auto-Reply) - NON-BLOCKING
         const apiKey = process.env.RESEND_API_KEY;
         const studentEmail = leadData.studentProfile?.email || leadData.studentProfile?.studentEmail;
@@ -69,11 +75,14 @@ export async function POST(request: Request) {
                     `
                 });
                 console.log(`[Email Sent] Auto-reply sent to ${studentEmail}`);
-            } catch (emailError) {
+                emailResults.student.sent = true;
+            } catch (emailError: any) {
                 console.error('[Email Error] Failed to send auto-reply:', emailError);
+                emailResults.student.error = emailError.message || 'Unknown error';
             }
         } else if (!apiKey) {
             console.warn('[Email Warning] RESEND_API_KEY is missing. Skipping auto-reply.');
+            emailResults.student.error = 'RESEND_API_KEY missing';
         }
 
         // 5. Send Admin Notifications (if configured)
@@ -97,12 +106,14 @@ export async function POST(request: Request) {
                     `
                 });
                 console.log(`[Email Sent] Admin notification sent to ${formConfig.notificationEmails.join(', ')}`);
-            } catch (emailError) {
+                emailResults.admin.sent = true;
+            } catch (emailError: any) {
                 console.error('[Email Error] Failed to send admin notification:', emailError);
+                emailResults.admin.error = emailError.message || 'Unknown error';
             }
         }
 
-        return NextResponse.json({ success: true, leadId: newLeadId }, { status: 201 });
+        return NextResponse.json({ success: true, leadId: newLeadId, emailResults }, { status: 201 });
     } catch (error) {
         console.error('Error submitting form:', error);
         return NextResponse.json({ error: `Failed to submit form: ${(error as Error).message}` }, { status: 500 });
