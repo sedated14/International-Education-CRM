@@ -4,13 +4,15 @@ import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
 import { Lead } from '../../../../types';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+
 
 // POST /api/public/submit-form
 export async function POST(request: Request) {
     try {
         const body = await request.json();
         const { formId, leadData } = body;
+
+        const resend = new Resend(process.env.RESEND_API_KEY);
 
         // 1. Validate Form (Read from Firestore)
         const formRef = doc(db, 'forms', formId);
