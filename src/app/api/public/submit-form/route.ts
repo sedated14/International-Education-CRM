@@ -12,8 +12,6 @@ export async function POST(request: Request) {
         const body = await request.json();
         const { formId, leadData } = body;
 
-        const resend = new Resend(process.env.RESEND_API_KEY);
-
         // 1. Validate Form (Read from Firestore)
         const formRef = doc(db, 'forms', formId);
         const formSnap = await getDoc(formRef);
@@ -42,18 +40,20 @@ export async function POST(request: Request) {
             }]
         };
 
-        // 3. Save to Firestore
+        // 3. Save to Firestore (CRITICAL STEP - Do this first)
         const leadsRef = collection(db, 'leads');
         const docRef = await addDoc(leadsRef, newLeadBase);
         const newLeadId = docRef.id;
 
-        // 4. Send Confirmation Email (Auto-Reply)
+        // 4. Send Confirmation Email (Auto-Reply) - NON-BLOCKING
+        const apiKey = process.env.RESEND_API_KEY;
         const studentEmail = leadData.studentProfile?.email || leadData.studentProfile?.studentEmail;
 
-        if (studentEmail) {
+        if (apiKey && studentEmail) {
             try {
+                const resend = new Resend(apiKey);
                 await resend.emails.send({
-                    from: 'Apex CRM <onboarding@resend.dev>', // Use validated domain or resend test domain
+                    from: 'Apex CRM <onboarding@resend.dev>',
                     to: studentEmail,
                     subject: `Thank you for your inquiry: ${formConfig.name}`,
                     html: `
@@ -71,13 +71,15 @@ export async function POST(request: Request) {
                 console.log(`[Email Sent] Auto-reply sent to ${studentEmail}`);
             } catch (emailError) {
                 console.error('[Email Error] Failed to send auto-reply:', emailError);
-                // Don't fail the request if email fails, just log it
             }
+        } else if (!apiKey) {
+            console.warn('[Email Warning] RESEND_API_KEY is missing. Skipping auto-reply.');
         }
 
         // 5. Send Admin Notifications (if configured)
-        if (formConfig.notificationEmails && formConfig.notificationEmails.length > 0) {
+        if (apiKey && formConfig.notificationEmails && formConfig.notificationEmails.length > 0) {
             try {
+                const resend = new Resend(apiKey);
                 await resend.emails.send({
                     from: 'Apex CRM <onboarding@resend.dev>',
                     to: formConfig.notificationEmails,
