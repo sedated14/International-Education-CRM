@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Plus, Trash2, Edit, Code, Loader2, ExternalLink } from 'lucide-react';
+import { Plus, Trash2, Edit, Code, Loader2, ExternalLink, ChevronLeft } from 'lucide-react';
 import { FormConfig } from '../../../types';
 
 export default function FormsPage() {
@@ -38,6 +38,10 @@ export default function FormsPage() {
 
     return (
         <div className="p-8 max-w-7xl mx-auto">
+            <Link href="/" className="inline-flex items-center text-sm font-bold text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white mb-6">
+                <ChevronLeft size={16} className="mr-1" />
+                Back to Dashboard
+            </Link>
             <div className="flex justify-between items-center mb-8">
                 <div>
                     <h1 className="text-3xl font-black text-gray-900 dark:text-white">Lead Forms</h1>

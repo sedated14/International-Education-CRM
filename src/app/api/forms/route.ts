@@ -1,56 +1,47 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { db } from '../../../lib/firebase';
+import { collection, getDocs, setDoc, doc, query, orderBy } from 'firebase/firestore';
 import { FormConfig } from '../../../types';
-
-const formsFilePath = path.join(process.cwd(), 'src/data/forms.json');
-
-const readForms = (): FormConfig[] => {
-    try {
-        if (!fs.existsSync(formsFilePath)) {
-            return [];
-        }
-        const fileContents = fs.readFileSync(formsFilePath, 'utf8');
-        return JSON.parse(fileContents);
-    } catch (error) {
-        console.error('Error reading forms:', error);
-        return [];
-    }
-};
-
-const writeForms = (forms: FormConfig[]) => {
-    try {
-        fs.writeFileSync(formsFilePath, JSON.stringify(forms, null, 2), 'utf8');
-    } catch (error) {
-        console.error('Error writing forms:', error);
-    }
-};
 
 // GET /api/forms
 export async function GET() {
-    const forms = readForms();
-    return NextResponse.json(forms);
+    try {
+        const formsRef = collection(db, 'forms');
+        // Sort by createdAt descending
+        const q = query(formsRef, orderBy('createdAt', 'desc'));
+        const querySnapshot = await getDocs(q);
+
+        const forms = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        })) as FormConfig[];
+
+        return NextResponse.json(forms);
+    } catch (error) {
+        console.error('Error fetching forms from Firestore:', error);
+        return NextResponse.json({ error: 'Failed to fetch forms' }, { status: 500 });
+    }
 }
 
 // POST /api/forms
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const forms = readForms();
 
+        const newId = crypto.randomUUID();
         const newForm: FormConfig = {
             ...body,
-            id: crypto.randomUUID(), // Generate a unique ID
+            id: newId,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
         };
 
-        forms.unshift(newForm);
-        writeForms(forms);
+        // Save to Firestore
+        await setDoc(doc(db, 'forms', newId), newForm);
 
         return NextResponse.json(newForm, { status: 201 });
     } catch (error) {
-        console.error('Error creating form:', error);
+        console.error('Error creating form in Firestore:', error);
         return NextResponse.json({ error: 'Failed to create form' }, { status: 500 });
     }
 }
