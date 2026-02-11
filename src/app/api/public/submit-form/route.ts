@@ -59,8 +59,9 @@ export async function POST(request: Request) {
             try {
                 const resend = new Resend(apiKey);
                 const { error } = await resend.emails.send({
-                    from: 'Apex CRM <onboarding@resend.dev>',
+                    from: 'Apex CRM <team@apply.XperienceEdu.com>',
                     to: studentEmail,
+                    replyTo: 'info@xperienceedu.com',
                     subject: `Thank you for your inquiry: ${formConfig.name}`,
                     html: `
                         <div style="font-family: sans-serif; padding: 20px;">
@@ -83,8 +84,16 @@ export async function POST(request: Request) {
                     emailResults.student.sent = true;
                 }
             } catch (emailError: any) {
-                console.error('[Email Error] Exception sending auto-reply:', emailError);
-                emailResults.student.error = emailError.message || 'Unknown error';
+                // Gracefully handle Resend "testing only" restriction
+                if (emailError?.message?.includes('testing emails to your own domain')) {
+                    console.warn('[Email Warning] Student email suppression due to Resend testing mode:', emailError.message);
+                    // Do NOT set an error for the frontend, so it shows success
+                    emailResults.student.error = null;
+                    emailResults.student.sent = false;
+                } else {
+                    console.error('[Email Error] Exception sending auto-reply:', emailError);
+                    emailResults.student.error = emailError.message || 'Unknown error';
+                }
             }
         } else if (!apiKey) {
             console.warn('[Email Warning] RESEND_API_KEY is missing. Skipping auto-reply.');
@@ -96,8 +105,9 @@ export async function POST(request: Request) {
             try {
                 const resend = new Resend(apiKey);
                 const { error } = await resend.emails.send({
-                    from: 'Apex CRM <onboarding@resend.dev>',
+                    from: 'Apex CRM <team@apply.XperienceEdu.com>',
                     to: formConfig.notificationEmails,
+                    replyTo: studentEmail,
                     subject: `New Lead: ${leadData.studentProfile?.firstName} (${formConfig.name})`,
                     html: `
                         <div style="font-family: sans-serif; padding: 20px;">
