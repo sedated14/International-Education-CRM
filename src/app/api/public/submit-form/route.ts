@@ -59,7 +59,7 @@ export async function POST(request: Request) {
             try {
                 const resend = new Resend(apiKey);
                 const { error } = await resend.emails.send({
-                    from: 'Apex CRM <team@apply.XperienceEdu.com>',
+                    from: 'Apex CRM <team@apply.xperienceedu.com>',
                     to: studentEmail,
                     replyTo: 'info@xperienceedu.com',
                     subject: `Thank you for your inquiry: ${formConfig.name}`,
@@ -105,7 +105,7 @@ export async function POST(request: Request) {
             try {
                 const resend = new Resend(apiKey);
                 const { error } = await resend.emails.send({
-                    from: 'Apex CRM <team@apply.XperienceEdu.com>',
+                    from: 'Apex CRM <team@apply.xperienceedu.com>',
                     to: formConfig.notificationEmails,
                     replyTo: studentEmail,
                     subject: `New Lead: ${leadData.studentProfile?.firstName} (${formConfig.name})`,
